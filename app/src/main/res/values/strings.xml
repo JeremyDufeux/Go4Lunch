@@ -1,4 +1,24 @@
 <resources>
+    <!-- For Login -->
+    <string name="google_request_id_token" translatable="false">756975640716-dj1nr8j5eolg48ctv8onulo0nj2jv7aa.apps.googleusercontent.com</string>
+    <string name="facebook_app_id" translatable="false">800460790566654</string>
+    <string name="fb_login_protocol_scheme" tools.ignore="UnusedResources">fb800460790566654</string>
+
+    <!-- App -->
     <string name="app_name">Go4Lunch</string>
 
+    <!-- Login activity -->
+    <string name="login">Login</string>
+    <string name="background">Background</string>
+    <string name="logo">Logo</string>
+    <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
+    <string name="error_no_internet">No internet !</string>
+    <string name="error_timeout">Connection timeout !</string>
+    <string name="error_unknown_error">An unknown error append&#8230;</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="error_facebook_connection_failure" translatable="false">CONNECTION_FAILURE: CONNECTION_FAILURE</string>
+    <string name="app_tag">Find a nice restaurant and invite your co-workers for lunch!</string>
+
+    <!-- New strings to sort -->
 </resources>

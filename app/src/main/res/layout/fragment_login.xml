@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment">
+    android:id="@+id/login_fragment_coordinator_layout">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Login fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/login_activity_background_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background_1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/background" />
+
+
+        <ImageView
+            android:id="@+id/login_activity_logo_iv"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_logo"
+            app:tint="@color/white"
+            android:contentDescription="@string/logo" />
+
+        <TextView
+            android:id="@+id/login_activity_app_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="60sp"
+            app:layout_constraintTop_toBottomOf="@+id/login_activity_logo_iv" />
+
+        <TextView
+            android:id="@+id/login_activity_app_tag_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/app_tag"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/login_activity_app_name_tv" />
+
+        <include
+            android:id="@+id/login_activity_frame_layout_facebook_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            layout="@layout/frame_layout_facebook_button"
+            app:layout_constraintBottom_toTopOf="@+id/login_activity_firebase_auth_google_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/login_activity_firebase_auth_google_btn"
+            android:layout_width="280dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="80dp"
+            android:backgroundTint="@color/google_button"
+            android:fontFamily="sans-serif"
+            android:text="@string/sign_in_with_google"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_google_logo"
+            app:iconSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
