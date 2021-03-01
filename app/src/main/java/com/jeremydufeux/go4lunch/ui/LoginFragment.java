@@ -1,9 +1,8 @@
-package com.jeremydufeux.go4lunch;
+package com.jeremydufeux.go4lunch.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +26,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
+import com.jeremydufeux.go4lunch.BaseFragment;
+import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes.SIGN_IN_CANCELLED;
 import static com.google.android.gms.common.api.CommonStatusCodes.NETWORK_ERROR;
@@ -125,6 +130,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                         .addOnCompleteListener(getActivity(), taskComplete -> {
                             if (taskComplete.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                createUserInFireStore();
                                 navigateToMapFragment();
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -193,12 +199,31 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success
+                        createUserInFireStore();
                         navigateToMapFragment();
                     } else {
                         // If sign in fails, display a message to the user.
                         showSnackBar(getString(R.string.error_unknown_error));
                     }
                 });
+    }
+
+    // ---------------
+    // FireStore
+    // ---------------
+
+    private void createUserInFireStore(){
+        if (getCurrentUser() != null){
+
+            List<? extends UserInfo> providerData = getCurrentUser().getProviderData();
+
+            String uid = getCurrentUser().getUid();
+            String name = providerData.get(1).getDisplayName();
+            String email = providerData.get(1).getEmail();
+            String pictureUrl = Objects.requireNonNull(providerData.get(1).getPhotoUrl()).toString();
+
+            WorkmateHelper.createWorkmate(uid, name, email, pictureUrl).addOnFailureListener(this.onFailureListener());
+        }
     }
 
     // ---------------
