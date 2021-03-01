@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -29,14 +27,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 import static com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes.SIGN_IN_CANCELLED;
 import static com.google.android.gms.common.api.CommonStatusCodes.NETWORK_ERROR;
@@ -66,7 +61,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         super.onStart();
 
         if (isCurrentUserLoggedIn()) {
-            navigateToMainFragment();
+            navigateToMapFragment();
         }
     }
 
@@ -95,8 +90,8 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         }
     }
 
-    private void navigateToMainFragment() {
-        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_login_to_secondary_nav_graph);
+    private void navigateToMapFragment() {
+        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_login_fragment_to_map_view_fragment);
     }
 
     // ---------------
@@ -130,7 +125,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                         .addOnCompleteListener(getActivity(), taskComplete -> {
                             if (taskComplete.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                navigateToMainFragment();
+                                navigateToMapFragment();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 showSnackBar(getString(R.string.error_unknown_error));
@@ -198,7 +193,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success
-                        navigateToMainFragment();
+                        navigateToMapFragment();
                     } else {
                         // If sign in fails, display a message to the user.
                         showSnackBar(getString(R.string.error_unknown_error));

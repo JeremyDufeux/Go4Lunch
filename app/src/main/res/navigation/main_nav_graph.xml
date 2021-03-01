@@ -10,12 +10,36 @@
         android:name="com.jeremydufeux.go4lunch.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
-
         <action
-            android:id="@+id/action_login_to_secondary_nav_graph"
-            app:destination="@id/secondary_nav_graph.xml" />
+            android:id="@+id/action_login_fragment_to_map_view_fragment"
+            app:destination="@id/map_view_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/map_view_fragment"
+        android:name="com.jeremydufeux.go4lunch.MapViewFragment"
+        android:label="@string/i_m_hungry"
+        tools:layout="@layout/fragment_map_view"/>
+    <fragment
+        android:id="@+id/list_view_fragment"
+        android:name="com.jeremydufeux.go4lunch.ListViewFragment"
+        android:label="@string/i_m_hungry"
+        tools:layout="@layout/fragment_list_view"/>
+    <fragment
+        android:id="@+id/workmates_fragment"
+        android:name="com.jeremydufeux.go4lunch.WorkmatesFragment"
+        android:label="@string/available_workmates"
+        tools:layout="@layout/fragment_workmates"/>
+    <fragment
+        android:id="@+id/restaurant_details_fragment"
+        android:name="com.jeremydufeux.go4lunch.RestaurantDetailsFragment"
+        tools:layout="@layout/fragment_restaurant_details" />
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.jeremydufeux.go4lunch.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
 
-    <include app:graph="@navigation/secondary_nav_graph" />
 
 </navigation>

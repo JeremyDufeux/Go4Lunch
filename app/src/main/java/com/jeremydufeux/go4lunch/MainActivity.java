@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
@@ -20,10 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
 
     private NavController mNavController;
-    private NavHostFragment mNavHostFragment;
     private BottomNavigationView mBottomNavigationView;
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
     private Toolbar mToolbar;
 
     @Override
@@ -35,30 +33,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
 
         configureNavController();
-        configureBottomNavigationView();
+        configureBottomNavigation();
         configureToolbar();
+        configureDrawer();
         configureNavControllerListener();
     }
-
     private void configureNavController() {
-        mNavHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
-        mNavController = mNavHostFragment.getNavController();
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
+        mNavController = navHostFragment.getNavController();
     }
 
-    private void configureBottomNavigationView() {
+    private void configureBottomNavigation() {
         mBottomNavigationView = mBinding.bottomNavigationView;
         NavigationUI.setupWithNavController(mBottomNavigationView, mNavController);
     }
 
     private void configureToolbar() {
         mToolbar = mBinding.mainActivityToolbar;
+        mToolbar.setTitle(getString(R.string.i_m_hungry));
         setSupportActionBar(mToolbar);
+
+        AppBarConfiguration appBarConfiguration =
+                new AppBarConfiguration.Builder(R.id.map_view_fragment, R.id.list_view_fragment, R.id.workmates_fragment)
+                        .setOpenableLayout(mBinding.getRoot())
+                        .build();
+
+        NavigationUI.setupWithNavController( mToolbar, mNavController, appBarConfiguration);
+    }
+
+    private void configureDrawer() {
+        NavigationView navView = findViewById(R.id.activity_main_drawer);
+        NavigationUI.setupWithNavController(navView, mNavController);
     }
 
     private void configureNavControllerListener() {
         mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+
             if(destination.getId() == R.id.login_fragment) {
                 mToolbar.setVisibility(View.GONE);
+                mBottomNavigationView.setVisibility(View.GONE);
+            } else
+                if(destination.getId() == R.id.restaurant_details_fragment) {
+                mToolbar.setVisibility(View.VISIBLE);
                 mBottomNavigationView.setVisibility(View.GONE);
             } else {
                 mToolbar.setVisibility(View.VISIBLE);
@@ -73,4 +89,5 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
+
 }

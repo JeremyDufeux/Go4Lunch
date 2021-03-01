@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/drawer_your_lunch"
+        android:id="@+id/restaurant_details_fragment"
         android:icon="@drawable/ic_lunch"
         app:showAsAction="ifRoom"
         android:title="@string/your_lunch">
     </item>
     <item
-        android:id="@+id/drawer_settings"
+        android:id="@+id/settings_fragment"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"
         android:title="@string/settings">
     </item>
     <item
-        android:id="@+id/drawer_logout"
+        android:id="@+id/login_fragment"
         android:icon="@drawable/ic_logout"
         app:showAsAction="ifRoom"
         android:title="@string/logout">
