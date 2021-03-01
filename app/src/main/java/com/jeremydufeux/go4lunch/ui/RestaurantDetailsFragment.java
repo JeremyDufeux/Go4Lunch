@@ -1,12 +1,13 @@
-package com.jeremydufeux.go4lunch;
+package com.jeremydufeux.go4lunch.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.jeremydufeux.go4lunch.BaseFragment;
+import com.jeremydufeux.go4lunch.R;
 
 public class RestaurantDetailsFragment extends BaseFragment {
 
