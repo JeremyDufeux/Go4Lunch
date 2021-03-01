@@ -14,7 +14,7 @@
             android:id="@+id/action_login_fragment_to_map_view_fragment"
             app:destination="@id/map_view_fragment"
             app:popUpTo="@id/login_fragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/map_view_fragment"
@@ -40,6 +40,9 @@
         android:name="com.jeremydufeux.go4lunch.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+    <action
+        android:id="@+id/action_global_restaurant_details_fragment"
+        app:destination="@id/restaurant_details_fragment" />
 
 
 </navigation>
