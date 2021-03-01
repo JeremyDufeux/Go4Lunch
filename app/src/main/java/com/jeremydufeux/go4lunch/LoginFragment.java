@@ -96,7 +96,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     }
 
     private void navigateToMainFragment() {
-        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_loginFragment_to_mainFragment);
+        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_login_to_secondary_nav_graph);
     }
 
     // ---------------
