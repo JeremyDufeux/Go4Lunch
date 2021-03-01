@@ -2,22 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/loginFragment">
+    android:id="@+id/main_nav_graph.xml"
+    app:startDestination="@id/login_fragment">
 
     <fragment
-        android:id="@+id/loginFragment"
+        android:id="@+id/login_fragment"
         android:name="com.jeremydufeux.go4lunch.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
+
         <action
-            android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_login_to_secondary_nav_graph"
+            app:destination="@id/secondary_nav_graph.xml" />
     </fragment>
 
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.jeremydufeux.go4lunch.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+    <include app:graph="@navigation/secondary_nav_graph" />
+
 </navigation>

@@ -4,6 +4,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/white</item>
-        <item name="android:statusBarColor">@color/dark_grey</item>
+    </style>
+
+    <!-- Toolbar theme. -->
+    <style name="DrawerMenu" parent="Widget.Design.NavigationView">
+        <item name="itemTextColor">@android:color/white</item>
+        <item name="itemIconTint">@android:color/white</item>
     </style>
 </resources>

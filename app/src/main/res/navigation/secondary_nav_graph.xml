@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/secondary_nav_graph.xml"
+    app:startDestination="@id/map_view_fragment">
+    <fragment
+        android:id="@+id/map_view_fragment"
+        android:name="com.jeremydufeux.go4lunch.MapViewFragment"
+        android:label="MapViewFragment"
+        tools:layout="@layout/fragment_map_view"/>
+    <fragment
+        android:id="@+id/list_view_fragment"
+        android:name="com.jeremydufeux.go4lunch.ListViewFragment"
+        android:label="ListViewFragment"
+        tools:layout="@layout/fragment_list_view"/>
+    <fragment
+        android:id="@+id/workmates_fragment"
+        android:name="com.jeremydufeux.go4lunch.WorkmatesFragment"
+        android:label="WorkmatesFragment"
+        tools:layout="@layout/fragment_workmates"/>
+</navigation>
