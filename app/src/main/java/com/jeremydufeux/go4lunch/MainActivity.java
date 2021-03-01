@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -18,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mBinding;
 
+    private NavController mNavController;
+    private NavHostFragment mNavHostFragment;
+    private BottomNavigationView mBottomNavigationView;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
@@ -30,19 +34,37 @@ public class MainActivity extends AppCompatActivity {
         View view = mBinding.getRoot();
         setContentView(view);
 
+        configureNavController();
         configureBottomNavigationView();
         configureToolbar();
+        configureNavControllerListener();
+    }
+
+    private void configureNavController() {
+        mNavHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
+        mNavController = mNavHostFragment.getNavController();
     }
 
     private void configureBottomNavigationView() {
-        BottomNavigationView bottomNavigationView = mBinding.bottomNavigationView;
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
-        NavigationUI.setupWithNavController(bottomNavigationView, navHostFragment.getNavController());
+        mBottomNavigationView = mBinding.bottomNavigationView;
+        NavigationUI.setupWithNavController(mBottomNavigationView, mNavController);
     }
 
     private void configureToolbar() {
         mToolbar = mBinding.mainActivityToolbar;
         setSupportActionBar(mToolbar);
+    }
+
+    private void configureNavControllerListener() {
+        mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(destination.getId() == R.id.login_fragment) {
+                mToolbar.setVisibility(View.GONE);
+                mBottomNavigationView.setVisibility(View.GONE);
+            } else {
+                mToolbar.setVisibility(View.VISIBLE);
+                mBottomNavigationView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
