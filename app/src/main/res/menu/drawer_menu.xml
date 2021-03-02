@@ -14,7 +14,7 @@
         android:title="@string/settings">
     </item>
     <item
-        android:id="@+id/login_fragment"
+        android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         app:showAsAction="ifRoom"
         android:title="@string/logout">
