@@ -18,9 +18,8 @@ public class WorkmateHelper {
     }
 
     // --- Create ---
-    public static Task<Void> createWorkmate(String uid, String username, String email, String urlPicture) {
-        Workmate workmateToCreate = new Workmate(uid, username, email, urlPicture);
-        return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
+    public static Task<Void> createWorkmate(Workmate workmate) {
+        return WorkmateHelper.getWorkmatesCollection().document(workmate.getuId()).set(workmate);
     }
 
     // --- Get ---

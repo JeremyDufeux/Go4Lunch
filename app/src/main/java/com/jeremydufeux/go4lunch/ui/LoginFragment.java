@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.facebook.AccessToken;
@@ -31,8 +33,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.jeremydufeux.go4lunch.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.api.WorkmateHelper;
+import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
+import com.jeremydufeux.go4lunch.injection.Injection;
+import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
+import com.jeremydufeux.go4lunch.models.Workmate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +51,8 @@ import static com.google.android.gms.common.api.CommonStatusCodes.TIMEOUT;
 
 public class LoginFragment extends BaseFragment implements FacebookCallback<LoginResult> {
     private static final int RC_SIGN_IN = 1000;
+
+    private LoginFragmentViewModel mViewModel;
 
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
@@ -61,8 +68,28 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        configureViewModel();
     }
+
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginFragmentViewModel.class);
+        mViewModel.observeResult().observe(this, this::onFirestoreResult);
+    }
+
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        mBinding = FragmentLoginBinding.inflate(getLayoutInflater());
+        View view = mBinding.getRoot();
+
+        configureGoogleSignIn();
+        configureFacebookSignIn();
+
+        return view;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -77,19 +104,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     private void showLoginButtons() {
         alphaViewAnimation(mBinding.loginActivityFirebaseAuthGoogleBtn);
         alphaViewAnimation(mBinding.loginActivityFrameLayoutFacebookButton.loginActivityFirebaseAuthFacebookBtn);
-    }
-
-    @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mBinding = FragmentLoginBinding.inflate(getLayoutInflater());
-        View view = mBinding.getRoot();
-
-        configureGoogleSignIn();
-        configureFacebookSignIn();
-
-        return view;
     }
 
     @Override
@@ -140,7 +154,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                             if (taskComplete.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 createUserInFireStore();
-                                navigateToMapFragment();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 showSnackBar(getString(R.string.error_unknown_error));
@@ -209,7 +222,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
                     if (task.isSuccessful()) {
                         // Sign in success
                         createUserInFireStore();
-                        navigateToMapFragment();
                     } else {
                         // If sign in fails, display a message to the user.
                         showSnackBar(getString(R.string.error_unknown_error));
@@ -223,7 +235,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
 
     private void createUserInFireStore(){
         if (getCurrentUser() != null){
-
             List<? extends UserInfo> providerData = getCurrentUser().getProviderData();
 
             String uid = getCurrentUser().getUid();
@@ -231,7 +242,17 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
             String email = providerData.get(1).getEmail();
             String pictureUrl = Objects.requireNonNull(providerData.get(1).getPhotoUrl()).toString();
 
-            WorkmateHelper.createWorkmate(uid, name, email, pictureUrl).addOnFailureListener(this.onFailureListener());
+            Workmate workmate = new Workmate(uid, name, email, pictureUrl);
+            mViewModel.createWorkmate(workmate);
+        }
+    }
+
+    private void onFirestoreResult(FirestoreResult result){
+        if(result.getSuccess()){
+            navigateToMapFragment();
+        } else {
+            showSnackBar(getString(R.string.error_unknown_error));
+            Log.d("Debug", "onFirestoreResult : " + result.getError().toString());
         }
     }
 
