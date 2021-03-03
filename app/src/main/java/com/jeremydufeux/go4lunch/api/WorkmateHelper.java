@@ -23,7 +23,7 @@ public class WorkmateHelper {
     }
 
     // --- Get ---
-    public static Task<DocumentSnapshot> getId(String uid){
+    public static Task<DocumentSnapshot> getWorkmateWithId(String uid){
         return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
