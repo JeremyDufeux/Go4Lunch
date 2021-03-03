@@ -11,8 +11,8 @@ public class FirestoreResult {
         this.success = success;
     }
 
-    public FirestoreResult(Boolean success, @Nullable Exception error) {
-        this.success = success;
+    public FirestoreResult(@Nullable Exception error) {
+        this.success = false;
         this.error = error;
     }
 
@@ -21,7 +21,7 @@ public class FirestoreResult {
     }
 
     @Nullable
-    public Exception getError() {
+    public Exception getException() {
         return error;
     }
 }

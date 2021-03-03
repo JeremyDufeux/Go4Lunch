@@ -74,7 +74,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginFragmentViewModel.class);
-        mViewModel.observeResult().observe(this, this::onFirestoreResult);
+        mViewModel.observeResult().observe(this, this::firestoreResultObserver);
     }
 
     @Override
@@ -247,12 +247,12 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         }
     }
 
-    private void onFirestoreResult(FirestoreResult result){
-        if(result.getSuccess()){
+    private void firestoreResultObserver(FirestoreResult result){
+        if(result.getSuccess()) {
             navigateToMapFragment();
         } else {
             showSnackBar(getString(R.string.error_unknown_error));
-            Log.d("Debug", "onFirestoreResult : " + result.getError().toString());
+            Log.d("Debug", "onFirestoreResult : " + result.getException().toString());
         }
     }
 
