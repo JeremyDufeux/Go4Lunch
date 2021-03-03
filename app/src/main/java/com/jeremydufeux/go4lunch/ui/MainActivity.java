@@ -1,5 +1,6 @@
 package com.jeremydufeux.go4lunch.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -33,7 +34,7 @@ import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.ui.fragment.LoginFragmentViewModel;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FirebaseAuth.AuthStateListener {
 
     private MainActivityViewModel mViewModel;
     private ActivityMainBinding mBinding;
@@ -61,6 +62,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureToolbar();
         configureDrawer();
         configureNavControllerListener();
+        configureFirebaseAuthListener();
+    }
+
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
+    }
+
+    private void workmateObserver(Workmate workmate){
+        updateDrawerHeader(workmate);
     }
 
     private void configureViewModel() {
@@ -161,5 +172,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LoginManager.getInstance().logOut();
 
         mNavController.navigate(R.id.action_global_login_fragment);
+    }
+
+    private void configureFirebaseAuthListener() {
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::workmateObserver);
+        }
     }
 }
