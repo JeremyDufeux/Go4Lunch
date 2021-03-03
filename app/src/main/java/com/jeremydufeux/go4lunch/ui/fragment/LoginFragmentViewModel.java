@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui;
+package com.jeremydufeux.go4lunch.ui.fragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
