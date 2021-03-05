@@ -12,15 +12,15 @@ import java.util.concurrent.Executor;
 public class LoginFragmentViewModel extends ViewModel {
 
     private final WorkmatesDataRepository mWorkmatesDataRepository;
-    private final Executor executor;
+    private final Executor mExecutor;
 
     public LoginFragmentViewModel(WorkmatesDataRepository workmatesDataRepository, Executor executor) {
-        this.mWorkmatesDataRepository = workmatesDataRepository;
-        this.executor = executor;
+        mWorkmatesDataRepository = workmatesDataRepository;
+        mExecutor = executor;
     }
 
     public void createWorkmate(Workmate workmate) {
-        executor.execute(() ->
+        mExecutor.execute(() ->
                 mWorkmatesDataRepository.createWorkmate(workmate)
         );
     }
