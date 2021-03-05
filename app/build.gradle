@@ -4,6 +4,8 @@ plugins {
     id 'com.google.secrets_gradle_plugin' version '0.5'
 }
 
+def mapApiKey = project.properties['MAPS_API_KEY']
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -26,6 +28,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+
+            buildConfigField("String", "MAPS_API_KEY", "\"${mapApiKey}\"")
+            resValue("string", "maps_api_key", "${mapApiKey}")
         }
     }
     compileOptions {

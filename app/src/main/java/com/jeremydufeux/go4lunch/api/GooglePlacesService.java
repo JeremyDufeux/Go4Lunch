@@ -15,13 +15,13 @@ public interface GooglePlacesService {
     @GET("/maps/api/place/nearbysearch/json")
     Observable<GooglePlaceResults> getNearbyPlaces(@Query("key") String apiKey, @Query("location") String latlng, @Query("radius") String radius, @Query("type") String type);
 
-    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    //HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(new OkHttpClient.Builder().addInterceptor(interceptor).build())
+            //.client(new OkHttpClient.Builder().addInterceptor(interceptor).build())
             .build();
 }
 
