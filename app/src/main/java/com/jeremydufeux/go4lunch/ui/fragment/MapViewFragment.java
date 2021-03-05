@@ -32,6 +32,7 @@ import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.GooglePlaceResult.GooglePlaceResults;
 import com.jeremydufeux.go4lunch.models.GooglePlaceResult.Result;
+import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +48,10 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, ActivityCompat.OnRequestPermissionsResultCallback, EasyPermissions.PermissionCallbacks {
 
     private static final int RC_LOCATION = 1;
+    private static final float DEFAULT_ZOOM = 16;
 
     private MapViewFragmentViewModel mViewModel;
+    private SharedViewModel mSharedViewModel;
 
     private FragmentMapViewBinding mBinding;
 
@@ -56,6 +59,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private GoogleMap mMap;
 
     private Boolean mPermissionDenied = false;
+
+    // ---------------
+    // Setup
+    // ---------------
 
     public MapViewFragment() {
     }
@@ -67,12 +74,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        configureViewModel();
+        configureViewModels();
     }
 
-    private void configureViewModel() {
+    private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewFragmentViewModel.class);
+        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+
         mViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
     }
 
@@ -101,26 +110,22 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mMap = googleMap;
         mMap.setOnCameraIdleListener(this);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        getSavedData();
         enableLocation();
     }
 
-    @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(RC_LOCATION)
-    private void enableLocation() {
-        if (EasyPermissions.hasPermissions(getActivity(), ACCESS_FINE_LOCATION)) {
-            mPermissionDenied = false;
-            if (mMap != null) {
-                mMap.setMyLocationEnabled(true);
-                focusToLocation();
-            }
-        } else {
-            requestPermission();
+    private void getSavedData() {
+        if(mSharedViewModel.isMapViewDataSet()){
+            focusCamera(mSharedViewModel.getMapViewCameraLatitude(),
+                    mSharedViewModel.getMapViewCameraLongitude(),
+                    mSharedViewModel.getMapViewCameraZoom(),
+                    false);
         }
     }
 
-    private void requestPermission(){
-        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), RC_LOCATION, ACCESS_FINE_LOCATION);
-    }
+    // ---------------
+    // Map interactions
+    // ---------------
 
     private void requestFocusToLocation(){
         if (mPermissionDenied && EasyPermissions.somePermissionPermanentlyDenied(getActivity(), Collections.singletonList(ACCESS_FINE_LOCATION))) {
@@ -136,15 +141,15 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private void focusToLocation() {
         mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
-                focusCamera(location.getLatitude(), location.getLongitude(), true);
+                focusCamera(location.getLatitude(), location.getLongitude(), DEFAULT_ZOOM, true);
                 fetchNearbyPlaces(location.getLatitude() + "," + location.getLongitude());
             }
         });
     }
 
-    private void focusCamera(double lat, double lng, boolean animCamera){
+    private void focusCamera(double lat, double lng, float zoom, boolean animCamera){
         LatLng latLng = new LatLng(lat, lng);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
         if(animCamera){
             mMap.animateCamera(cameraUpdate);
         } else {
@@ -152,8 +157,23 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         }
     }
 
+    // ---------------
+    // Places
+    // ---------------
+
     private void fetchNearbyPlaces(String latlng) {
         mViewModel.fetchNearbyPlaces(latlng, String.valueOf(getMapSize()), "restaurant");
+    }
+
+    @Override
+    public void onCameraIdle() {
+        fetchPlacesAtCameraPosition();
+    }
+
+    private void fetchPlacesAtCameraPosition(){
+        double lat = mMap.getCameraPosition().target.latitude;
+        double lng = mMap.getCameraPosition().target.longitude;
+        fetchNearbyPlaces(lat + "," + lng);
     }
 
     private void getGooglePlaceResults(GooglePlaceResults googlePlacesResults) {
@@ -164,6 +184,29 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
                     .title(place.getName())
             );
         }
+    }
+
+    // ---------------
+    // Permissions
+    // ---------------
+
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(RC_LOCATION)
+    private void enableLocation() {
+        if (EasyPermissions.hasPermissions(getActivity(), ACCESS_FINE_LOCATION)) {
+            mPermissionDenied = false;
+            mMap.setMyLocationEnabled(true);
+
+            if(!mSharedViewModel.isMapViewDataSet()) {
+                focusToLocation();
+            }
+        } else {
+            requestPermission();
+        }
+    }
+
+    private void requestPermission(){
+        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), RC_LOCATION, ACCESS_FINE_LOCATION);
     }
 
     @Override
@@ -192,16 +235,23 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         }
     }
 
+    // ---------------
+    // Save Data
+    // ---------------
+
     @Override
-    public void onCameraIdle() {
-        fetchPlacesAtCameraPosition();
+    public void onDestroyView() {
+        super.onDestroyView();
+        mSharedViewModel.setMapViewCameraLatitude(mMap.getCameraPosition().target.latitude);
+        mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);
+        mSharedViewModel.setMapViewCameraZoom(mMap.getCameraPosition().zoom);
+        mSharedViewModel.setMapViewDataSet(true);
     }
 
-    private void fetchPlacesAtCameraPosition(){
-        double lat = mMap.getCameraPosition().target.latitude;
-        double lng = mMap.getCameraPosition().target.longitude;
-        fetchNearbyPlaces(lat + "," + lng);
-    }
+
+    // ---------------
+    // Utils
+    // ---------------
 
     private double getMapSize(){
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();

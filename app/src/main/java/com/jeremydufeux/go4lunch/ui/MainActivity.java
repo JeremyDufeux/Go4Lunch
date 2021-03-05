@@ -37,6 +37,7 @@ import com.jeremydufeux.go4lunch.ui.fragment.LoginFragmentViewModel;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FirebaseAuth.AuthStateListener {
 
     private MainActivityViewModel mViewModel;
+    private SharedViewModel mSharedViewModel;
     private ActivityMainBinding mBinding;
     private ActivityMainDrawerHeaderBinding mHeaderBinding;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mHeaderBinding = ActivityMainDrawerHeaderBinding.bind(headerView);
 
         configureViewModel();
+        configureSharedViewModel();
         configureNavController();
         configureBottomNavigation();
         configureToolbar();
@@ -68,21 +70,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
-    }
-
-    private void workmateObserver(Workmate workmate){
-        updateDrawerHeader(workmate);
-    }
-
-    private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::workmateObserver);
+        mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
     }
 
-    private void workmateObserver(Workmate workmate){
-        updateDrawerHeader(workmate);
+    private void configureSharedViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
     }
 
     private void configureNavController() {
@@ -188,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null){
-            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::workmateObserver);
+            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::updateDrawerHeader);
         }
     }
 }
