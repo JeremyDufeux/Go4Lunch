@@ -48,6 +48,9 @@
 
     <!-- Location permissions    -->
     <string name="permission_rationale_location">Access to the location service is required to show places around.</string>
+    <string name="rating">Rating</string>
+    <string name="place_picture">Place picture</string>
+    <string name="workmates_interested">Workmates interested</string>
 
     <!-- New strings to sort -->
 </resources>

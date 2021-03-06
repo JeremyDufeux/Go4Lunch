@@ -1,0 +1,40 @@
+{
+  "comment": "places data - places.json",
+  "names": [
+    {
+      "name": [
+        { "value": "Le Zinc" },
+        { "value": "Tokymaki" },
+        { "value": "Casa Nostra" },
+        { "value": "Le Seoul" },
+        { "value": "Burgermania" }
+      ],
+      "address": [
+        { "value": "French - 12 Faubourg Poissonnière" },
+        { "value": "Japanese - 24 rue des Peties Ecoles" },
+        { "value": "Italian - 42 rue de Scicile" },
+        { "value": "Korean - 18 rue de Paradis" },
+        { "value": "American - 31 rue de Floride" }
+      ],
+      "open": [
+        { "value": "Open until 7pm" },
+        { "value": "Closing soon" },
+        { "value": "Open until 2.30pm" },
+        { "value": "Open 24/7" }
+      ],
+      "distance": [
+        { "value": "120m" },
+        { "value": "170m" },
+        { "value": "210m" },
+        { "value": "243m" },
+        { "value": "290m" }
+      ],
+      "workmates": [
+        { "value": "(2)" },
+        { "value": "(3)" },
+        { "value": "" },
+        { "value": "(1)" }
+      ]
+    }
+  ]
+}
