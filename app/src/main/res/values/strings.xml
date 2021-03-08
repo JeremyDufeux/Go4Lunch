@@ -51,6 +51,8 @@
     <string name="rating">Rating</string>
     <string name="place_picture">Place picture</string>
     <string name="workmates_interested">Workmates interested</string>
+    <string name="closed">Closed</string>
+    <string name="open_now">Open now</string>
 
     <!-- New strings to sort -->
 </resources>

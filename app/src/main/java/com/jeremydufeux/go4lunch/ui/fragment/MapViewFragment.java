@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,7 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
-import com.jeremydufeux.go4lunch.models.GooglePlaceResult.GooglePlaceResults;
-import com.jeremydufeux.go4lunch.models.GooglePlaceResult.Result;
+import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +47,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private static final int RC_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 16;
+    private static final String RESTAURANT = "restaurant";
 
     private MapViewViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
@@ -78,7 +79,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
+        mSharedViewModel.getPlaceList().observe(this, this::getGooglePlaceResults);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // ---------------
 
     private void getNearbyPlaces(String latlng) {
-        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getMapSize()), "restaurant");
+        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getMapSize()), RESTAURANT);
     }
 
     @Override
@@ -174,10 +175,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         getNearbyPlaces(lat + "," + lng);
     }
 
-    private void getGooglePlaceResults(GooglePlaceResults googlePlacesResults) {
+    private void getGooglePlaceResults(List<Place> placeList) {
         if(mMap!=null) {
-            for (Result place : googlePlacesResults.getResults()) {
-                LatLng latLng = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
+            for (Place place : placeList) {
+                LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title(place.getName())

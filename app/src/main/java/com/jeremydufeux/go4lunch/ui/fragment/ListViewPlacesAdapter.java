@@ -6,18 +6,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.GooglePlaceResult.Result;
+import com.jeremydufeux.go4lunch.models.Place;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
-    List<Result> mResultList;
+    List<Place> mPlaceList;
 
     public ListViewPlacesAdapter() {
-        mResultList = new ArrayList<>();
+        mPlaceList = new ArrayList<>();
     }
 
     @NonNull
@@ -29,20 +31,24 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        Result result = mResultList.get(position);
-        holder.mBinding.placeItemNameTv.setText(result.getName());
-        if(result.getOpeningHours() != null){
-            holder.mBinding.placeItemOpenTv.setText(result.getOpeningHours().getOpenNow().toString());
+        Place place = mPlaceList.get(position);
+        holder.mBinding.placeItemNameTv.setText(place.getName());
+        if(place.getOpeningHours() != null) {
+            if (place.getOpeningHours().getOpenNow()) {
+                holder.mBinding.placeItemOpenTv.setText(R.string.open_now);
+            } else {
+                holder.mBinding.placeItemOpenTv.setText(R.string.closed);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return mResultList.size();
+        return mPlaceList.size();
     }
 
-    public void updateList(List<Result> results) {
-        mResultList = results;
+    public void updateList(List<Place> places) {
+        mPlaceList = places;
         notifyDataSetChanged();
     }
 

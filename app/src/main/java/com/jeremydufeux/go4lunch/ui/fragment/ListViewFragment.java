@@ -15,13 +15,11 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
-import com.jeremydufeux.go4lunch.models.GooglePlaceResult.GooglePlaceResults;
 import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewFragment extends BaseFragment {
@@ -47,11 +45,11 @@ public class ListViewFragment extends BaseFragment {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
+        mSharedViewModel.getPlaceList().observe(this, this::getGooglePlaceResults);
     }
 
-    private void getGooglePlaceResults(GooglePlaceResults googlePlaceResults) {
-        mAdapter.updateList(googlePlaceResults.getResults());
+    private void getGooglePlaceResults(List<Place> places) {
+        mAdapter.updateList(places);
     }
 
     @Override
