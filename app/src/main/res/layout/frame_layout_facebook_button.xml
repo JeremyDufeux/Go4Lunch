@@ -6,13 +6,13 @@
     android:id="@+id/frame_layout_facebook_button">
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_activity_facebook_login_button"
+        android:id="@+id/frame_facebook_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
     <Button
-        android:id="@+id/login_activity_firebase_auth_facebook_btn"
+        android:id="@+id/frame_firebase_auth_facebook_btn"
         android:layout_width="280dp"
         android:layout_height="60dp"
         android:layout_marginVertical="5dp"
