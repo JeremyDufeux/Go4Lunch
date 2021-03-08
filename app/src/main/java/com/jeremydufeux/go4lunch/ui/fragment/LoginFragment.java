@@ -53,7 +53,7 @@ import static com.google.android.gms.common.api.CommonStatusCodes.TIMEOUT;
 public class LoginFragment extends BaseFragment implements FacebookCallback<LoginResult> {
     private static final int RC_SIGN_IN = 1000;
 
-    private LoginFragmentViewModel mViewModel;
+    private LoginViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -75,7 +75,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginViewModel.class);
         mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
         mViewModel.observeResult().observe(this, this::firestoreResultObserver);
     }

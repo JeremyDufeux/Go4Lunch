@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jeremydufeux.go4lunch.repositories.GooglePlaceRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
-import com.jeremydufeux.go4lunch.ui.MainActivityViewModel;
+import com.jeremydufeux.go4lunch.ui.MainViewModel;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
-import com.jeremydufeux.go4lunch.ui.fragment.LoginFragmentViewModel;
-import com.jeremydufeux.go4lunch.ui.fragment.MapViewFragmentViewModel;
+import com.jeremydufeux.go4lunch.ui.fragment.LoginViewModel;
+import com.jeremydufeux.go4lunch.ui.fragment.MapViewViewModel;
 
 import java.util.concurrent.Executor;
 
@@ -35,14 +35,14 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if(modelClass.isAssignableFrom(SharedViewModel.class)){
             return (T) new SharedViewModel();
         }
-        else if(modelClass.isAssignableFrom(LoginFragmentViewModel.class)){
-            return (T) new LoginFragmentViewModel(mWorkmatesDataRepository, mExecutor);
+        else if(modelClass.isAssignableFrom(LoginViewModel.class)){
+            return (T) new LoginViewModel(mWorkmatesDataRepository, mExecutor);
         }
-        else if(modelClass.isAssignableFrom(MainActivityViewModel.class)){
-            return (T) new MainActivityViewModel(mWorkmatesDataRepository);
+        else if(modelClass.isAssignableFrom(MainViewModel.class)){
+            return (T) new MainViewModel(mWorkmatesDataRepository);
         }
-        else if(modelClass.isAssignableFrom(MapViewFragmentViewModel.class)){
-            return (T) new MapViewFragmentViewModel(mGooglePlaceRepository, mExecutor);
+        else if(modelClass.isAssignableFrom(MapViewViewModel.class)){
+            return (T) new MapViewViewModel(mGooglePlaceRepository, mExecutor);
         }
         throw new IllegalArgumentException("Unknown ViewModel Class");
     }

@@ -32,7 +32,7 @@ import com.jeremydufeux.go4lunch.models.Workmate;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FirebaseAuth.AuthStateListener {
 
-    private MainActivityViewModel mViewModel;
+    private MainViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
     private ActivityMainBinding mBinding;
     private ActivityMainDrawerHeaderBinding mHeaderBinding;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
         mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

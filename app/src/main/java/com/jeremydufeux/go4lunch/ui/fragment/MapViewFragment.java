@@ -48,7 +48,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private static final int RC_LOCATION = 1;
     private static final float DEFAULT_ZOOM = 16;
 
-    private MapViewFragmentViewModel mViewModel;
+    private MapViewViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -75,7 +75,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewFragmentViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
         mViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);

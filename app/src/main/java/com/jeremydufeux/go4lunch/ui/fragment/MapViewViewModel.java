@@ -18,7 +18,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.ExecutorScheduler;
 import io.reactivex.observers.DisposableObserver;
 
-public class MapViewFragmentViewModel extends ViewModel {
+public class MapViewViewModel extends ViewModel {
 
     private final GooglePlaceRepository mGooglePlaceRepository;
     private final Executor mExecutor;
@@ -26,7 +26,7 @@ public class MapViewFragmentViewModel extends ViewModel {
     private CompositeDisposable mDisposable = new CompositeDisposable();
     private final MutableLiveData<GooglePlaceResults> mGooglePlaceList;
 
-    public MapViewFragmentViewModel(GooglePlaceRepository googlePlaceRepository, Executor executor) {
+    public MapViewViewModel(GooglePlaceRepository googlePlaceRepository, Executor executor) {
         mGooglePlaceRepository = googlePlaceRepository;
         mExecutor = executor;
 
