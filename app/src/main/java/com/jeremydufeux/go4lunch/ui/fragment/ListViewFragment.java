@@ -1,14 +1,35 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.jeremydufeux.go4lunch.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
+import com.jeremydufeux.go4lunch.injection.Injection;
+import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
+import com.jeremydufeux.go4lunch.models.GooglePlaceResult.GooglePlaceResults;
+import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.ui.SharedViewModel;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListViewFragment extends BaseFragment {
+
+    private SharedViewModel mSharedViewModel;
+
+    private FragmentListViewBinding mBinding;
+    private ListViewPlacesAdapter mAdapter;
 
     public ListViewFragment() {}
 
@@ -19,12 +40,36 @@ public class ListViewFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        configureViewModel();
+    }
+
+    private void configureViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+
+        mSharedViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
+    }
+
+    private void getGooglePlaceResults(GooglePlaceResults googlePlaceResults) {
+        mAdapter.updateList(googlePlaceResults.getResults());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_view, container, false);
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mBinding = FragmentListViewBinding.inflate(getLayoutInflater());
+
+        configureRecyclerView();
+
+        return mBinding.getRoot();
+    }
+
+    private void configureRecyclerView() {
+        mAdapter = new ListViewPlacesAdapter();
+        mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
+        mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        itemDecoration.setDrawable(new ColorDrawable(getResources().getColor(R.color.very_light_grey)));
+        mBinding.listViewFragmentRecyclerView.addItemDecoration(itemDecoration);
     }
 }
