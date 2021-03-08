@@ -78,7 +78,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
+        mSharedViewModel.getGooglePlaceList().observe(this, this::getGooglePlaceResults);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
                 focusCamera(location.getLatitude(), location.getLongitude(), DEFAULT_ZOOM, true);
-                fetchNearbyPlaces(location.getLatitude() + "," + location.getLongitude());
+                getNearbyPlaces(location.getLatitude() + "," + location.getLongitude());
             }
         });
     }
@@ -159,8 +159,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // Places
     // ---------------
 
-    private void fetchNearbyPlaces(String latlng) {
-        mViewModel.fetchNearbyPlaces(latlng, String.valueOf(getMapSize()), "restaurant");
+    private void getNearbyPlaces(String latlng) {
+        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getMapSize()), "restaurant");
     }
 
     @Override
@@ -171,17 +171,19 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private void fetchPlacesAtCameraPosition(){
         double lat = mMap.getCameraPosition().target.latitude;
         double lng = mMap.getCameraPosition().target.longitude;
-        fetchNearbyPlaces(lat + "," + lng);
+        getNearbyPlaces(lat + "," + lng);
     }
 
     private void getGooglePlaceResults(GooglePlaceResults googlePlacesResults) {
-        for(Result place : googlePlacesResults.getResults()){
-            LatLng latLng = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
-            mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(place.getName())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal))
-            );
+        if(mMap!=null) {
+            for (Result place : googlePlacesResults.getResults()) {
+                LatLng latLng = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
+                mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(place.getName())
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal))
+                );
+            }
         }
     }
 

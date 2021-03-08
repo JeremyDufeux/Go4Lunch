@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-public class GooglePlaceRepository {
+public class PlacesDataRepository {
 
-    public Observable<GooglePlaceResults> fetchNearbyPlaces(String latlng, String radius, String type){
+    public Observable<GooglePlaceResults> getNearbyPlaces(String latlng, String radius, String type){
         GooglePlacesService googlePlacesService = GooglePlacesService.retrofit.create(GooglePlacesService.class);
 
-        return googlePlacesService.getNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, radius, type)
+        return googlePlacesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, radius, type)
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS);
     }

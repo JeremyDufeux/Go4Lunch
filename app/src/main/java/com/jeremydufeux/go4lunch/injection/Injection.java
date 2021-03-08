@@ -1,6 +1,6 @@
 package com.jeremydufeux.go4lunch.injection;
 
-import com.jeremydufeux.go4lunch.repositories.GooglePlaceRepository;
+import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
 
 import java.util.concurrent.Executor;
@@ -16,16 +16,16 @@ public class Injection {
         return new WorkmatesDataRepository();
     }
 
-    private static GooglePlaceRepository provideGooglePlaceRepository() {
-        return new GooglePlaceRepository();
+    private static PlacesDataRepository provideGooglePlaceRepository() {
+        return new PlacesDataRepository();
     }
 
 
     public static ViewModelFactory provideViewModelFactory(){
         WorkmatesDataRepository workmatesDataRepository = provideWorkmateDataRepository();
-        GooglePlaceRepository googlePlaceRepository = provideGooglePlaceRepository();
+        PlacesDataRepository placesDataRepository = provideGooglePlaceRepository();
         Executor executor = provideExecutor();
-        return new ViewModelFactory(workmatesDataRepository, googlePlaceRepository, executor);
+        return new ViewModelFactory(workmatesDataRepository, placesDataRepository, executor);
     }
 
 }

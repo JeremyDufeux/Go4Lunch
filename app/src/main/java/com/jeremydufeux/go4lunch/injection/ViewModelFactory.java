@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.jeremydufeux.go4lunch.repositories.GooglePlaceRepository;
+import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
 import com.jeremydufeux.go4lunch.ui.MainViewModel;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
@@ -16,14 +16,14 @@ import java.util.concurrent.Executor;
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final WorkmatesDataRepository mWorkmatesDataRepository;
-    private final GooglePlaceRepository mGooglePlaceRepository;
+    private final PlacesDataRepository mPlacesDataRepository;
     private final Executor mExecutor;
 
     public ViewModelFactory(WorkmatesDataRepository workmatesDataRepository,
-                            GooglePlaceRepository googlePlaceRepository,
+                            PlacesDataRepository placesDataRepository,
                             Executor executor) {
         mWorkmatesDataRepository = workmatesDataRepository;
-        mGooglePlaceRepository = googlePlaceRepository;
+        mPlacesDataRepository = placesDataRepository;
         mExecutor = executor;
     }
 
@@ -33,7 +33,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
 
         if(modelClass.isAssignableFrom(SharedViewModel.class)){
-            return (T) new SharedViewModel();
+            return (T) new SharedViewModel(mPlacesDataRepository);
         }
         else if(modelClass.isAssignableFrom(LoginViewModel.class)){
             return (T) new LoginViewModel(mWorkmatesDataRepository, mExecutor);
@@ -42,7 +42,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MainViewModel(mWorkmatesDataRepository);
         }
         else if(modelClass.isAssignableFrom(MapViewViewModel.class)){
-            return (T) new MapViewViewModel(mGooglePlaceRepository, mExecutor);
+            return (T) new MapViewViewModel(mPlacesDataRepository, mExecutor);
         }
         throw new IllegalArgumentException("Unknown ViewModel Class");
     }
