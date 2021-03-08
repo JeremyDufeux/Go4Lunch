@@ -12,12 +12,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -32,7 +29,6 @@ import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.ui.fragment.LoginFragmentViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FirebaseAuth.AuthStateListener {
 
@@ -57,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = mBinding.activityMainNavView.getHeaderView(0);
         mHeaderBinding = ActivityMainDrawerHeaderBinding.bind(headerView);
 
-        configureViewModel();
-        configureSharedViewModel();
+        configureViewModels();
         configureNavController();
         configureBottomNavigation();
         configureToolbar();
@@ -67,16 +62,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureFirebaseAuthListener();
     }
 
-    private void configureViewModel() {
+    private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
+        mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
+        if(user!=null) {
+            mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
+        }
+        else {
+            mSharedViewModel.isUserLogged().observe(this, this::observeForUserData);
+        }
     }
 
-    private void configureSharedViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
+    private void observeForUserData(Boolean aBoolean) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
     }
 
     private void configureNavController() {
