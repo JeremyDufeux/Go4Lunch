@@ -38,7 +38,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/place_item_star_1_iv"
+        app:layout_constraintEnd_toStartOf="@+id/place_item_star_3_iv"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@sample/places.json/names/open/value" />
 
@@ -55,12 +55,13 @@
         android:id="@+id/place_item_workmate_iv"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        app:tint="@color/black"
+        android:src="@drawable/ic_person"
+        android:visibility="gone"
+        android:contentDescription="@string/workmates_interested"
         app:layout_constraintBottom_toBottomOf="@+id/place_item_workmate_amount_tv"
         app:layout_constraintEnd_toStartOf="@+id/place_item_workmate_amount_tv"
-        app:layout_constraintTop_toTopOf="@+id/place_item_workmate_amount_tv"
-        app:tint="@color/black"
-        tools:srcCompat="@drawable/ic_person"
-        android:contentDescription="@string/workmates_interested" />
+        app:layout_constraintTop_toTopOf="@+id/place_item_workmate_amount_tv" />
 
     <TextView
         android:id="@+id/place_item_workmate_amount_tv"
@@ -68,38 +69,40 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:textColor="@color/black"
+        tools:text="@sample/places.json/names/workmates/value"
         app:layout_constraintBottom_toTopOf="@+id/place_item_star_1_iv"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv"
-        app:layout_constraintTop_toBottomOf="@+id/place_item_distance_tv"
-        tools:text="@sample/places.json/names/workmates/value" />
-
-    <ImageView
-        android:id="@+id/place_item_star_3_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv"
-        tools:srcCompat="@drawable/ic_star"
-        android:contentDescription="@string/rating" />
-
-    <ImageView
-        android:id="@+id/place_item_star_2_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/place_item_star_3_iv"
-        tools:srcCompat="@drawable/ic_star"
-        android:contentDescription="@string/rating" />
+        app:layout_constraintTop_toBottomOf="@+id/place_item_distance_tv"/>
 
     <ImageView
         android:id="@+id/place_item_star_1_iv"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_star"
+        android:contentDescription="@string/rating"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/place_item_star_2_iv"
-        tools:srcCompat="@drawable/ic_star"
-        android:contentDescription="@string/rating" />
+        app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv" />
+
+    <ImageView
+        android:id="@+id/place_item_star_2_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_star"
+        android:contentDescription="@string/rating"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/place_item_star_1_iv" />
+
+    <ImageView
+        android:id="@+id/place_item_star_3_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_star"
+        android:contentDescription="@string/rating"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/place_item_star_2_iv"/>
 
     <ImageView
         android:id="@+id/place_item_picture_iv"
@@ -107,9 +110,9 @@
         android:layout_height="80dp"
         android:contentDescription="@string/place_picture"
         app:layout_constraintBottom_toBottomOf="parent"
+        tools:srcCompat="@sample/restaurants"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@sample/restaurants" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

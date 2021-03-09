@@ -1,12 +1,8 @@
 package com.jeremydufeux.go4lunch.repositories;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;

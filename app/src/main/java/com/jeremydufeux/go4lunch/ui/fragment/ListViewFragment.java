@@ -24,8 +24,6 @@ import java.util.List;
 
 public class ListViewFragment extends BaseFragment {
 
-    private SharedViewModel mSharedViewModel;
-
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
 
@@ -43,12 +41,11 @@ public class ListViewFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-
-        mSharedViewModel.getPlaceList().observe(this, this::getGooglePlaceResults);
+        SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+        sharedViewModel.getPlaceListLiveData().observe(this, this::getPlaceResults);
     }
 
-    private void getGooglePlaceResults(List<Place> places) {
+    private void getPlaceResults(List<Place> places) {
         mAdapter.updateList(places);
     }
 
@@ -62,7 +59,7 @@ public class ListViewFragment extends BaseFragment {
     }
 
     private void configureRecyclerView() {
-        mAdapter = new ListViewPlacesAdapter();
+        mAdapter = new ListViewPlacesAdapter(requireContext());
         mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
         mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 

@@ -1,12 +1,9 @@
 package com.jeremydufeux.go4lunch.repositories;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
-import com.jeremydufeux.go4lunch.api.GooglePlacesService;
-import com.jeremydufeux.go4lunch.models.GooglePlaceResult.Result;
-import com.jeremydufeux.go4lunch.models.Place;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.jeremydufeux.go4lunch.api.PlacesService;
+import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
+import com.jeremydufeux.go4lunch.models.PlaceResult.PlaceResults;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -14,26 +11,36 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PlacesDataRepository {
 
-    public Observable<List<Place>> getNearbyPlaces(String latlng, String radius, String type){
-        GooglePlacesService googlePlacesService = GooglePlacesService.retrofit.create(GooglePlacesService.class);
+    public Observable<PlaceResults> getNearbyPlaces(String latlng, String radius, String type){
+        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-        return googlePlacesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, radius, type)
-                .map(placeResults -> {
-                    List<Place> placeList = new ArrayList<>();
+        return placesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, radius, type)
+                .subscribeOn(Schedulers.io())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 
-                    for(Result result : placeResults.getResults()){
-                        Place place = new Place(result.getPlaceId(), result.getName());
-                        place.setLatitude(result.getGeometry().getLocation().getLat());
-                        place.setLongitude(result.getGeometry().getLocation().getLng());
-                        if(result.getOpeningHours() != null) {
-                            place.setOpeningHours(result.getOpeningHours());
-                        }
+    public Observable<PlaceResults> getNextPageNearbyPlaces(String pageToken) {
+        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-                        placeList.add(place);
-                    }
+        return placesService.fetchNextPageNearbyPlaces(BuildConfig.MAPS_API_KEY, pageToken)
+                .subscribeOn(Schedulers.io())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 
-                    return placeList;
-                })
+    public Observable<PlaceDetailsResults> getDetailsForPlaceId(String placeId) {
+        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
+
+        String fields = "place_id,"
+                + "name,"
+                + "address_component,"
+                + "geometry,"
+                + "opening_hours,"
+                + "photo,"
+                + "international_phone_number,"
+                + "website,"
+                + "rating";
+
+        return placesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, placeId, fields)
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS);
     }

@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private static final float DEFAULT_ZOOM = 16;
     private static final String RESTAURANT = "restaurant";
 
-    private MapViewViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -76,10 +74,9 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getPlaceList().observe(this, this::getGooglePlaceResults);
+        mSharedViewModel.getPlaceListLiveData().observe(this, this::getGooglePlaceResults);
     }
 
     @Override
@@ -177,13 +174,13 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private void getGooglePlaceResults(List<Place> placeList) {
         if(mMap!=null) {
-            for (Place place : placeList) {
+            for (Place place :placeList) {
                 LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
-                mMap.addMarker(new MarkerOptions()
+                MarkerOptions markerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(place.getName())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal))
-                );
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
+               mMap.addMarker(markerOptions);
             }
         }
     }
@@ -257,6 +254,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
 
     private double getMapSize(){
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, mMap.getCameraPosition().target);
+        return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight);
     }
 }

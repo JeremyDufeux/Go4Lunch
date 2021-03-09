@@ -2,11 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="dark_grey">#595B5D</color>
+    <color name="grey">#808080</color>
     <color name="very_light_grey">#D2D2D2</color>
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#FF5721</color>
     <color name="dark_orange">#C41A00</color>
     <color name="clear_orange">#FF8A50</color>
+    <color name="red">#D82B3B</color>
     <color name="google_button">#DF4930</color>
     <color name="facebook_button">#507CC0</color>
 </resources>

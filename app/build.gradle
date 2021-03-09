@@ -95,4 +95,7 @@ dependencies {
 
     // Retrofit RxJava Adapter
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    // OkHTTP
+    //implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
 }

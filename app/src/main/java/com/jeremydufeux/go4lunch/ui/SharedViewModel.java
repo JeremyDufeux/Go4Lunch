@@ -7,8 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.AddressComponent;
+import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
+import com.jeremydufeux.go4lunch.models.PlaceResult.PlaceResults;
+import com.jeremydufeux.go4lunch.models.PlaceResult.Result;
 import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
@@ -18,13 +24,14 @@ import io.reactivex.observers.DisposableObserver;
 public class SharedViewModel extends ViewModel {
 
     // For MainActivity
-    private MutableLiveData<Boolean> userLogged;
+    private final MutableLiveData<Boolean> userLogged;
 
     // For List and Map View
-    PlacesDataRepository mPlacesDataRepository;
+    private final PlacesDataRepository mPlacesDataRepository;
 
-    private CompositeDisposable mDisposable = new CompositeDisposable();
-    private final MutableLiveData<List<Place>> mPlaceList;
+    private final CompositeDisposable mDisposable = new CompositeDisposable();
+    private final HashMap<String, Place> mPlaceList;
+    private final MutableLiveData<List<Place>> mPlaceListLiveData;
 
     // For Map View
     private double mapViewCameraLatitude;
@@ -35,7 +42,8 @@ public class SharedViewModel extends ViewModel {
     public SharedViewModel(PlacesDataRepository placesDataRepository) {
         mPlacesDataRepository = placesDataRepository;
 
-        mPlaceList = new MutableLiveData<>();
+        mPlaceList = new HashMap<>();
+        mPlaceListLiveData = new MutableLiveData<>();
         userLogged = new MutableLiveData<>();
     }
 
@@ -57,15 +65,40 @@ public class SharedViewModel extends ViewModel {
 
     public void getNearbyPlaces(String latlng, String radius, String type) {
         mDisposable.add(mPlacesDataRepository.getNearbyPlaces(latlng, radius, type)
-                .subscribeWith(new DisposableObserver<List<Place>>() {
+                .subscribeWith(new DisposableObserver<PlaceResults>() {
                     @Override
-                    public void onNext(@NonNull List<Place> placeList) {
-                        mPlaceList.postValue(placeList);
+                    public void onNext(@NonNull PlaceResults results) {
+                        updatePlaceListNewResults(getPlacesFromResults(results));
+                        if(results.getNextPageToken()!=null) {
+                            getNextPageNearbyPlaces(results.getNextPageToken());
+                        }
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d("Debug", "onError getNearbyPlaces " + e.toString());
+                    }
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
+
+    public void getNextPageNearbyPlaces(String pageToken) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mDisposable.add(mPlacesDataRepository.getNextPageNearbyPlaces(pageToken)
+                .subscribeWith(new DisposableObserver<PlaceResults>() {
+                    @Override
+                    public void onNext(@NonNull PlaceResults results) {
+                        updatePlaceListNewResults(getPlacesFromResults(results));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError " + e.toString());
+                        Log.d("Debug", "onError getNearbyPlaces " + e.toString());
                     }
 
                     @Override
@@ -74,8 +107,91 @@ public class SharedViewModel extends ViewModel {
                 }));
     }
 
-    public MutableLiveData<List<Place>> getPlaceList() {
-        return mPlaceList;
+    public void getDetailsForPlaceId(String placeId){
+        mDisposable.add(mPlacesDataRepository.getDetailsForPlaceId(placeId)
+                .subscribeWith(new DisposableObserver<PlaceDetailsResults>() {
+                    @Override
+                    public void onNext(@NonNull PlaceDetailsResults results) {
+                        updatePlaceListWithDetails(getDetailsFromResults(results));
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d("Debug", "onError getDetailsForPlaceId " + e.toString());
+                    }
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
+
+    private List<Place> getPlacesFromResults(PlaceResults results){
+        List<Place> placeList = new ArrayList<>();
+
+        for(Result result : results.getResults()){
+            if(result.getBusinessStatus()!= null) {
+                if (result.getBusinessStatus().equals("OPERATIONAL")) {
+                    Place place = new Place(result.getPlaceId(), result.getName());
+                    place.setLatitude(result.getGeometry().getLocation().getLat());
+                    place.setLongitude(result.getGeometry().getLocation().getLng());
+
+                    placeList.add(place);
+                }
+            }
+        }
+
+        return placeList;
+    }
+
+    private Place getDetailsFromResults(PlaceDetailsResults results){
+        com.jeremydufeux.go4lunch.models.PlaceDetailsResult.Result placeDetail = results.getResult();
+
+        Place place = new Place(placeDetail.getPlaceId(), placeDetail.getName());
+        place.setAddress(getAddressFromAddressComponents(placeDetail.getAddressComponents()));
+        place.setLatitude(placeDetail.getGeometry().getLocation().getLat());
+        place.setLongitude(placeDetail.getGeometry().getLocation().getLng());
+        place.setOpeningHours(placeDetail.getOpeningHours());
+        if(placeDetail.getPhotos() != null) {
+            place.setPhotoReference(placeDetail.getPhotos().get(0).getPhotoReference());
+        }
+        place.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
+        place.setWebsite(placeDetail.getWebsite());
+        place.setRating(placeDetail.getRating());
+
+        return place;
+    }
+
+    private String getAddressFromAddressComponents(List<AddressComponent> addressComponents){
+        String streetNumber = "";
+        String route = "";
+        for (int i = 0; i < addressComponents.size(); i++){
+            if(addressComponents.get(i).getTypes().contains("street_number")){
+                streetNumber = addressComponents.get(i).getLongName() + ", ";
+            } else if(addressComponents.get(i).getTypes().contains("route")){
+                route = addressComponents.get(i).getLongName();
+            }
+        }
+        return streetNumber + route;
+    }
+
+
+    private void updatePlaceListNewResults(List<Place> places) {
+        for (Place place : places){
+            if(!mPlaceList.containsKey(place.getUId())){
+                mPlaceList.put(place.getUId(), place);
+                getDetailsForPlaceId(place.getUId());
+            }
+        }
+        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
+    }
+
+    private void updatePlaceListWithDetails(Place placeDetails) {
+        mPlaceList.put(placeDetails.getUId(), placeDetails);
+
+        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
+    }
+
+    public MutableLiveData<List<Place>> getPlaceListLiveData() {
+        return mPlaceListLiveData;
     }
 
     // -------------
