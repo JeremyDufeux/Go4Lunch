@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
@@ -84,6 +85,7 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void getNextPageNearbyPlaces(String pageToken) {
+        // TODO To check
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -130,9 +132,11 @@ public class SharedViewModel extends ViewModel {
         for(Result result : results.getResults()){
             if(result.getBusinessStatus()!= null) {
                 if (result.getBusinessStatus().equals("OPERATIONAL")) {
-                    Place place = new Place(result.getPlaceId(), result.getName());
-                    place.setLatitude(result.getGeometry().getLocation().getLat());
-                    place.setLongitude(result.getGeometry().getLocation().getLng());
+
+                    LatLng latLng = new LatLng(result.getGeometry().getLocation().getLat(),
+                            result.getGeometry().getLocation().getLng());
+
+                    Place place = new Place(result.getPlaceId(), result.getName(), latLng);
 
                     placeList.add(place);
                 }
@@ -145,10 +149,11 @@ public class SharedViewModel extends ViewModel {
     private Place getDetailsFromResults(PlaceDetailsResults results){
         com.jeremydufeux.go4lunch.models.PlaceDetailsResult.Result placeDetail = results.getResult();
 
-        Place place = new Place(placeDetail.getPlaceId(), placeDetail.getName());
+        LatLng latLng = new LatLng(placeDetail.getGeometry().getLocation().getLat(),
+                placeDetail.getGeometry().getLocation().getLng());
+
+        Place place = new Place(placeDetail.getPlaceId(), placeDetail.getName(), latLng);
         place.setAddress(getAddressFromAddressComponents(placeDetail.getAddressComponents()));
-        place.setLatitude(placeDetail.getGeometry().getLocation().getLat());
-        place.setLongitude(placeDetail.getGeometry().getLocation().getLng());
         place.setOpeningHours(placeDetail.getOpeningHours());
         if(placeDetail.getPhotos() != null) {
             place.setPhotoReference(placeDetail.getPhotos().get(0).getPhotoReference());
@@ -198,7 +203,6 @@ public class SharedViewModel extends ViewModel {
     // For MapView
     // -------------
 
-
     public double getMapViewCameraLatitude() {
         return mapViewCameraLatitude;
     }
@@ -234,8 +238,6 @@ public class SharedViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        if(mDisposable!=null) {
-            mDisposable.clear();
-        }
+        mDisposable.clear();
     }
 }

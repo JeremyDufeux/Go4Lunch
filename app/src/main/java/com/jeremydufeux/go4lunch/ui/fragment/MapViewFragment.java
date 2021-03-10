@@ -18,9 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.SphericalUtil;
 import com.jeremydufeux.go4lunch.BaseFragment;
@@ -33,6 +31,7 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,18 +41,21 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, ActivityCompat.OnRequestPermissionsResultCallback, EasyPermissions.PermissionCallbacks {
+public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, EasyPermissions.PermissionCallbacks {
 
-    private static final int RC_LOCATION = 1;
-    private static final float DEFAULT_ZOOM = 16;
-    private static final String RESTAURANT = "restaurant";
+    private static final int PERMS_RC_LOCATION = 1;
+    private static final float DEFAULT_ZOOM_VALUE = 16;
+    private static final float LIMIT_ZOOM_VALUE = 14.6f;
+    private static final String PLACE_TYPE_RESTAURANT = "restaurant";
 
     private SharedViewModel mSharedViewModel;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleMap mMap;
 
+    private List<Place> mPlaces = new ArrayList<>();
     private Boolean mPermissionDenied = false;
+    private Boolean mMapReady = false;
 
     // ---------------
     // Setup
@@ -76,7 +78,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getPlaceListLiveData().observe(this, this::getGooglePlaceResults);
+        mSharedViewModel.getPlaceListLiveData().observe(this, this::getPlaceResults);
     }
 
     @Override
@@ -103,11 +105,13 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnCameraIdleListener(this);
+        mMap.setOnCameraIdleListener(this::onCameraIdle);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMapReady = true;
         getSavedData();
         enableLocation();
+        updateMap();
     }
 
     private void getSavedData() {
@@ -137,7 +141,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     private void focusToLocation() {
         mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
-                focusCamera(location.getLatitude(), location.getLongitude(), DEFAULT_ZOOM, true);
+                focusCamera(location.getLatitude(), location.getLongitude(), DEFAULT_ZOOM_VALUE, true);
                 getNearbyPlaces(location.getLatitude() + "," + location.getLongitude());
             }
         });
@@ -157,13 +161,9 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // Places
     // ---------------
 
-    private void getNearbyPlaces(String latlng) {
-        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getMapSize()), RESTAURANT);
-    }
-
-    @Override
     public void onCameraIdle() {
         fetchPlacesAtCameraPosition();
+        updateMap();
     }
 
     private void fetchPlacesAtCameraPosition(){
@@ -172,16 +172,40 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         getNearbyPlaces(lat + "," + lng);
     }
 
-    private void getGooglePlaceResults(List<Place> placeList) {
-        if(mMap!=null) {
-            for (Place place :placeList) {
-                LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions()
-                        .position(latLng)
-                        .title(place.getName())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
-               mMap.addMarker(markerOptions);
+    private void getNearbyPlaces(String latlng) {
+        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
+    }
+
+    private void getPlaceResults(List<Place> placeList) {
+        // TODO Check if ok
+        mPlaces = placeList;
+        updateMap();
+    }
+
+    private void updateMap() {
+        if (mMapReady && mPlaces != null) {
+            if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
+                addMarkersInViewport();
+            } else {
+                hideAllMarkers();
             }
+        }
+    }
+
+    private void addMarkersInViewport(){
+        for (Place place : mPlaces) {
+            if (mMap.getProjection().getVisibleRegion().latLngBounds.contains(place.getLatlng())) {
+                if (place.getMarker() == null) {
+                    place.setMarker(mMap.addMarker(place.getMarkerOptions()));
+                }
+            }
+        }
+    }
+
+    private void hideAllMarkers(){
+        mMap.clear();
+        for (Place place : mPlaces) {
+            place.setMarker(null);
         }
     }
 
@@ -190,7 +214,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // ---------------
 
     @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(RC_LOCATION)
+    @AfterPermissionGranted(PERMS_RC_LOCATION)
     private void enableLocation() {
         if (EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
             mPermissionDenied = false;
@@ -205,7 +229,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     }
 
     private void requestPermission(){
-        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), RC_LOCATION, ACCESS_FINE_LOCATION);
+        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), PERMS_RC_LOCATION, ACCESS_FINE_LOCATION);
     }
 
     @Override
@@ -245,6 +269,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);
         mSharedViewModel.setMapViewCameraZoom(mMap.getCameraPosition().zoom);
         mSharedViewModel.setMapViewDataSet(true);
+
+        for (Place place : mPlaces) {
+            place.setMarker(null);
+        }
     }
 
 
@@ -252,7 +280,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // Utils
     // ---------------
 
-    private double getMapSize(){
+    private double getVisibleRegionRadius(){
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
         return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight);
     }

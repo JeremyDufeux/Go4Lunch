@@ -39,6 +39,9 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         holder.mBinding.placeItemNameTv.setText(place.getName());
         holder.mBinding.placeItemTypeAndAddressTv.setText(place.getAddress());
 
+        // TODO Load place photo
+
+        // TODO Display "Open until" depending on time
         if(place.getOpeningHours() != null) {
             if (!place.getOpeningHours().getOpenNow()) {
                 holder.mBinding.placeItemOpenTv.setText(R.string.closed);

@@ -1,11 +1,14 @@
 package com.jeremydufeux.go4lunch.models;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.OpeningHours;
 
 public class Place {
     private final String mUId;
-    private Double mLatitude;
-    private Double mLongitude;
     private String mName;
     private String mAddress;
     private String mPhotoReference;
@@ -15,30 +18,22 @@ public class Place {
     private int mWorkmatesInterested;
     private int mDistanceFromUser;
     private OpeningHours mOpeningHours;
+    private LatLng mLatlng;
+    private Marker mMarker;
+    private MarkerOptions mMarkerOptions;
 
-    public Place(String placeId, String name) {
+    public Place(String placeId, String name, LatLng latlng) {
         mUId = placeId;
         mName = name;
+        mLatlng = latlng;
+        mMarkerOptions = new MarkerOptions()
+                .title(name)
+                .position(mLatlng)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
     }
 
     public String getUId() {
         return mUId;
-    }
-
-    public Double getLatitude() {
-        return mLatitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        mLatitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return mLongitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        mLongitude = longitude;
     }
 
     public String getName() {
@@ -111,5 +106,29 @@ public class Place {
 
     public void setPhotoReference(String photoReference) {
         mPhotoReference = photoReference;
+    }
+
+    public LatLng getLatlng() {
+        return mLatlng;
+    }
+
+    public void setLatlng(LatLng latlng) {
+        mLatlng = latlng;
+    }
+
+    public Marker getMarker() {
+        return mMarker;
+    }
+
+    public void setMarker(Marker marker) {
+        mMarker = marker;
+    }
+
+    public MarkerOptions getMarkerOptions() {
+        return mMarkerOptions;
+    }
+
+    public void setMarkerOptions(MarkerOptions markerOptions) {
+        mMarkerOptions = markerOptions;
     }
 }
