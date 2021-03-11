@@ -33,6 +33,7 @@ public class PlacesDataRepository {
         String fields = "place_id,"
                 + "name,"
                 + "address_component,"
+                + "vicinity,"
                 + "geometry,"
                 + "opening_hours,"
                 + "photo,"

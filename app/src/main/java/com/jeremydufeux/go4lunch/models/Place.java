@@ -1,5 +1,7 @@
 package com.jeremydufeux.go4lunch.models;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -16,16 +18,22 @@ public class Place {
     private String mWebsite;
     private float mRating;
     private int mWorkmatesInterested;
-    private int mDistanceFromUser;
+    private float mDistanceFromUser;
     private OpeningHours mOpeningHours;
     private LatLng mLatlng;
+    private Location mLocation;
     private Marker mMarker;
     private MarkerOptions mMarkerOptions;
 
-    public Place(String placeId, String name, LatLng latlng) {
+    public Place(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
         mName = name;
-        mLatlng = latlng;
+
+        mLatlng = new LatLng(lat,lng );
+        mLocation = new Location("");
+        mLocation.setLatitude(lat);
+        mLocation.setLongitude(lng);
+
         mMarkerOptions = new MarkerOptions()
                 .title(name)
                 .position(mLatlng)
@@ -68,11 +76,11 @@ public class Place {
         mWorkmatesInterested = workmatesInterested;
     }
 
-    public int getDistanceFromUser() {
+    public float getDistanceFromUser() {
         return mDistanceFromUser;
     }
 
-    public void setDistanceFromUser(int distanceFromUser) {
+    public void setDistanceFromUser(float distanceFromUser) {
         mDistanceFromUser = distanceFromUser;
     }
 
@@ -114,6 +122,14 @@ public class Place {
 
     public void setLatlng(LatLng latlng) {
         mLatlng = latlng;
+    }
+
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(Location location) {
+        mLocation = location;
     }
 
     public Marker getMarker() {

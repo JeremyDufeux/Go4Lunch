@@ -19,6 +19,9 @@ public class Result {
     @SerializedName("opening_hours")
     @Expose
     private OpeningHours openingHours;
+    @SerializedName("vicinity")
+    @Expose
+    private String vicinity;
     @SerializedName("photos")
     @Expose
     private List<Photo> photos = null;
@@ -68,6 +71,14 @@ public class Result {
 
     public void setOpeningHours(OpeningHours openingHours) {
         this.openingHours = openingHours;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
     }
 
     public List<Photo> getPhotos() {

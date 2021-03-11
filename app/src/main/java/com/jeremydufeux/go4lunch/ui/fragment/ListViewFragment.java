@@ -20,9 +20,12 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewFragment extends BaseFragment {
+
+    private SharedViewModel mSharedViewModel;
 
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
@@ -41,18 +44,17 @@ public class ListViewFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        SharedViewModel sharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-        sharedViewModel.getPlaceListLiveData().observe(this, this::getPlaceResults);
+        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+        mSharedViewModel.getPlaceListLiveData().observe(this, this::onPlacesChanged);
     }
 
-    private void getPlaceResults(List<Place> places) {
+    void onPlacesChanged(List<Place> places) {
         mAdapter.updateList(places);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentListViewBinding.inflate(getLayoutInflater());
-
         configureRecyclerView();
 
         return mBinding.getRoot();

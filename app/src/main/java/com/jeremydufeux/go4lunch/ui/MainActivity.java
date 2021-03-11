@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,7 +12,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +24,11 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +40,22 @@ import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FirebaseAuth.AuthStateListener {
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        FirebaseAuth.AuthStateListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
+
+    public static final int PERMS_RC_LOCATION = 1;
 
     private MainViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
@@ -41,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BottomNavigationView mBottomNavigationView;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
+
+    private LocationCallback mLocationCallback;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,31 +89,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureDrawer();
         configureNavControllerListener();
         configureFirebaseAuthListener();
+        configurePermissionsRequest();
     }
+
+    // ---------------
+    // Configuration
+    // ---------------
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
         mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null) {
-            mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
-        }
-        else {
-            mSharedViewModel.isUserLogged().observe(this, this::observeForUserData);
-        }
-    }
-
-    private void observeForUserData(Boolean aBoolean) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        mViewModel.getWorkmateWithId(user.getUid()).observe(this, this::updateDrawerHeader);
     }
 
     private void configureNavController() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
-        assert navHostFragment != null;
         mNavController = navHostFragment.getNavController();
     }
 
@@ -134,11 +153,108 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void updateDrawerHeader(Workmate workmate) {
+    private void configureFirebaseAuthListener() {
+        FirebaseAuth.getInstance().addAuthStateListener(this);
+    }
+
+    private void configurePermissionsRequest() {
+        mSharedViewModel.getSystemSettingsDialogRequest().observe(this, this::onSystemSettingsDialog);
+    }
+
+    private void onSystemSettingsDialog(Boolean request) {
+        if(request) {
+            mSharedViewModel.setSystemSettingsDialogRequest(false);
+            openSystemSettingsDialog();
+        }
+    }
+
+    private void openSystemSettingsDialog() {
+        new AppSettingsDialog.Builder(this).build().show();
+    }
+
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(PERMS_RC_LOCATION)
+    private void configureLocation() {
+        if (EasyPermissions.hasPermissions(this, ACCESS_FINE_LOCATION)) {
+            mLocationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(@NotNull LocationResult locationResult) {
+                    mSharedViewModel.setUserLocation(locationResult.getLastLocation());
+                }
+            };
+
+            mLocationRequest = LocationRequest.create();
+            mLocationRequest.setInterval(5000);
+            mLocationRequest.setFastestInterval(1000);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    mSharedViewModel.setUserLocation(location);
+                }
+            });
+
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    mLocationCallback,
+                    Looper.getMainLooper());
+
+            mSharedViewModel.setLocationPermissionGranted(true);
+        }else {
+            requestPermission();
+        }
+    }
+
+    private void requestPermission(){
+        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), PERMS_RC_LOCATION, ACCESS_FINE_LOCATION);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE && EasyPermissions.hasPermissions(this, ACCESS_FINE_LOCATION)) {
+            configureLocation();
+        }
+    }
+
+    // ---------------
+    // Firebase Auth
+    // ---------------
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser != null){
+            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::onUserDataChange);
+            configureLocation();
+        }
+    }
+
+    private void onUserDataChange(Workmate workmate) {
         Glide.with(this).load(workmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
         mHeaderBinding.drawerNameTv.setText(workmate.getUserName());
         mHeaderBinding.drawerEmailTv.setText(workmate.getEmail());
     }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
+
+        mNavController.navigate(R.id.action_global_login_fragment);
+    }
+
+    // ---------------
+    // Activity Overrides
+    // ---------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,28 +280,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void logout() {
-        FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
-
-        mNavController.navigate(R.id.action_global_login_fragment);
-    }
-
-    private void configureFirebaseAuthListener() {
-        FirebaseAuth.getInstance().addAuthStateListener(this);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
-    }
-
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser != null){
-            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::updateDrawerHeader);
-        }
     }
 }

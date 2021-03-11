@@ -1,11 +1,14 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.content.Context;
+import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jeremydufeux.go4lunch.R;
@@ -51,7 +54,8 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                 holder.mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.grey));
             }
         }
-        String distance = place.getDistanceFromUser() + "m";
+
+        String distance = (int)place.getDistanceFromUser() + "m";
         holder.mBinding.placeItemDistanceTv.setText(distance);
 
         if(place.getWorkmatesInterested()>0){
@@ -60,6 +64,9 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             holder.mBinding.placeItemWorkmateAmountTv.setText(workmatesInterested);
         }
 
+        if (place.getRating() > 0) {
+            holder.mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
+        }
         if (place.getRating() > 1.66) {
             holder.mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
         }
@@ -74,7 +81,8 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     }
 
     public void updateList(List<Place> places) {
-        mPlaceList = places;
+        mPlaceList.clear();
+        mPlaceList.addAll(places);
         notifyDataSetChanged();
     }
 

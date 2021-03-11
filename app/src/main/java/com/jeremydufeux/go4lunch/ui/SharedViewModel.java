@@ -1,12 +1,12 @@
 package com.jeremydufeux.go4lunch.ui;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
@@ -24,8 +24,11 @@ import io.reactivex.observers.DisposableObserver;
 
 public class SharedViewModel extends ViewModel {
 
-    // For MainActivity
-    private final MutableLiveData<Boolean> userLogged;
+    // For Location
+    private Location mLocation;
+    private final MutableLiveData<Boolean> mSystemSettingsDialogRequest;
+    private final MutableLiveData<Boolean> mLocationGrantedLiveData;
+    private final MutableLiveData<Location> mLocationLiveData;
 
     // For List and Map View
     private final PlacesDataRepository mPlacesDataRepository;
@@ -45,19 +48,12 @@ public class SharedViewModel extends ViewModel {
 
         mPlaceList = new HashMap<>();
         mPlaceListLiveData = new MutableLiveData<>();
-        userLogged = new MutableLiveData<>();
-    }
 
-    // -------------
-    // For MainActivity
-    // -------------
+        mLocation = new Location("");
+        mLocationGrantedLiveData = new MutableLiveData<>();
+        mLocationLiveData = new MutableLiveData<>();
 
-    public LiveData<Boolean> isUserLogged(){
-        return userLogged;
-    }
-
-    public void setUserLogged(boolean logged){
-        userLogged.postValue(logged);
+        mSystemSettingsDialogRequest = new MutableLiveData<>();
     }
 
     // -------------
@@ -133,10 +129,10 @@ public class SharedViewModel extends ViewModel {
             if(result.getBusinessStatus()!= null) {
                 if (result.getBusinessStatus().equals("OPERATIONAL")) {
 
-                    LatLng latLng = new LatLng(result.getGeometry().getLocation().getLat(),
-                            result.getGeometry().getLocation().getLng());
+                    double lat = result.getGeometry().getLocation().getLat();
+                    double lng = result.getGeometry().getLocation().getLng();
 
-                    Place place = new Place(result.getPlaceId(), result.getName(), latLng);
+                    Place place = new Place(result.getPlaceId(), result.getName(), lat, lng);
 
                     placeList.add(place);
                 }
@@ -149,15 +145,22 @@ public class SharedViewModel extends ViewModel {
     private Place getDetailsFromResults(PlaceDetailsResults results){
         com.jeremydufeux.go4lunch.models.PlaceDetailsResult.Result placeDetail = results.getResult();
 
-        LatLng latLng = new LatLng(placeDetail.getGeometry().getLocation().getLat(),
-                placeDetail.getGeometry().getLocation().getLng());
+        double lat = placeDetail.getGeometry().getLocation().getLat();
+        double lng = placeDetail.getGeometry().getLocation().getLng();
 
-        Place place = new Place(placeDetail.getPlaceId(), placeDetail.getName(), latLng);
-        place.setAddress(getAddressFromAddressComponents(placeDetail.getAddressComponents()));
+        Place place = new Place(placeDetail.getPlaceId(), placeDetail.getName(), lat, lng);
+
+        String address = getAddressFromAddressComponents(placeDetail.getAddressComponents());
+        if(address.isEmpty()){
+            address = placeDetail.getVicinity();
+        }
+        place.setAddress(address);
+
         place.setOpeningHours(placeDetail.getOpeningHours());
         if(placeDetail.getPhotos() != null) {
             place.setPhotoReference(placeDetail.getPhotos().get(0).getPhotoReference());
         }
+
         place.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
         place.setWebsite(placeDetail.getWebsite());
         place.setRating(placeDetail.getRating());
@@ -200,6 +203,44 @@ public class SharedViewModel extends ViewModel {
     }
 
     // -------------
+    // For Location
+    // -------------
+
+    public LiveData<Boolean> getSystemSettingsDialogRequest() {
+        return mSystemSettingsDialogRequest;
+    }
+
+    public void setSystemSettingsDialogRequest(boolean request){
+        mSystemSettingsDialogRequest.setValue(request);
+    }
+
+    public LiveData<Boolean> getLocationPermissionGranted(){
+        return mLocationGrantedLiveData;
+    }
+
+    public void setLocationPermissionGranted(boolean locationPermissionGranted){
+        mLocationGrantedLiveData.setValue(locationPermissionGranted);
+    }
+
+    public void setUserLocation(Location location){
+        mLocation = location;
+        mLocationLiveData.postValue(mLocation);
+        calculatePlacesDistances();
+    }
+
+    public LiveData<Location> getUserLocation(){
+        return mLocationLiveData;
+    }
+
+    private void calculatePlacesDistances() {
+        for(Place place : mPlaceList.values()){
+            float distance = mLocation.distanceTo(place.getLocation());
+            place.setDistanceFromUser(distance);
+        }
+        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
+    }
+
+    // -------------
     // For MapView
     // -------------
 
@@ -234,6 +275,10 @@ public class SharedViewModel extends ViewModel {
     public void setMapViewDataSet(boolean mapViewDataSet) {
         this.mapViewDataSet = mapViewDataSet;
     }
+
+    // -------------
+    // For View Model
+    // -------------
 
     @Override
     protected void onCleared() {

@@ -122,7 +122,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     }
 
     private void navigateToMapFragment() {
-        mSharedViewModel.setUserLogged(true);
         Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_login_fragment_to_map_view_fragment);
     }
 

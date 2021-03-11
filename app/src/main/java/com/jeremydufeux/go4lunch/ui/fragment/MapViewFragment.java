@@ -1,18 +1,14 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,29 +28,26 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.jeremydufeux.go4lunch.ui.MainActivity.PERMS_RC_LOCATION;
 
-public class MapViewFragment extends BaseFragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, EasyPermissions.PermissionCallbacks {
+public class MapViewFragment extends BaseFragment implements OnMapReadyCallback {
 
-    private static final int PERMS_RC_LOCATION = 1;
     private static final float DEFAULT_ZOOM_VALUE = 16;
     private static final float LIMIT_ZOOM_VALUE = 14.6f;
     private static final String PLACE_TYPE_RESTAURANT = "restaurant";
 
     private SharedViewModel mSharedViewModel;
 
-    private FusedLocationProviderClient mFusedLocationClient;
     private GoogleMap mMap;
+    private Location mLocation;
 
     private List<Place> mPlaces = new ArrayList<>();
-    private Boolean mPermissionDenied = false;
     private Boolean mMapReady = false;
 
     // ---------------
@@ -78,7 +71,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getPlaceListLiveData().observe(this, this::getPlaceResults);
+        mSharedViewModel.getPlaceListLiveData().observe(this, this::onPlaceResultsChanged);
     }
 
     @Override
@@ -87,7 +80,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         binding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
 
         configureMaps();
-        configureLocation();
 
         return binding.getRoot();
     }
@@ -98,10 +90,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
     }
 
-    private void configureLocation(){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -109,8 +97,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMapReady = true;
+        mSharedViewModel.getLocationPermissionGranted().observe(this, this::enableLocation);
         getSavedData();
-        enableLocation();
         updateMap();
     }
 
@@ -127,24 +115,29 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // Map interactions
     // ---------------
 
+    @AfterPermissionGranted(PERMS_RC_LOCATION)
     private void requestFocusToLocation(){
-        if (mPermissionDenied && EasyPermissions.somePermissionPermanentlyDenied(requireActivity(), Collections.singletonList(ACCESS_FINE_LOCATION))) {
-            new AppSettingsDialog.Builder(this).build().show();
-        } else if(EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
-            focusToLocation();
+        if (!EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
+            mSharedViewModel.setSystemSettingsDialogRequest(true);
         } else {
-            requestPermission();
+            // TODO Check location
+            focusToLocation();
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private void focusToLocation() {
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location != null) {
-                focusCamera(location.getLatitude(), location.getLongitude(), DEFAULT_ZOOM_VALUE, true);
-                getNearbyPlaces(location.getLatitude() + "," + location.getLongitude());
+    private void onUserLocationChanged(Location location) {
+        if (location != null) {
+            mLocation = location;
+            if(!mSharedViewModel.isMapViewDataSet()) {
+                focusToLocation();
+                mSharedViewModel.setMapViewDataSet(true);
             }
-        });
+        }
+    }
+
+    private void focusToLocation() {
+        focusCamera(mLocation.getLatitude(), mLocation.getLongitude(), DEFAULT_ZOOM_VALUE, true);
+        getNearbyPlaces(mLocation.getLatitude() + "," + mLocation.getLongitude());
     }
 
     private void focusCamera(double lat, double lng, float zoom, boolean animCamera){
@@ -176,7 +169,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
         mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
     }
 
-    private void getPlaceResults(List<Place> placeList) {
+    private void onPlaceResultsChanged(List<Place> placeList) {
         // TODO Check if ok
         mPlaces = placeList;
         updateMap();
@@ -212,49 +205,11 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback,
     // ---------------
     // Permissions
     // ---------------
-
     @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(PERMS_RC_LOCATION)
-    private void enableLocation() {
-        if (EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
-            mPermissionDenied = false;
+    private void enableLocation(Boolean locationPermissionGranted) {
+        if (mMap != null && locationPermissionGranted) {
             mMap.setMyLocationEnabled(true);
-
-            if(!mSharedViewModel.isMapViewDataSet()) {
-                focusToLocation();
-            }
-        } else {
-            requestPermission();
-        }
-    }
-
-    private void requestPermission(){
-        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), PERMS_RC_LOCATION, ACCESS_FINE_LOCATION);
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        mPermissionDenied = false;
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        mPermissionDenied = true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE && EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
-            mPermissionDenied = false;
-            enableLocation();
+            mSharedViewModel.getUserLocation().observe(this, this::onUserLocationChanged);
         }
     }
 

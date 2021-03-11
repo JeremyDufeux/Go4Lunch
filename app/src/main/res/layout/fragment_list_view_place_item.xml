@@ -80,6 +80,7 @@
         android:layout_height="20dp"
         android:layout_marginEnd="5dp"
         android:src="@drawable/ic_star"
+        android:visibility="invisible"
         android:contentDescription="@string/rating"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv" />
