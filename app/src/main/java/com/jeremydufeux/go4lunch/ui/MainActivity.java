@@ -16,7 +16,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,8 +40,6 @@ import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -104,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void configureNavController() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_activity_nav_host);
+        assert navHostFragment != null;
         mNavController = navHostFragment.getNavController();
     }
 
@@ -158,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void configurePermissionsRequest() {
-        mSharedViewModel.getSystemSettingsDialogRequest().observe(this, this::onSystemSettingsDialog);
+        mSharedViewModel.observeSystemSettingsDialogRequest().observe(this, this::onSystemSettingsDialog);
     }
 
     private void onSystemSettingsDialog(Boolean request) {
@@ -190,11 +188,11 @@ public class MainActivity extends AppCompatActivity implements
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            /*mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
                     mSharedViewModel.setUserLocation(location);
                 }
-            });
+            });*/
 
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback,

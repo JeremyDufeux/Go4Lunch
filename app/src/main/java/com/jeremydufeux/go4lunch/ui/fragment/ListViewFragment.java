@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,10 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 public class ListViewFragment extends BaseFragment {
 
@@ -29,6 +32,10 @@ public class ListViewFragment extends BaseFragment {
 
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
+
+    private Location mLocation;
+
+    private final Subject<Location> mObservableLocation = PublishSubject.create();
 
     public ListViewFragment() {}
 
@@ -45,7 +52,19 @@ public class ListViewFragment extends BaseFragment {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-        mSharedViewModel.getPlaceListLiveData().observe(this, this::onPlacesChanged);
+        mSharedViewModel.observePlaceList().observe(this, this::onPlacesChanged);
+        mSharedViewModel.observeLocationPermissionGranted().observe(this, this::onLocationPermissionGranted);
+    }
+
+    private void onLocationPermissionGranted(Boolean granted) {
+        if (granted){
+            mSharedViewModel.observeUserLocation().observe(this, this::onUserPositionChanged);
+        }
+    }
+
+    private void onUserPositionChanged(Location location) {
+        mLocation = location;
+        mObservableLocation.onNext(location);
     }
 
     void onPlacesChanged(List<Place> places) {
@@ -61,7 +80,7 @@ public class ListViewFragment extends BaseFragment {
     }
 
     private void configureRecyclerView() {
-        mAdapter = new ListViewPlacesAdapter(requireContext());
+        mAdapter = new ListViewPlacesAdapter(requireContext(), mObservableLocation, mSharedViewModel.getLocation());
         mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
         mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 

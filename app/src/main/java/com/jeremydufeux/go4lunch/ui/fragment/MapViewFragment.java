@@ -71,7 +71,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
 
-        mSharedViewModel.getPlaceListLiveData().observe(this, this::onPlaceResultsChanged);
+        mSharedViewModel.observePlaceList().observe(this, this::onPlaceResultsChanged);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMapReady = true;
-        mSharedViewModel.getLocationPermissionGranted().observe(this, this::enableLocation);
+        mSharedViewModel.observeLocationPermissionGranted().observe(this, this::enableLocation);
         getSavedData();
         updateMap();
     }
@@ -209,7 +209,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     private void enableLocation(Boolean locationPermissionGranted) {
         if (mMap != null && locationPermissionGranted) {
             mMap.setMyLocationEnabled(true);
-            mSharedViewModel.getUserLocation().observe(this, this::onUserLocationChanged);
+            mSharedViewModel.observeUserLocation().observe(this, this::onUserLocationChanged);
         }
     }
 

@@ -18,7 +18,6 @@ public class Place {
     private String mWebsite;
     private float mRating;
     private int mWorkmatesInterested;
-    private float mDistanceFromUser;
     private OpeningHours mOpeningHours;
     private LatLng mLatlng;
     private Location mLocation;
@@ -74,14 +73,6 @@ public class Place {
 
     public void setWorkmatesInterested(int workmatesInterested) {
         mWorkmatesInterested = workmatesInterested;
-    }
-
-    public float getDistanceFromUser() {
-        return mDistanceFromUser;
-    }
-
-    public void setDistanceFromUser(float distanceFromUser) {
-        mDistanceFromUser = distanceFromUser;
     }
 
     public OpeningHours getOpeningHours() {

@@ -2,13 +2,11 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jeremydufeux.go4lunch.R;
@@ -17,62 +15,42 @@ import com.jeremydufeux.go4lunch.models.Place;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
     Context mContext;
     List<Place> mPlaceList;
+    CompositeDisposable mDisposable;
+    Observable<Location> mObservableLocation;
+    Location mLocation;
 
-    public ListViewPlacesAdapter(Context context) {
+    public ListViewPlacesAdapter(Context context, Observable<Location> observableLocation, Location location) {
         mContext = context;
+        mObservableLocation = observableLocation;
         mPlaceList = new ArrayList<>();
+        mDisposable = new CompositeDisposable();
+        mLocation = location;
     }
 
     @NonNull
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentListViewPlaceItemBinding mBinding = FragmentListViewPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new PlacesViewHolder(mBinding);
+        PlacesViewHolder viewHolder = new PlacesViewHolder(mBinding, mContext, mLocation);
+        mDisposable.add(viewHolder.setPositionObservable(mObservableLocation));
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        Place place = mPlaceList.get(position);
-
-        holder.mBinding.placeItemNameTv.setText(place.getName());
-        holder.mBinding.placeItemTypeAndAddressTv.setText(place.getAddress());
-
-        // TODO Load place photo
-
-        // TODO Display "Open until" depending on time
-        if(place.getOpeningHours() != null) {
-            if (!place.getOpeningHours().getOpenNow()) {
-                holder.mBinding.placeItemOpenTv.setText(R.string.closed);
-                holder.mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.red));
-            } else {
-                holder.mBinding.placeItemOpenTv.setText(R.string.open_now);
-                holder.mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.grey));
-            }
-        }
-
-        String distance = (int)place.getDistanceFromUser() + "m";
-        holder.mBinding.placeItemDistanceTv.setText(distance);
-
-        if(place.getWorkmatesInterested()>0){
-            holder.mBinding.placeItemWorkmateIv.setVisibility(View.VISIBLE);
-            String workmatesInterested = "(" + place.getWorkmatesInterested() + ")";
-            holder.mBinding.placeItemWorkmateAmountTv.setText(workmatesInterested);
-        }
-
-        if (place.getRating() > 0) {
-            holder.mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
-        }
-        if (place.getRating() > 1.66) {
-            holder.mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
-        }
-        if (place.getRating() > 3.33) {
-            holder.mBinding.placeItemStar3Iv.setVisibility(View.VISIBLE);
-        }
+        holder.updateViewHolder(mPlaceList.get(position));
     }
 
     @Override
@@ -86,11 +64,79 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         notifyDataSetChanged();
     }
 
+
     static class PlacesViewHolder extends RecyclerView.ViewHolder {
         FragmentListViewPlaceItemBinding mBinding;
-        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding) {
+        Context mContext;
+        Place mPlace;
+        Location mLocation;
+
+        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding, Context context, Location location) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
+            mContext = context;
+            mLocation = location;
+        }
+
+        public void updateViewHolder(Place place){
+            mPlace = place;
+            mBinding.placeItemNameTv.setText(mPlace.getName());
+            mBinding.placeItemTypeAndAddressTv.setText(mPlace.getAddress());
+
+            // TODO Load place photo
+
+            // TODO Display "Open until" depending on time
+            if(mPlace.getOpeningHours() != null) {
+                if (!mPlace.getOpeningHours().getOpenNow()) {
+                    mBinding.placeItemOpenTv.setText(R.string.closed);
+                    mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.red));
+                } else {
+                    mBinding.placeItemOpenTv.setText(R.string.open_now);
+                    mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.grey));
+                }
+            }
+
+            if (mLocation != null) {
+                String distance = (int) mLocation.distanceTo(mPlace.getLocation()) + "m";
+                mBinding.placeItemDistanceTv.setText(distance);
+            }
+
+            if(mPlace.getWorkmatesInterested()>0){
+                mBinding.placeItemWorkmateIv.setVisibility(View.VISIBLE);
+                String workmatesInterested = "(" + mPlace.getWorkmatesInterested() + ")";
+                mBinding.placeItemWorkmateAmountTv.setText(workmatesInterested);
+            }
+
+            if (mPlace.getRating() > 0) {
+                mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
+            }
+            if (mPlace.getRating() > 1.66) {
+                mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
+            }
+            if (mPlace.getRating() > 3.33) {
+                mBinding.placeItemStar3Iv.setVisibility(View.VISIBLE);
+            }
+        }
+
+        Disposable setPositionObservable(Observable<Location> location){
+            return location.debounce(1000, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableObserver<Location>() {
+                        @Override
+                        public void onNext(@NonNull Location location) {
+                            String distance = (int) location.distanceTo(mPlace.getLocation()) + "m";
+                            mBinding.placeItemDistanceTv.setText(distance);
+                            mLocation = location;
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                        }
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
         }
     }
 }

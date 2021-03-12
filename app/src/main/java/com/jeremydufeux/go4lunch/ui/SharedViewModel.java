@@ -49,7 +49,6 @@ public class SharedViewModel extends ViewModel {
         mPlaceList = new HashMap<>();
         mPlaceListLiveData = new MutableLiveData<>();
 
-        mLocation = new Location("");
         mLocationGrantedLiveData = new MutableLiveData<>();
         mLocationLiveData = new MutableLiveData<>();
 
@@ -198,7 +197,7 @@ public class SharedViewModel extends ViewModel {
         mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
     }
 
-    public MutableLiveData<List<Place>> getPlaceListLiveData() {
+    public MutableLiveData<List<Place>> observePlaceList() {
         return mPlaceListLiveData;
     }
 
@@ -206,7 +205,7 @@ public class SharedViewModel extends ViewModel {
     // For Location
     // -------------
 
-    public LiveData<Boolean> getSystemSettingsDialogRequest() {
+    public LiveData<Boolean> observeSystemSettingsDialogRequest() {
         return mSystemSettingsDialogRequest;
     }
 
@@ -214,7 +213,7 @@ public class SharedViewModel extends ViewModel {
         mSystemSettingsDialogRequest.setValue(request);
     }
 
-    public LiveData<Boolean> getLocationPermissionGranted(){
+    public LiveData<Boolean> observeLocationPermissionGranted(){
         return mLocationGrantedLiveData;
     }
 
@@ -225,19 +224,14 @@ public class SharedViewModel extends ViewModel {
     public void setUserLocation(Location location){
         mLocation = location;
         mLocationLiveData.postValue(mLocation);
-        calculatePlacesDistances();
     }
 
-    public LiveData<Location> getUserLocation(){
+    public LiveData<Location> observeUserLocation(){
         return mLocationLiveData;
     }
 
-    private void calculatePlacesDistances() {
-        for(Place place : mPlaceList.values()){
-            float distance = mLocation.distanceTo(place.getLocation());
-            place.setDistanceFromUser(distance);
-        }
-        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
+    public Location getLocation() {
+        return mLocation;
     }
 
     // -------------
@@ -283,6 +277,6 @@ public class SharedViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        mDisposable.clear();
+        mDisposable.dispose();
     }
 }
