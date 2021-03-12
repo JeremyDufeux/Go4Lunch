@@ -5,6 +5,7 @@ plugins {
 }
 
 def mapApiKey = project.properties['MAPS_API_KEY']
+def geoaapifyApiKey = project.properties['GEOAPIFY_API_KEY']
 
 android {
     compileSdkVersion 30
@@ -30,9 +31,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-
             buildConfigField("String", "MAPS_API_KEY", "\"${mapApiKey}\"")
             resValue("string", "maps_api_key", "${mapApiKey}")
+
+            buildConfigField("String", "GEOAPIFY_API_KEY", "\"${geoaapifyApiKey}\"")
+            resValue("string", "geoapify_api_key", "${geoaapifyApiKey}")
         }
     }
     compileOptions {
@@ -55,7 +58,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // Navigation Component
-    def nav_version = "2.3.3"
+    def nav_version = "2.3.4"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
 

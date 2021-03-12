@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.jeremydufeux.go4lunch.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
@@ -80,7 +81,7 @@ public class ListViewFragment extends BaseFragment {
     }
 
     private void configureRecyclerView() {
-        mAdapter = new ListViewPlacesAdapter(requireContext(), mObservableLocation, mSharedViewModel.getLocation());
+        mAdapter = new ListViewPlacesAdapter(requireContext(), Glide.with(this), mSharedViewModel.getLocation(), mObservableLocation);
         mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
         mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 

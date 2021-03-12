@@ -188,11 +188,11 @@ public class MainActivity extends AppCompatActivity implements
 
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-            /*mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
                     mSharedViewModel.setUserLocation(location);
                 }
-            });*/
+            });
 
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback,

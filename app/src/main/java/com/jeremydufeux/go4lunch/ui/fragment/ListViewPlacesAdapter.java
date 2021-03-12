@@ -5,10 +5,14 @@ import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
+import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Place;
@@ -25,14 +29,16 @@ import io.reactivex.observers.DisposableObserver;
 
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
-    Context mContext;
-    List<Place> mPlaceList;
-    CompositeDisposable mDisposable;
-    Observable<Location> mObservableLocation;
-    Location mLocation;
+    private final Context mContext;
+    private RequestManager mGlide;
+    private final List<Place> mPlaceList;
+    private final CompositeDisposable mDisposable;
+    private final Observable<Location> mObservableLocation;
+    private final Location mLocation;
 
-    public ListViewPlacesAdapter(Context context, Observable<Location> observableLocation, Location location) {
+    public ListViewPlacesAdapter(Context context, RequestManager glide, Location location, Observable<Location> observableLocation) {
         mContext = context;
+        mGlide = glide;
         mObservableLocation = observableLocation;
         mPlaceList = new ArrayList<>();
         mDisposable = new CompositeDisposable();
@@ -43,14 +49,14 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentListViewPlaceItemBinding mBinding = FragmentListViewPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        PlacesViewHolder viewHolder = new PlacesViewHolder(mBinding, mContext, mLocation);
+        PlacesViewHolder viewHolder = new PlacesViewHolder(mBinding, mLocation);
         mDisposable.add(viewHolder.setPositionObservable(mObservableLocation));
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        holder.updateViewHolder(mPlaceList.get(position));
+        holder.updateViewHolder(mContext, mGlide, mPlaceList.get(position));
     }
 
     @Override
@@ -66,33 +72,35 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
 
     static class PlacesViewHolder extends RecyclerView.ViewHolder {
-        FragmentListViewPlaceItemBinding mBinding;
-        Context mContext;
-        Place mPlace;
-        Location mLocation;
+        private final FragmentListViewPlaceItemBinding mBinding;
+        private Place mPlace;
+        private Location mLocation;
 
-        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding, Context context, Location location) {
+        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding, Location location) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
-            mContext = context;
             mLocation = location;
         }
 
-        public void updateViewHolder(Place place){
+        public void updateViewHolder(Context context, RequestManager glide, Place place){
             mPlace = place;
             mBinding.placeItemNameTv.setText(mPlace.getName());
             mBinding.placeItemTypeAndAddressTv.setText(mPlace.getAddress());
 
-            // TODO Load place photo
+            if(!place.getPhotoUrl().isEmpty()) {
+                glide.load(place.getPhotoUrl())
+                        .centerCrop()
+                        .into(mBinding.placeItemPictureIv);
+            }
 
             // TODO Display "Open until" depending on time
             if(mPlace.getOpeningHours() != null) {
                 if (!mPlace.getOpeningHours().getOpenNow()) {
                     mBinding.placeItemOpenTv.setText(R.string.closed);
-                    mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.red));
+                    mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(R.color.red));
                 } else {
                     mBinding.placeItemOpenTv.setText(R.string.open_now);
-                    mBinding.placeItemOpenTv.setTextColor(mContext.getResources().getColor(R.color.grey));
+                    mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(R.color.grey));
                 }
             }
 

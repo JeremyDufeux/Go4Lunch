@@ -22,6 +22,9 @@ public interface PlacesService {
     @GET("/maps/api/place/details/json")
     Observable<PlaceDetailsResults> fetchDetailsForPlaceId(@Query("key") String apiKey, @Query("place_id") String placeId, @Query("fields") String fields);
 
+    @GET("/maps/api/place/photo?")
+    Observable<String> fetchPlacePhoto(@Query("key") String apiKey, @Query("photoreference") String photoReference, @Query("maxwidth") String maxWidth );
+
     //HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     Retrofit retrofit = new Retrofit.Builder()

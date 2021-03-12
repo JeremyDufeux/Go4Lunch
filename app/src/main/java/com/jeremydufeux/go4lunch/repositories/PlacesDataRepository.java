@@ -6,6 +6,7 @@ import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
 import com.jeremydufeux.go4lunch.models.PlaceResult.PlaceResults;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -42,6 +43,15 @@ public class PlacesDataRepository {
                 + "rating";
 
         return placesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, placeId, fields)
+                .subscribeOn(Schedulers.io())
+                .timeout(10, TimeUnit.SECONDS);
+    }
+
+    public Observable<String> getPlacePhoto(String reference) {
+        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
+        String maxWidth = "320";
+
+        return placesService.fetchPlacePhoto(BuildConfig.MAPS_API_KEY, reference, maxWidth)
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS);
     }

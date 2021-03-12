@@ -16,6 +16,7 @@ public class Place {
     private String mPhotoReference;
     private String mPhoneNumber;
     private String mWebsite;
+    private String mPhotoUrl;
     private float mRating;
     private int mWorkmatesInterested;
     private OpeningHours mOpeningHours;
@@ -97,6 +98,14 @@ public class Place {
 
     public void setWebsite(String website) {
         mWebsite = website;
+    }
+
+    public String getPhotoUrl() {
+        return mPhotoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        mPhotoUrl = photoUrl;
     }
 
     public String getPhotoReference() {

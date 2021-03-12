@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
@@ -121,6 +122,23 @@ public class SharedViewModel extends ViewModel {
                 }));
     }
 
+    public void getPlacePhoto(String reference){
+        mDisposable.add(mPlacesDataRepository.getPlacePhoto(reference)
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(@NonNull String photoUrl) {
+                        Log.d("Debug", "photo url " + photoUrl);
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d("Debug", "onError getPlacePhoto " + e.toString());
+                    }
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
+
     private List<Place> getPlacesFromResults(PlaceResults results){
         List<Place> placeList = new ArrayList<>();
 
@@ -156,8 +174,11 @@ public class SharedViewModel extends ViewModel {
         place.setAddress(address);
 
         place.setOpeningHours(placeDetail.getOpeningHours());
-        if(placeDetail.getPhotos() != null) {
-            place.setPhotoReference(placeDetail.getPhotos().get(0).getPhotoReference());
+
+        if(placeDetail.getPhotos() != null){
+            place.setPhotoUrl(getUrlFromReference(placeDetail.getPhotos().get(0).getPhotoReference()));
+        } else {
+            place.setPhotoUrl(getUrlFromGeoapify(lat,lng));
         }
 
         place.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
@@ -165,6 +186,16 @@ public class SharedViewModel extends ViewModel {
         place.setRating(placeDetail.getRating());
 
         return place;
+    }
+
+    public static final String MAP_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=%s&maxwidth=320";
+    public static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=320&height=320&center=lonlat:%s,%s&zoom=17&apiKey=%s";
+
+    private String getUrlFromReference(String photoReference) {
+        return String.format(MAP_PHOTO_URL, photoReference, BuildConfig.MAPS_API_KEY);
+    }
+    private String getUrlFromGeoapify(double lat, double lng) {
+        return String.format(GEOAPIFY_PHOTO_URL, lng, lat, BuildConfig.GEOAPIFY_API_KEY);
     }
 
     private String getAddressFromAddressComponents(List<AddressComponent> addressComponents){
