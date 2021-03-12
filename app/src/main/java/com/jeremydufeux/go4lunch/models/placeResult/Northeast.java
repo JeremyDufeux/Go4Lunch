@@ -1,9 +1,9 @@
-package com.jeremydufeux.go4lunch.models.PlaceResult;
+package com.jeremydufeux.go4lunch.models.placeResult;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Northeast {
 
     @SerializedName("lat")
     @Expose

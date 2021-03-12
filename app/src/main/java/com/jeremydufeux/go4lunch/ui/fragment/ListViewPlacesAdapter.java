@@ -5,14 +5,11 @@ import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
-import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Place;
@@ -30,7 +27,7 @@ import io.reactivex.observers.DisposableObserver;
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
     private final Context mContext;
-    private RequestManager mGlide;
+    private final RequestManager mGlide;
     private final List<Place> mPlaceList;
     private final CompositeDisposable mDisposable;
     private final Observable<Location> mObservableLocation;

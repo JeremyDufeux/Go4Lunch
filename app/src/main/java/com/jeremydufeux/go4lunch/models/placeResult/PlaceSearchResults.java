@@ -1,10 +1,10 @@
-package com.jeremydufeux.go4lunch.models.PlaceResult;
+package com.jeremydufeux.go4lunch.models.placeResult;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PlaceResults {
+public class PlaceSearchResults {
 
     @SerializedName("html_attributions")
     @Expose
@@ -14,7 +14,7 @@ public class PlaceResults {
     private String nextPageToken;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<PlaceSearch> mPlaceSearches = null;
     @SerializedName("status")
     @Expose
     private String status;
@@ -35,12 +35,12 @@ public class PlaceResults {
         this.nextPageToken = nextPageToken;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<PlaceSearch> getPlaceSearches() {
+        return mPlaceSearches;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setPlaceSearches(List<PlaceSearch> placeSearches) {
+        this.mPlaceSearches = placeSearches;
     }
 
     public String getStatus() {

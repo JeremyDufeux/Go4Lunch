@@ -19,7 +19,7 @@ public class WorkmateHelper {
 
     // --- Create ---
     public static Task<Void> createWorkmate(Workmate workmate) {
-        return WorkmateHelper.getWorkmatesCollection().document(workmate.getuId()).set(workmate);
+        return WorkmateHelper.getWorkmatesCollection().document(workmate.getUId()).set(workmate);
     }
 
     // --- Get ---

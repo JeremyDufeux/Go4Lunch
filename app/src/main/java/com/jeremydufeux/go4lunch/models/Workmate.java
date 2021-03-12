@@ -25,11 +25,11 @@ public class Workmate {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getuId() {
+    public String getUId() {
         return uId;
     }
 
-    public void setuId(String uId) {
+    public void setUId(String uId) {
         this.uId = uId;
     }
 

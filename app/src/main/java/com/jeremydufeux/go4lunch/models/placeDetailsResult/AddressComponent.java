@@ -1,5 +1,5 @@
 
-package com.jeremydufeux.go4lunch.models.PlaceDetailsResult;
+package com.jeremydufeux.go4lunch.models.placeDetailsResult;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

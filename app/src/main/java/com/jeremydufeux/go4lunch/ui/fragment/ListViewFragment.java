@@ -34,8 +34,6 @@ public class ListViewFragment extends BaseFragment {
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
 
-    private Location mLocation;
-
     private final Subject<Location> mObservableLocation = PublishSubject.create();
 
     public ListViewFragment() {}
@@ -64,7 +62,6 @@ public class ListViewFragment extends BaseFragment {
     }
 
     private void onUserPositionChanged(Location location) {
-        mLocation = location;
         mObservableLocation.onNext(location);
     }
 

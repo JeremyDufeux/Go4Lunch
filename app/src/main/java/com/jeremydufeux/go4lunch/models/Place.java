@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.OpeningHours;
+import com.jeremydufeux.go4lunch.models.placeDetailsResult.OpeningHours;
 
 public class Place {
     private final String mUId;

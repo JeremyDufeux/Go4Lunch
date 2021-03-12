@@ -1,7 +1,7 @@
 package com.jeremydufeux.go4lunch.api;
 
-import com.jeremydufeux.go4lunch.models.PlaceDetailsResult.PlaceDetailsResults;
-import com.jeremydufeux.go4lunch.models.PlaceResult.PlaceResults;
+import com.jeremydufeux.go4lunch.models.placeDetailsResult.PlaceDetailsResults;
+import com.jeremydufeux.go4lunch.models.placeResult.PlaceSearchResults;
 
 import io.reactivex.Observable;
 //import okhttp3.OkHttpClient;
@@ -14,16 +14,13 @@ import retrofit2.http.Query;
 
 public interface PlacesService {
     @GET("/maps/api/place/nearbysearch/json")
-    Observable<PlaceResults> fetchNearbyPlaces(@Query("key") String apiKey, @Query("location") String latlng, @Query("radius") String radius, @Query("type") String type);
+    Observable<PlaceSearchResults> fetchNearbyPlaces(@Query("key") String apiKey, @Query("location") String latlng, @Query("radius") String radius, @Query("type") String type);
 
     @GET("/maps/api/place/nearbysearch/json")
-    Observable<PlaceResults> fetchNextPageNearbyPlaces(@Query("key") String apiKey, @Query("pagetoken") String pageToken);
+    Observable<PlaceSearchResults> fetchNextPageNearbyPlaces(@Query("key") String apiKey, @Query("pagetoken") String pageToken);
 
     @GET("/maps/api/place/details/json")
     Observable<PlaceDetailsResults> fetchDetailsForPlaceId(@Query("key") String apiKey, @Query("place_id") String placeId, @Query("fields") String fields);
-
-    @GET("/maps/api/place/photo?")
-    Observable<String> fetchPlacePhoto(@Query("key") String apiKey, @Query("photoreference") String photoReference, @Query("maxwidth") String maxWidth );
 
     //HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 

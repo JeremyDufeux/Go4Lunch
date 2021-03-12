@@ -1,10 +1,10 @@
 
-package com.jeremydufeux.go4lunch.models.PlaceDetailsResult;
+package com.jeremydufeux.go4lunch.models.placeDetailsResult;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Close {
+public class Open {
 
     @SerializedName("day")
     @Expose

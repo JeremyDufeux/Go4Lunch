@@ -1,10 +1,10 @@
-package com.jeremydufeux.go4lunch.models.PlaceResult;
+package com.jeremydufeux.go4lunch.models.placeResult;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+public class PlaceSearch {
 
     @SerializedName("business_status")
     @Expose

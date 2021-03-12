@@ -1,5 +1,5 @@
 
-package com.jeremydufeux.go4lunch.models.PlaceDetailsResult;
+package com.jeremydufeux.go4lunch.models.placeDetailsResult;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -12,7 +12,7 @@ public class PlaceDetailsResults {
     private List<Object> htmlAttributions = null;
     @SerializedName("result")
     @Expose
-    private Result result;
+    private PlaceDetails mPlaceDetails;
     @SerializedName("status")
     @Expose
     private String status;
@@ -25,12 +25,12 @@ public class PlaceDetailsResults {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public Result getResult() {
-        return result;
+    public PlaceDetails getPlaceDetails() {
+        return mPlaceDetails;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setPlaceDetails(PlaceDetails placeDetails) {
+        this.mPlaceDetails = placeDetails;
     }
 
     public String getStatus() {

@@ -64,10 +64,6 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
 
-    private LocationCallback mLocationCallback;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationRequest mLocationRequest;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,28 +170,28 @@ public class MainActivity extends AppCompatActivity implements
     @AfterPermissionGranted(PERMS_RC_LOCATION)
     private void configureLocation() {
         if (EasyPermissions.hasPermissions(this, ACCESS_FINE_LOCATION)) {
-            mLocationCallback = new LocationCallback() {
+            LocationCallback locationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(@NotNull LocationResult locationResult) {
                     mSharedViewModel.setUserLocation(locationResult.getLastLocation());
                 }
             };
 
-            mLocationRequest = LocationRequest.create();
-            mLocationRequest.setInterval(5000);
-            mLocationRequest.setFastestInterval(1000);
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationRequest locationRequest = LocationRequest.create();
+            locationRequest.setInterval(5000);
+            locationRequest.setFastestInterval(1000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
                     mSharedViewModel.setUserLocation(location);
                 }
             });
 
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                    mLocationCallback,
+            fusedLocationClient.requestLocationUpdates(locationRequest,
+                    locationCallback,
                     Looper.getMainLooper());
 
             mSharedViewModel.setLocationPermissionGranted(true);

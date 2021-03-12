@@ -35,7 +35,6 @@ android {
             resValue("string", "maps_api_key", "${mapApiKey}")
 
             buildConfigField("String", "GEOAPIFY_API_KEY", "\"${geoaapifyApiKey}\"")
-            resValue("string", "geoapify_api_key", "${geoaapifyApiKey}")
         }
     }
     compileOptions {
