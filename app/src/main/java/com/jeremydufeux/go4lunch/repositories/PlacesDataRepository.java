@@ -1,15 +1,16 @@
 package com.jeremydufeux.go4lunch.repositories;
 
-import androidx.core.util.Pair;
+import android.util.Pair;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.api.PlacesService;
 import com.jeremydufeux.go4lunch.models.Place;
 import com.jeremydufeux.go4lunch.models.placeDetailsResult.AddressComponent;
+import com.jeremydufeux.go4lunch.models.placeDetailsResult.Period;
 import com.jeremydufeux.go4lunch.models.placeDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.placeDetailsResult.PlaceDetailsResults;
-import com.jeremydufeux.go4lunch.models.placeResult.PlaceSearchResults;
 import com.jeremydufeux.go4lunch.models.placeResult.PlaceSearch;
+import com.jeremydufeux.go4lunch.models.placeResult.PlaceSearchResults;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class PlacesDataRepository {
                 + "vicinity,"
                 + "geometry,"
                 + "opening_hours,"
+                + "utc_offset,"
                 + "photo,"
                 + "international_phone_number,"
                 + "website,"
@@ -95,7 +97,21 @@ public class PlacesDataRepository {
         }
         place.setAddress(address);
 
-        place.setOpeningHours(placeDetail.getOpeningHours());
+        if(placeDetail.getOpeningHours() != null) {
+            place.setOpenNow(placeDetail.getOpeningHours().getOpenNow());
+            place.setUtcOffset(placeDetail.getUtcOffset()*60000);
+
+            if(placeDetail.getOpeningHours().getPeriods() != null) {
+                for (Period period : placeDetail.getOpeningHours().getPeriods()) {
+                    place.addOpeningHours(period.getOpen().getDay(),
+                            Integer.parseInt(period.getOpen().getTime().substring(0, 2)),
+                            Integer.parseInt(period.getOpen().getTime().substring(2, 4)),
+                            Integer.parseInt(period.getClose().getTime().substring(0, 2)),
+                            Integer.parseInt(period.getClose().getTime().substring(2, 4))
+                            );
+                }
+            }
+        }
 
         if(placeDetail.getPhotos() != null){
             place.setPhotoUrl(getUrlFromReference(placeDetail.getPhotos().get(0).getPhotoReference()));

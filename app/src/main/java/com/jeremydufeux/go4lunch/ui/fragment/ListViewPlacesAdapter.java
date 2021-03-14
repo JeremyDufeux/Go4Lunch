@@ -67,6 +67,11 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mDisposable.clear();
+    }
 
     static class PlacesViewHolder extends RecyclerView.ViewHolder {
         private final FragmentListViewPlaceItemBinding mBinding;
@@ -84,42 +89,64 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             mBinding.placeItemNameTv.setText(mPlace.getName());
             mBinding.placeItemTypeAndAddressTv.setText(mPlace.getAddress());
 
-            if(!place.getPhotoUrl().isEmpty()) {
+            if(place.getPhotoUrl() != null) {
                 glide.load(place.getPhotoUrl())
                         .centerCrop()
                         .into(mBinding.placeItemPictureIv);
+                mBinding.placeItemPictureIv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.placeItemPictureIv.setVisibility(View.INVISIBLE);
             }
 
-            // TODO Display "Open until" depending on time
-            if(mPlace.getOpeningHours() != null) {
-                if (!mPlace.getOpeningHours().getOpenNow()) {
+            if(mPlace.isOpeningHoursAvailable()) {
+                if (mPlace.isOpenNow()) {
+                    String closingSoonTime = mPlace.getClosingSoonTime();
+                    if (!closingSoonTime.isEmpty()) {
+                        String openUntil = context.getString(R.string.open_until) + " " + closingSoonTime;
+                        mBinding.placeItemOpenTv.setText(openUntil);
+                    } else {
+                        mBinding.placeItemOpenTv.setText(R.string.open_now);
+                    }
+                    mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(R.color.grey));
+                } else {
                     mBinding.placeItemOpenTv.setText(R.string.closed);
                     mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(R.color.red));
-                } else {
-                    mBinding.placeItemOpenTv.setText(R.string.open_now);
-                    mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(R.color.grey));
                 }
+                mBinding.placeItemOpenTv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.placeItemOpenTv.setVisibility(View.INVISIBLE);
             }
 
             if (mLocation != null) {
+                mBinding.placeItemDistanceTv.setVisibility(View.VISIBLE);
                 String distance = (int) mLocation.distanceTo(mPlace.getLocation()) + "m";
                 mBinding.placeItemDistanceTv.setText(distance);
+            } else {
+                mBinding.placeItemDistanceTv.setVisibility(View.INVISIBLE);
             }
 
             if(mPlace.getWorkmatesInterested()>0){
                 mBinding.placeItemWorkmateIv.setVisibility(View.VISIBLE);
                 String workmatesInterested = "(" + mPlace.getWorkmatesInterested() + ")";
                 mBinding.placeItemWorkmateAmountTv.setText(workmatesInterested);
+            }else {
+                mBinding.placeItemWorkmateIv.setVisibility(View.INVISIBLE);
             }
 
             if (mPlace.getRating() > 0) {
                 mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.placeItemStar1Iv.setVisibility(View.INVISIBLE);
             }
             if (mPlace.getRating() > 1.66) {
                 mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.placeItemStar2Iv.setVisibility(View.INVISIBLE);
             }
             if (mPlace.getRating() > 3.33) {
                 mBinding.placeItemStar3Iv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.placeItemStar3Iv.setVisibility(View.INVISIBLE);
             }
         }
 

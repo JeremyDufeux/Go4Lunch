@@ -19,6 +19,9 @@ public class PlaceDetails {
     @SerializedName("opening_hours")
     @Expose
     private OpeningHours openingHours;
+    @SerializedName("utc_offset")
+    @Expose
+    private Integer UtcOffset;
     @SerializedName("vicinity")
     @Expose
     private String vicinity;
@@ -71,6 +74,14 @@ public class PlaceDetails {
 
     public void setOpeningHours(OpeningHours openingHours) {
         this.openingHours = openingHours;
+    }
+
+    public Integer getUtcOffset() {
+        return UtcOffset;
+    }
+
+    public void setUtcOffset(Integer utcOffset) {
+        UtcOffset = utcOffset;
     }
 
     public String getVicinity() {

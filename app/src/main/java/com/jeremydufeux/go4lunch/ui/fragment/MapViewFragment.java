@@ -120,7 +120,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         if (!EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
             mSharedViewModel.setSystemSettingsDialogRequest(true);
         } else {
-            // TODO Check location
             focusToLocation();
         }
     }
@@ -170,7 +169,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void onPlaceResultsChanged(List<Place> placeList) {
-        // TODO Check if ok
         mPlaces = placeList;
         updateMap();
     }

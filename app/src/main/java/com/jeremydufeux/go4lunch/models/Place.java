@@ -1,13 +1,19 @@
 package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.models.placeDetailsResult.OpeningHours;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 public class Place {
     private final String mUId;
@@ -19,11 +25,16 @@ public class Place {
     private String mPhotoUrl;
     private float mRating;
     private int mWorkmatesInterested;
-    private OpeningHours mOpeningHours;
+    private boolean isOpenNow;
+    // The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
+    // The list in value contain period of time where the place is open during the day, represented by the nested class OpenPeriod
+    private final HashMap<Integer, List<OpenPeriod>>  mOpeningHours;
+    private int mUtcOffset;
     private LatLng mLatlng;
     private Location mLocation;
     private Marker mMarker;
     private MarkerOptions mMarkerOptions;
+    private boolean mOpeningHoursAvailable;
 
     public Place(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
@@ -38,6 +49,13 @@ public class Place {
                 .title(name)
                 .position(mLatlng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
+
+        mOpeningHours = new HashMap<>();
+
+        for(int i = 0; i < Calendar.DAY_OF_WEEK; i++){
+            List<OpenPeriod> dayHours = new ArrayList<>();
+            mOpeningHours.put(i, dayHours);
+        }
     }
 
     public String getUId() {
@@ -76,14 +94,61 @@ public class Place {
         mWorkmatesInterested = workmatesInterested;
     }
 
-    public OpeningHours getOpeningHours() {
-        return mOpeningHours;
+    public boolean isOpeningHoursAvailable() {
+        return mOpeningHoursAvailable;
     }
 
-    public void setOpeningHours(OpeningHours openingHours) {
-        mOpeningHours = openingHours;
+    public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
+        mOpeningHoursAvailable = true;
+        mOpeningHours.get(dayOfWeek).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
     }
 
+    public boolean isOpenNow() {
+        return isOpenNow;
+    }
+
+    // If closing soon, return the closing time, else return an empty String
+    public String getClosingSoonTime(){
+        Calendar nowCal = Calendar.getInstance();
+
+        for(OpenPeriod period : mOpeningHours.get(nowCal.get(Calendar.DAY_OF_WEEK)-1)){
+            Calendar openCal = Calendar.getInstance();
+            openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
+            openCal.set(Calendar.MINUTE, period.getOpeningMinute());
+            openCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
+
+            Calendar closeCal = Calendar.getInstance();
+            closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
+            closeCal.set(Calendar.MINUTE, period.getClosingMinute());
+            closeCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
+
+            if( period.getClosingHour() == 0 && period.getClosingMinute() == 0){
+                closeCal.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            if (nowCal.after(openCal) && nowCal.before(closeCal)) {
+                nowCal.add(Calendar.HOUR_OF_DAY, 1);
+
+                if(nowCal.after(closeCal)){
+                    closeCal.set(Calendar.ZONE_OFFSET, nowCal.getTimeZone().getRawOffset());
+                    return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());
+                }
+            }
+        }
+        return "";
+    }
+
+    public void setOpenNow(boolean openNow) {
+        isOpenNow = openNow;
+    }
+
+    public int getUtcOffset() {
+        return mUtcOffset;
+    }
+
+    public void setUtcOffset(int utcOffset) {
+        this.mUtcOffset = utcOffset;
+    }
     public String getPhoneNumber() {
         return mPhoneNumber;
     }
@@ -146,5 +211,35 @@ public class Place {
 
     public void setMarkerOptions(MarkerOptions markerOptions) {
         mMarkerOptions = markerOptions;
+    }
+
+    private static class OpenPeriod{
+        private int openingHour;
+        private int openingMinute;
+        private int closingHour;
+        private int closingMinute;
+
+        public OpenPeriod(int openingHour, int openingMinute, int closingHour, int closingMinute) {
+            this.openingHour = openingHour;
+            this.openingMinute = openingMinute;
+            this.closingHour = closingHour;
+            this.closingMinute = closingMinute;
+        }
+
+        public int getOpeningHour() {
+            return openingHour;
+        }
+
+        public int getOpeningMinute() {
+            return openingMinute;
+        }
+
+        public int getClosingHour() {
+            return closingHour;
+        }
+
+        public int getClosingMinute() {
+            return closingMinute;
+        }
     }
 }
