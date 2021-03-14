@@ -2,8 +2,8 @@ package com.jeremydufeux.go4lunch.ui;
 
 import android.location.Location;
 import android.util.Log;
+import android.util.Pair;
 
-import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,7 +14,9 @@ import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -74,27 +76,24 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void getNextPageNearbyPlaces(String pageToken) {
-        // TODO To check
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mDisposable.add(mPlacesDataRepository.getNextPageNearbyPlaces(pageToken)
-                .subscribeWith(new DisposableObserver<Pair<List<Place>, String>>() {
-                    @Override
-                    public void onNext(@NonNull Pair<List<Place>, String> placeListWithNextPageToken) {
-                    }
+        mDisposable.add(Observable.just("")
+                        .delay(2, TimeUnit.SECONDS)
+                        .flatMap(s -> mPlacesDataRepository.getNextPageNearbyPlaces(pageToken))
+                        .subscribeWith(new DisposableObserver<Pair<List<Place>, String>>() {
+                            @Override
+                            public void onNext(@NonNull Pair<List<Place>, String> placeListWithNextPageToken) {
+                                getPlaceSearchResult(placeListWithNextPageToken);
+                            }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError getNearbyPlaces " + e.toString());
-                    }
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                Log.d("Debug", "onError getNearbyPlaces " + e.toString());
+                            }
 
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
+                            @Override
+                            public void onComplete() {
+                            }
+                        }));
     }
 
     public void getDetailsForPlaceId(String placeId){
