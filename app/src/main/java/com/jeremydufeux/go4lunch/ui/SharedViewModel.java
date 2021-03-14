@@ -117,7 +117,8 @@ public class SharedViewModel extends ViewModel {
         assert placeListWithNextPageToken.first != null;
         updatePlaceListNewResults(placeListWithNextPageToken.first);
         if(placeListWithNextPageToken.second != null && !placeListWithNextPageToken.second.isEmpty()){
-            getNextPageNearbyPlaces(placeListWithNextPageToken.second);
+            // TODO Disabled to avoid billing
+            //getNextPageNearbyPlaces(placeListWithNextPageToken.second);
         }
     }
 

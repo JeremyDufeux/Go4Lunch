@@ -165,7 +165,9 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void getNearbyPlaces(String latlng) {
-        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
+        // TODO Disabled to avoid billing
+        //mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
+        mSharedViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
     }
 
     private void onPlaceResultsChanged(List<Place> placeList) {
