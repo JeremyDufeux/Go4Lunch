@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 public class PlacesDataRepository {
 
     public static final String MAP_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=%s&maxwidth=800";
-    public static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=800&height=400&center=lonlat:%s,%s&zoom=17&apiKey=%s";
+    public static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:%s,%s&zoom=17&marker=lonlat:%s,%s;color:%%23ff5721;size:xx-large&apiKey=%s";
 
     public Observable<Pair<List<Place>, String>> getNearbyPlaces(String latlng, String radius, String type){
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
@@ -144,6 +144,6 @@ public class PlacesDataRepository {
     }
 
     private String getUrlFromGeoapify(double lat, double lng) {
-        return String.format(GEOAPIFY_PHOTO_URL, lng, lat, BuildConfig.GEOAPIFY_API_KEY);
+        return String.format(GEOAPIFY_PHOTO_URL, lng, lat, lng, lat, BuildConfig.GEOAPIFY_API_KEY);
     }
 }
