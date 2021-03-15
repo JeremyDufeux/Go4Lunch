@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Place {
     private final String mUId;
@@ -46,7 +47,6 @@ public class Place {
         mLocation.setLongitude(lng);
 
         mMarkerOptions = new MarkerOptions()
-                .title(name)
                 .position(mLatlng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
 
@@ -100,7 +100,7 @@ public class Place {
 
     public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
         mOpeningHoursAvailable = true;
-        mOpeningHours.get(dayOfWeek).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
+        Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
     }
 
     public boolean isOpenNow() {
@@ -111,7 +111,7 @@ public class Place {
     public String getClosingSoonTime(){
         Calendar nowCal = Calendar.getInstance();
 
-        for(OpenPeriod period : mOpeningHours.get(nowCal.get(Calendar.DAY_OF_WEEK)-1)){
+        for(OpenPeriod period : Objects.requireNonNull(mOpeningHours.get(nowCal.get(Calendar.DAY_OF_WEEK) - 1))){
             Calendar openCal = Calendar.getInstance();
             openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
             openCal.set(Calendar.MINUTE, period.getOpeningMinute());

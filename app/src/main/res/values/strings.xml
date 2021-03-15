@@ -53,6 +53,14 @@
     <string name="closed">Closed</string>
     <string name="open_now">Open now</string>
     <string name="open_until">Open until</string>
+    <string name="restaurant_photo">Restaurant photo</string>
+    <string name="website">WEBSITE</string>
+    <string name="like">LIKE</string>
+    <string name="call">CALL</string>
+    <string name="call_image">Call image</string>
+    <string name="like_image">Like Image</string>
+    <string name="website_image">Website image</string>
+    <string name="go_to_this_restaurant_button">Go to this restaurant button</string>
 
     <!-- New strings to sort -->
 </resources>

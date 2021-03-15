@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.secrets_gradle_plugin' version '0.5'
+    id 'androidx.navigation.safeargs'
 }
 
 def mapApiKey = project.properties['MAPS_API_KEY']

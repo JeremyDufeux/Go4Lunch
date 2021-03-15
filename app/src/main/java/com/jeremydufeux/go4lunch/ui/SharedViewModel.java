@@ -212,6 +212,14 @@ public class SharedViewModel extends ViewModel {
     }
 
     // -------------
+    // For Detail View
+    // -------------
+
+    public Place getPlaceWithId(String placeId) {
+        return mPlaceList.get(placeId);
+    }
+
+    // -------------
     // For View Model
     // -------------
 
@@ -220,4 +228,5 @@ public class SharedViewModel extends ViewModel {
         super.onCleared();
         mDisposable.dispose();
     }
+
 }

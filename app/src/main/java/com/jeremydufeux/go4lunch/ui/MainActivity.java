@@ -134,9 +134,12 @@ public class MainActivity extends AppCompatActivity implements
                 mToolbar.setVisibility(View.GONE);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 mBottomNavigationView.setVisibility(View.GONE);
-            } else if(destination.getId() == R.id.restaurant_details_fragment
-                    || destination.getId() == R.id.settings_fragment) {
+            } else if(destination.getId() == R.id.settings_fragment) {
                 mToolbar.setVisibility(View.VISIBLE);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                mBottomNavigationView.setVisibility(View.GONE);
+            } else if(destination.getId() == R.id.restaurant_details_fragment) {
+                mToolbar.setVisibility(View.GONE);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 mBottomNavigationView.setVisibility(View.GONE);
             } else {

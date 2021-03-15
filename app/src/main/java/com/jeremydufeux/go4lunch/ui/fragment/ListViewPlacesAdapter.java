@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
+import com.jeremydufeux.go4lunch.databinding.AdapterPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Place;
 
 import java.util.ArrayList;
@@ -28,14 +28,16 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     private final Context mContext;
     private final RequestManager mGlide;
+    private final OnPlaceListener mPlaceListener;
     private final List<Place> mPlaceList;
     private final CompositeDisposable mDisposable;
     private final Observable<Location> mObservableLocation;
     private final Location mLocation;
 
-    public ListViewPlacesAdapter(Context context, RequestManager glide, Location location, Observable<Location> observableLocation) {
+    public ListViewPlacesAdapter(Context context, RequestManager glide, Location location, Observable<Location> observableLocation, OnPlaceListener placeListener) {
         mContext = context;
         mGlide = glide;
+        mPlaceListener = placeListener;
         mObservableLocation = observableLocation;
         mPlaceList = new ArrayList<>();
         mDisposable = new CompositeDisposable();
@@ -45,15 +47,16 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     @NonNull
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        FragmentListViewPlaceItemBinding mBinding = FragmentListViewPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        PlacesViewHolder viewHolder = new PlacesViewHolder(mBinding, mLocation);
+        AdapterPlaceItemBinding binding = AdapterPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        PlacesViewHolder viewHolder = new PlacesViewHolder(binding, mLocation);
         mDisposable.add(viewHolder.setPositionObservable(mObservableLocation));
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        holder.updateViewHolder(mContext, mGlide, mPlaceList.get(position));
+        holder.updateViewHolder(mContext, mGlide, mPlaceList.get(position), mPlaceListener);
+
     }
 
     @Override
@@ -73,30 +76,27 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         mDisposable.clear();
     }
 
-    static class PlacesViewHolder extends RecyclerView.ViewHolder {
-        private final FragmentListViewPlaceItemBinding mBinding;
+    static class PlacesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final AdapterPlaceItemBinding mBinding;
         private Place mPlace;
         private Location mLocation;
+        OnPlaceListener mPlaceListener;
 
-        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding, Location location) {
+        public PlacesViewHolder(@NonNull AdapterPlaceItemBinding itemBinding, Location location) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
             mLocation = location;
         }
 
-        public void updateViewHolder(Context context, RequestManager glide, Place place){
+        public void updateViewHolder(Context context, RequestManager glide, Place place, OnPlaceListener placeListener){
             mPlace = place;
+            mPlaceListener = placeListener;
             mBinding.placeItemNameTv.setText(mPlace.getName());
             mBinding.placeItemTypeAndAddressTv.setText(mPlace.getAddress());
 
-            if(place.getPhotoUrl() != null) {
-                glide.load(place.getPhotoUrl())
-                        .centerCrop()
-                        .into(mBinding.placeItemPictureIv);
-                mBinding.placeItemPictureIv.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.placeItemPictureIv.setVisibility(View.INVISIBLE);
-            }
+            glide.load(place.getPhotoUrl())
+                    .centerCrop()
+                    .into(mBinding.placeItemPictureIv);
 
             if(mPlace.isOpeningHoursAvailable()) {
                 if (mPlace.isOpenNow()) {
@@ -117,13 +117,15 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                 mBinding.placeItemOpenTv.setVisibility(View.INVISIBLE);
             }
 
-            if (mLocation != null) {
+            if(mLocation != null) {
                 mBinding.placeItemDistanceTv.setVisibility(View.VISIBLE);
                 String distance = (int) mLocation.distanceTo(mPlace.getLocation()) + "m";
                 mBinding.placeItemDistanceTv.setText(distance);
             } else {
                 mBinding.placeItemDistanceTv.setVisibility(View.INVISIBLE);
             }
+
+            // TODO Display the amount of workmates who liked the place
 
             if(mPlace.getWorkmatesInterested()>0){
                 mBinding.placeItemWorkmateIv.setVisibility(View.VISIBLE);
@@ -133,21 +135,28 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                 mBinding.placeItemWorkmateIv.setVisibility(View.INVISIBLE);
             }
 
-            if (mPlace.getRating() > 0) {
+            if(mPlace.getRating() > 0) {
                 mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar1Iv.setVisibility(View.INVISIBLE);
             }
-            if (mPlace.getRating() > 1.66) {
+            if(mPlace.getRating() > 1.66) {
                 mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar2Iv.setVisibility(View.INVISIBLE);
             }
-            if (mPlace.getRating() > 3.33) {
+            if(mPlace.getRating() > 3.33) {
                 mBinding.placeItemStar3Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar3Iv.setVisibility(View.INVISIBLE);
             }
+
+            mBinding.getRoot().setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mPlaceListener.onPlaceClick(getAdapterPosition());
         }
 
         Disposable setPositionObservable(Observable<Location> location){
@@ -170,5 +179,9 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                         }
                     });
         }
+    }
+
+    public interface OnPlaceListener{
+        void onPlaceClick(int position);
     }
 }

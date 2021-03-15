@@ -1,13 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_restaurant_details_motion_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_restaurant_details_scene"
+    app:showPaths="false"
     tools:context=".ui.fragment.RestaurantDetailsFragment">
 
-    <TextView
+    <ImageView
+        android:id="@+id/fragment_restaurant_details_photo_iv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Restaurant details" />
+        android:layout_height="290dp"
+        android:contentDescription="@string/restaurant_photo"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@sample/restaurants" />
 
-</FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_restaurant_details_go_fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        android:src="@drawable/ic_check"
+        app:tint="@color/green"
+        android:contentDescription="@string/go_to_this_restaurant_button"
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_photo_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fragment_restaurant_details_info_ll" />
+
+    <LinearLayout
+        android:id="@+id/fragment_restaurant_details_info_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_photo_iv">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/fragment_restaurant_details_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:text="@sample/places.json/names/name/value" />
+
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_star_1_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star"
+                android:contentDescription="@string/rating" />
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_star_2_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star"
+                android:contentDescription="@string/rating" />
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_star_3_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_star"
+                android:contentDescription="@string/rating"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fragment_restaurant_details_address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15sp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            tools:text="@sample/places.json/names/address/value" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_restaurant_details_links_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_info_ll"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/fragment_restaurant_details_call_ll"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_call_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_call"
+                app:tint="@color/orange"
+                android:contentDescription="@string/call_image"/>
+
+            <TextView
+                android:id="@+id/fragment_restaurant_details_call_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="@string/call"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_restaurant_details_like_ll"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_like_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_like"
+                app:tint="@color/orange"
+                android:contentDescription="@string/like_image" />
+
+            <TextView
+                android:id="@+id/fragment_restaurant_details_like_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="@string/like"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/orange"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_restaurant_details_web_ll"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/fragment_restaurant_details_website_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_web"
+                app:tint="@color/orange"
+                android:contentDescription="@string/website_image" />
+
+            <TextView
+                android:id="@+id/fragment_restaurant_details_website_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="@string/website"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/orange"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="6dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_links_ll" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_restaurant_details_workmates_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/adapter_workmate_item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

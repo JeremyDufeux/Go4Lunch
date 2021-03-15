@@ -3,11 +3,14 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,9 +18,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.SphericalUtil;
 import com.jeremydufeux.go4lunch.BaseFragment;
+import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
@@ -29,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -43,6 +49,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     private static final String PLACE_TYPE_RESTAURANT = "restaurant";
 
     private SharedViewModel mSharedViewModel;
+    private FragmentMapViewBinding mBinding;
 
     private GoogleMap mMap;
     private Location mLocation;
@@ -76,12 +83,12 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentMapViewBinding binding = FragmentMapViewBinding.inflate(getLayoutInflater());
-        binding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
+        mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
+        mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
 
         configureMaps();
 
-        return binding.getRoot();
+        return mBinding.getRoot();
     }
 
     private void configureMaps() {
@@ -90,16 +97,26 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mapFragment.getMapAsync(this);
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnCameraIdleListener(this::onCameraIdle);
+        mMap.setOnMarkerClickListener(this::onMarkerClick);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMapReady = true;
         mSharedViewModel.observeLocationPermissionGranted().observe(this, this::enableLocation);
         getSavedData();
         updateMap();
+    }
+
+    private boolean onMarkerClick(Marker marker) {
+        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
+        directions.setPlaceId((String) Objects.requireNonNull(marker.getTag()));
+
+        Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+        return false;
     }
 
     private void getSavedData() {
@@ -166,8 +183,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private void getNearbyPlaces(String latlng) {
         // TODO Disabled to avoid billing
-        //mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
-        mSharedViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
+        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
+        //mSharedViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
     }
 
     private void onPlaceResultsChanged(List<Place> placeList) {
@@ -190,6 +207,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
             if (mMap.getProjection().getVisibleRegion().latLngBounds.contains(place.getLatlng())) {
                 if (place.getMarker() == null) {
                     place.setMarker(mMap.addMarker(place.getMarkerOptions()));
+                    place.getMarker().setTag(place.getUId());
                 }
             }
         }
