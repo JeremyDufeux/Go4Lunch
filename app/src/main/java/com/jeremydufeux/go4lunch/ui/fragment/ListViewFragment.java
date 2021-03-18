@@ -20,7 +20,7 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
-import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,11 +34,12 @@ import io.reactivex.subjects.Subject;
 public class ListViewFragment extends BaseFragment implements ListViewPlacesAdapter.OnPlaceListener {
 
     private SharedViewModel mSharedViewModel;
+    private ListViewViewModel mListViewViewModel;
 
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
 
-    private List<Place> mPlaceList = new ArrayList<>();
+    private List<Restaurant> mRestaurantList = new ArrayList<>();
     private final Subject<Location> mObservableLocation = PublishSubject.create();
 
     public ListViewFragment() {}
@@ -56,6 +57,7 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+        mListViewViewModel = new ViewModelProvider(this, viewModelFactory).get(ListViewViewModel.class);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     }
 
     private void configureObservers() {
-        mSharedViewModel.observePlaceList().observe(getViewLifecycleOwner(), this::onPlacesChanged);
+        mListViewViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), this::onPlacesChanged);
         mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::onLocationPermissionGranted);
     }
 
@@ -82,9 +84,10 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         mObservableLocation.onNext(location);
     }
 
-    void onPlacesChanged(List<Place> places) {
-        mPlaceList = places;
-        mAdapter.updateList(mPlaceList);
+    void onPlacesChanged(List<Restaurant> restaurants) {
+        Log.d("Debug", "onPlacesChanged");
+        mRestaurantList = restaurants;
+        mAdapter.updateList(mRestaurantList);
     }
 
     private void configureRecyclerView() {
@@ -95,13 +98,12 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         DividerItemDecoration itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         itemDecoration.setDrawable(new ColorDrawable(getResources().getColor(R.color.very_light_grey)));
         mBinding.listViewFragmentRecyclerView.addItemDecoration(itemDecoration);
-
     }
 
     @Override
     public void onPlaceClick(int position) {
         MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setPlaceId(mPlaceList.get(position).getUId());
+        directions.setRestaurantId(mRestaurantList.get(position).getUId());
 
         Navigation.findNavController(mBinding.getRoot()).navigate(directions);
     }
@@ -111,6 +113,6 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         super.onDestroyView();
         mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
         mSharedViewModel.observeUserLocation().removeObservers(this);
-        mSharedViewModel.observePlaceList().removeObservers(this);
+        mListViewViewModel.observeRestaurantList().removeObservers(this);
     }
 }

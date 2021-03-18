@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final int PERMS_RC_LOCATION = 1;
 
-    private MainViewModel mViewModel;
+    private MainActivityViewModel mViewModel;
     private SharedViewModel mSharedViewModel;
     private ActivityMainBinding mBinding;
     private ActivityMainDrawerHeaderBinding mHeaderBinding;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
         mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
     }
 

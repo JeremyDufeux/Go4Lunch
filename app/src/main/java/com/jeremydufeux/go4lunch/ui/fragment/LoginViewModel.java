@@ -5,27 +5,27 @@ import androidx.lifecycle.ViewModel;
 
 import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
+import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 
 import java.util.concurrent.Executor;
 
 public class LoginViewModel extends ViewModel {
 
-    private final WorkmatesDataRepository mWorkmatesDataRepository;
+    private final WorkmatesRepository mWorkmatesRepository;
     private final Executor mExecutor;
 
-    public LoginViewModel(WorkmatesDataRepository workmatesDataRepository, Executor executor) {
-        mWorkmatesDataRepository = workmatesDataRepository;
+    public LoginViewModel(WorkmatesRepository workmatesRepository, Executor executor) {
+        mWorkmatesRepository = workmatesRepository;
         mExecutor = executor;
     }
 
     public void createWorkmate(Workmate workmate) {
         mExecutor.execute(() ->
-                mWorkmatesDataRepository.createWorkmate(workmate)
+                mWorkmatesRepository.createWorkmate(workmate)
         );
     }
 
     public LiveData<FirestoreResult> observeResult(){
-        return mWorkmatesDataRepository.observeResult();
+        return mWorkmatesRepository.observeResult();
     }
 }

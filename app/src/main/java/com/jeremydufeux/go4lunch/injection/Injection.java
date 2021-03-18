@@ -1,7 +1,8 @@
 package com.jeremydufeux.go4lunch.injection;
 
-import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
-import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
+import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -12,20 +13,24 @@ public class Injection {
         return Executors.newSingleThreadExecutor();
     }
 
-    private static WorkmatesDataRepository provideWorkmateDataRepository() {
-        return new WorkmatesDataRepository();
+    private static WorkmatesRepository provideWorkmateDataRepository() {
+        return new WorkmatesRepository();
     }
 
-    private static PlacesDataRepository provideGooglePlaceRepository() {
-        return new PlacesDataRepository();
+    private static RestaurantRepository provideRestaurantRepository() {
+        return RestaurantRepository.getInstance();
     }
 
+    private static GooglePlacesRepository provideGooglePlaceRepository() {
+        return new GooglePlacesRepository();
+    }
 
     public static ViewModelFactory provideViewModelFactory(){
-        WorkmatesDataRepository workmatesDataRepository = provideWorkmateDataRepository();
-        PlacesDataRepository placesDataRepository = provideGooglePlaceRepository();
+        WorkmatesRepository workmatesRepository = provideWorkmateDataRepository();
+        GooglePlacesRepository googlePlacesRepository = provideGooglePlaceRepository();
+        RestaurantRepository restaurantRepository = provideRestaurantRepository();
         Executor executor = provideExecutor();
-        return new ViewModelFactory(workmatesDataRepository, placesDataRepository, executor);
+        return new ViewModelFactory(workmatesRepository, googlePlacesRepository, restaurantRepository, executor);
     }
 
 }

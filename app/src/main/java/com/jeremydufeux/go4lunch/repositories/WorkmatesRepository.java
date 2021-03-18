@@ -7,11 +7,11 @@ import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-public class WorkmatesDataRepository {
+public class WorkmatesRepository {
 
     private final MutableLiveData<FirestoreResult> mResult;
 
-    public WorkmatesDataRepository() {
+    public WorkmatesRepository() {
         mResult = new MutableLiveData<>();
     }
 

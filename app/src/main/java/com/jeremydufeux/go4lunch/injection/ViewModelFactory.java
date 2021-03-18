@@ -4,25 +4,33 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
-import com.jeremydufeux.go4lunch.repositories.WorkmatesDataRepository;
-import com.jeremydufeux.go4lunch.ui.MainViewModel;
+import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
+import com.jeremydufeux.go4lunch.ui.MainActivityViewModel;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
+import com.jeremydufeux.go4lunch.ui.fragment.ListViewViewModel;
 import com.jeremydufeux.go4lunch.ui.fragment.LoginViewModel;
+import com.jeremydufeux.go4lunch.ui.fragment.MapViewViewModel;
+import com.jeremydufeux.go4lunch.ui.fragment.RestaurantDetailsFragment;
+import com.jeremydufeux.go4lunch.ui.fragment.RestaurantDetailsViewModel;
 
 import java.util.concurrent.Executor;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-    private final WorkmatesDataRepository mWorkmatesDataRepository;
-    private final PlacesDataRepository mPlacesDataRepository;
+    private final WorkmatesRepository mWorkmatesRepository;
+    private final GooglePlacesRepository mGooglePlacesRepository;
+    private final RestaurantRepository mRestaurantRepository;
     private final Executor mExecutor;
 
-    public ViewModelFactory(WorkmatesDataRepository workmatesDataRepository,
-                            PlacesDataRepository placesDataRepository,
+    public ViewModelFactory(WorkmatesRepository workmatesRepository,
+                            GooglePlacesRepository googlePlacesRepository,
+                            RestaurantRepository restaurantRepository,
                             Executor executor) {
-        mWorkmatesDataRepository = workmatesDataRepository;
-        mPlacesDataRepository = placesDataRepository;
+        mWorkmatesRepository = workmatesRepository;
+        mGooglePlacesRepository = googlePlacesRepository;
+        mRestaurantRepository = restaurantRepository;
         mExecutor = executor;
     }
 
@@ -31,14 +39,23 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
 
-        if(modelClass.isAssignableFrom(SharedViewModel.class)){
-            return (T) new SharedViewModel(mPlacesDataRepository);
+        if(modelClass.isAssignableFrom(MainActivityViewModel.class)){
+            return (T) new MainActivityViewModel(mWorkmatesRepository);
+        }
+        else if(modelClass.isAssignableFrom(SharedViewModel.class)){
+            return (T) new SharedViewModel();
+        }
+        else if(modelClass.isAssignableFrom(ListViewViewModel.class)){
+            return (T) new ListViewViewModel(mRestaurantRepository);
         }
         else if(modelClass.isAssignableFrom(LoginViewModel.class)){
-            return (T) new LoginViewModel(mWorkmatesDataRepository, mExecutor);
+            return (T) new LoginViewModel(mWorkmatesRepository, mExecutor);
         }
-        else if(modelClass.isAssignableFrom(MainViewModel.class)){
-            return (T) new MainViewModel(mWorkmatesDataRepository);
+        else if(modelClass.isAssignableFrom(MapViewViewModel.class)){
+            return (T) new MapViewViewModel(mGooglePlacesRepository, mRestaurantRepository , mExecutor);
+        }
+        else if(modelClass.isAssignableFrom(RestaurantDetailsViewModel.class)){
+            return (T) new RestaurantDetailsViewModel(mRestaurantRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel Class");
     }

@@ -1,7 +1,7 @@
 package com.jeremydufeux.go4lunch.api;
 
-import com.jeremydufeux.go4lunch.models.placeDetailsResult.PlaceDetailsResults;
-import com.jeremydufeux.go4lunch.models.placeResult.PlaceSearchResults;
+import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
+import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 
 import io.reactivex.Observable;
 //import okhttp3.OkHttpClient;

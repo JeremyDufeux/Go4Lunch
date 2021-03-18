@@ -55,7 +55,7 @@
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/white"
                 android:textSize="25sp"
-                tools:text="@sample/places.json/names/name/value" />
+                tools:text="@sample/restaurants.json/names/name/value" />
 
 
             <ImageView
@@ -90,7 +90,7 @@
             android:layout_marginBottom="15sp"
             android:textColor="@color/white"
             android:textSize="15sp"
-            tools:text="@sample/places.json/names/address/value" />
+            tools:text="@sample/restaurants.json/names/address/value" />
     </LinearLayout>
 
     <LinearLayout

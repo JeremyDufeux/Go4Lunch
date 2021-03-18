@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toStartOf="@+id/place_item_distance_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/places.json/names/name/value" />
+        tools:text="@sample/restaurants.json/names/name/value" />
 
     <TextView
         android:id="@+id/place_item_type_and_address_tv"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@+id/place_item_workmate_iv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/place_item_name_tv"
-        tools:text="@sample/places.json/names/address/value" />
+        tools:text="@sample/restaurants.json/names/address/value" />
 
     <TextView
         android:id="@+id/place_item_open_tv"
@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/place_item_star_3_iv"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@sample/places.json/names/open/value" />
+        tools:text="@sample/restaurants.json/names/open/value" />
 
     <TextView
         android:id="@+id/place_item_distance_tv"
@@ -49,7 +49,7 @@
         android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@sample/places.json/names/distance/value" />
+        tools:text="@sample/restaurants.json/names/distance/value" />
 
     <ImageView
         android:id="@+id/place_item_workmate_iv"
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:textColor="@color/black"
-        tools:text="@sample/places.json/names/workmates/value"
+        tools:text="@sample/restaurants.json/names/workmates/value"
         app:layout_constraintBottom_toTopOf="@+id/place_item_star_1_iv"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv"
         app:layout_constraintTop_toBottomOf="@+id/place_item_distance_tv"/>

@@ -42,9 +42,9 @@
         tools:layout="@layout/fragment_restaurant_details" >
 
              <argument
-                          android:name="placeId"
-                          app:argType="string"
-                          android:defaultValue="0" />
+                  android:name="restaurantId"
+                  app:argType="string"
+                  android:defaultValue="0" />
     </fragment>
 
     <fragment

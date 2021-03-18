@@ -1,9 +1,9 @@
-package com.jeremydufeux.go4lunch.models.placeDetailsResult;
+package com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.jeremydufeux.go4lunch.models.placeResult.Location;
-import com.jeremydufeux.go4lunch.models.placeResult.Viewport;
+import com.jeremydufeux.go4lunch.models.googlePlaceResult.Location;
+import com.jeremydufeux.go4lunch.models.googlePlaceResult.Viewport;
 
 public class Geometry {
 

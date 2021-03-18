@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,7 +26,7 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
-import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,15 +45,15 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private static final float DEFAULT_ZOOM_VALUE = 16;
     private static final float LIMIT_ZOOM_VALUE = 14.6f;
-    private static final String PLACE_TYPE_RESTAURANT = "restaurant";
 
     private SharedViewModel mSharedViewModel;
+    private MapViewViewModel mMapViewViewModel;
     private FragmentMapViewBinding mBinding;
 
     private GoogleMap mMap;
     private Location mLocation;
 
-    private List<Place> mPlaces = new ArrayList<>();
+    private List<Restaurant> mRestaurants = new ArrayList<>();
     private Boolean mMapReady = false;
 
     // ---------------
@@ -77,14 +76,15 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-
-        mSharedViewModel.observePlaceList().observe(this, this::onPlaceResultsChanged);
+        mMapViewViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
+
+        mMapViewViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), this::onRestaurantListChanged);
 
         configureMaps();
 
@@ -106,14 +106,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMapReady = true;
-        mSharedViewModel.observeLocationPermissionGranted().observe(this, this::enableLocation);
+        mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::enableLocation);
         getSavedData();
         updateMap();
     }
 
     private boolean onMarkerClick(Marker marker) {
         MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setPlaceId((String) Objects.requireNonNull(marker.getTag()));
+        directions.setRestaurantId((String) Objects.requireNonNull(marker.getTag()));
 
         Navigation.findNavController(mBinding.getRoot()).navigate(directions);
         return false;
@@ -183,17 +183,18 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private void getNearbyPlaces(String latlng) {
         // TODO Disabled to avoid billing
-        mSharedViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()), PLACE_TYPE_RESTAURANT);
-        //mSharedViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
+        mMapViewViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()));
+        //mMapViewViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
     }
 
-    private void onPlaceResultsChanged(List<Place> placeList) {
-        mPlaces = placeList;
+    private void onRestaurantListChanged(List<Restaurant> restaurantList) {
+        Log.d("Debug", "onRestaurantListChanged " + restaurantList.size());
+        mRestaurants = restaurantList;
         updateMap();
     }
 
     private void updateMap() {
-        if (mMapReady && mPlaces != null) {
+        if (mMapReady && mRestaurants != null) {
             if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                 addMarkersInViewport();
             } else {
@@ -203,11 +204,11 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void addMarkersInViewport(){
-        for (Place place : mPlaces) {
-            if (mMap.getProjection().getVisibleRegion().latLngBounds.contains(place.getLatlng())) {
-                if (place.getMarker() == null) {
-                    place.setMarker(mMap.addMarker(place.getMarkerOptions()));
-                    place.getMarker().setTag(place.getUId());
+        for (Restaurant restaurant : mRestaurants) {
+            if (mMap.getProjection().getVisibleRegion().latLngBounds.contains(restaurant.getLatlng())) {
+                if (restaurant.getMarker() == null) {
+                    restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
+                    restaurant.getMarker().setTag(restaurant.getUId());
                 }
             }
         }
@@ -215,8 +216,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private void hideAllMarkers(){
         mMap.clear();
-        for (Place place : mPlaces) {
-            place.setMarker(null);
+        for (Restaurant restaurant : mRestaurants) {
+            restaurant.setMarker(null);
         }
     }
 
@@ -238,13 +239,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
+        mSharedViewModel.observeUserLocation().removeObservers(this);
+
         mSharedViewModel.setMapViewCameraLatitude(mMap.getCameraPosition().target.latitude);
         mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);
         mSharedViewModel.setMapViewCameraZoom(mMap.getCameraPosition().zoom);
         mSharedViewModel.setMapViewDataSet(true);
 
-        for (Place place : mPlaces) {
-            place.setMarker(null);
+        for (Restaurant restaurant : mRestaurants) {
+            restaurant.setMarker(null);
         }
     }
 

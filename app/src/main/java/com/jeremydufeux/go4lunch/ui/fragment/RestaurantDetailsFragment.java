@@ -1,25 +1,20 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.jeremydufeux.go4lunch.BaseFragment;
-import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
-import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,10 +22,11 @@ import org.jetbrains.annotations.NotNull;
 public class RestaurantDetailsFragment extends BaseFragment {
 
     private SharedViewModel mSharedViewModel;
+    private RestaurantDetailsViewModel mRestaurantDetailsViewModel;
     private FragmentRestaurantDetailsBinding mBinding;
     private RestaurantDetailsWorkmatesAdapter mAdapter;
 
-    private Place mPlace;
+    private Restaurant mRestaurant;
 
     public RestaurantDetailsFragment() {}
 
@@ -47,6 +43,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
+        mRestaurantDetailsViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(RestaurantDetailsViewModel.class);
     }
 
     @Override
@@ -54,9 +51,9 @@ public class RestaurantDetailsFragment extends BaseFragment {
         mBinding = FragmentRestaurantDetailsBinding.inflate(getLayoutInflater());
 
         assert getArguments() != null;
-        String placeId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getPlaceId();
+        String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();
 
-        mPlace = mSharedViewModel.getPlaceWithId(placeId);
+        mRestaurant = mRestaurantDetailsViewModel.getRestaurantWithId(restaurantId);
 
         configureRecyclerView();
         updateView();
@@ -71,25 +68,25 @@ public class RestaurantDetailsFragment extends BaseFragment {
     }
 
     private void updateView() {
-        mBinding.fragmentRestaurantDetailsNameTv.setText(mPlace.getName());
-        mBinding.fragmentRestaurantDetailsAddressTv.setText(mPlace.getAddress());
+        mBinding.fragmentRestaurantDetailsNameTv.setText(mRestaurant.getName());
+        mBinding.fragmentRestaurantDetailsAddressTv.setText(mRestaurant.getAddress());
 
         Glide.with(this)
-                .load(mPlace.getPhotoUrl())
+                .load(mRestaurant.getPhotoUrl())
                 .centerCrop()
                 .into(mBinding.fragmentRestaurantDetailsPhotoIv);
 
-        if (mPlace.getRating() > 0) {
+        if (mRestaurant.getRating() > 0) {
             mBinding.fragmentRestaurantDetailsStar1Iv.setVisibility(View.VISIBLE);
         } else {
             mBinding.fragmentRestaurantDetailsStar1Iv.setVisibility(View.INVISIBLE);
         }
-        if (mPlace.getRating() > 1.66) {
+        if (mRestaurant.getRating() > 1.66) {
             mBinding.fragmentRestaurantDetailsStar2Iv.setVisibility(View.VISIBLE);
         } else {
             mBinding.fragmentRestaurantDetailsStar2Iv.setVisibility(View.INVISIBLE);
         }
-        if (mPlace.getRating() > 3.33) {
+        if (mRestaurant.getRating() > 3.33) {
             mBinding.fragmentRestaurantDetailsStar3Iv.setVisibility(View.VISIBLE);
         } else {
             mBinding.fragmentRestaurantDetailsStar3Iv.setVisibility(View.INVISIBLE);
@@ -98,7 +95,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
         // TODO Check if user is going to this place for lunch
         mBinding.fragmentRestaurantDetailsGoFab.setOnClickListener(v -> choseRestaurant());
 
-        if(mPlace.getPhoneNumber() != null && !mPlace.getPhoneNumber().isEmpty()) {
+        if(mRestaurant.getPhoneNumber() != null && !mRestaurant.getPhoneNumber().isEmpty()) {
             mBinding.fragmentRestaurantDetailsCallIv.setOnClickListener(v -> callRestaurant());
         } else {
             mBinding.fragmentRestaurantDetailsCallLl.setVisibility(View.GONE);
@@ -107,7 +104,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
         // TODO Check if user as liked the place
         mBinding.fragmentRestaurantDetailsLikeIv.setOnClickListener(v -> likeRestaurant());
 
-        if(mPlace.getWebsite() != null && !mPlace.getWebsite().isEmpty()) {
+        if(mRestaurant.getWebsite() != null && !mRestaurant.getWebsite().isEmpty()) {
             mBinding.fragmentRestaurantDetailsWebsiteIv.setOnClickListener(v -> visitRestaurantWebsite());
         } else {
             mBinding.fragmentRestaurantDetailsWebLl.setVisibility(View.GONE);

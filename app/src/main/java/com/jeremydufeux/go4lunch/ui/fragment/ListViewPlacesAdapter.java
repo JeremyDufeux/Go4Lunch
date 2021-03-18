@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.AdapterPlaceItemBinding;
-import com.jeremydufeux.go4lunch.models.Place;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     private final Context mContext;
     private final RequestManager mGlide;
     private final OnPlaceListener mPlaceListener;
-    private final List<Place> mPlaceList;
+    private final List<Restaurant> mRestaurantList;
     private final CompositeDisposable mDisposable;
     private final Observable<Location> mObservableLocation;
     private final Location mLocation;
@@ -39,7 +39,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         mGlide = glide;
         mPlaceListener = placeListener;
         mObservableLocation = observableLocation;
-        mPlaceList = new ArrayList<>();
+        mRestaurantList = new ArrayList<>();
         mDisposable = new CompositeDisposable();
         mLocation = location;
     }
@@ -55,18 +55,18 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        holder.updateViewHolder(mContext, mGlide, mPlaceList.get(position), mPlaceListener);
+        holder.updateViewHolder(mContext, mGlide, mRestaurantList.get(position), mPlaceListener);
 
     }
 
     @Override
     public int getItemCount() {
-        return mPlaceList.size();
+        return mRestaurantList.size();
     }
 
-    public void updateList(List<Place> places) {
-        mPlaceList.clear();
-        mPlaceList.addAll(places);
+    public void updateList(List<Restaurant> restaurants) {
+        mRestaurantList.clear();
+        mRestaurantList.addAll(restaurants);
         notifyDataSetChanged();
     }
 
@@ -78,7 +78,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     static class PlacesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final AdapterPlaceItemBinding mBinding;
-        private Place mPlace;
+        private Restaurant mRestaurant;
         private Location mLocation;
         OnPlaceListener mPlaceListener;
 
@@ -88,19 +88,21 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             mLocation = location;
         }
 
-        public void updateViewHolder(Context context, RequestManager glide, Place place, OnPlaceListener placeListener){
-            mPlace = place;
+        public void updateViewHolder(Context context, RequestManager glide, Restaurant restaurant, OnPlaceListener placeListener){
+            mRestaurant = restaurant;
             mPlaceListener = placeListener;
-            mBinding.placeItemNameTv.setText(mPlace.getName());
-            mBinding.placeItemTypeAndAddressTv.setText(mPlace.getAddress());
+            mBinding.placeItemNameTv.setText(mRestaurant.getName());
+            mBinding.placeItemTypeAndAddressTv.setText(mRestaurant.getAddress());
 
-            glide.load(place.getPhotoUrl())
+            glide.load(restaurant.getPhotoUrl())
                     .centerCrop()
                     .into(mBinding.placeItemPictureIv);
 
-            if(mPlace.isOpeningHoursAvailable()) {
-                if (mPlace.isOpenNow()) {
-                    String closingSoonTime = mPlace.getClosingSoonTime();
+
+            // TODO Move in viewmodel and get a string
+            if(mRestaurant.isOpeningHoursAvailable()) {
+                if (mRestaurant.isOpenNow()) {
+                    String closingSoonTime = mRestaurant.getClosingSoonTime();
                     if (!closingSoonTime.isEmpty()) {
                         String openUntil = context.getString(R.string.open_until) + " " + closingSoonTime;
                         mBinding.placeItemOpenTv.setText(openUntil);
@@ -119,7 +121,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             if(mLocation != null) {
                 mBinding.placeItemDistanceTv.setVisibility(View.VISIBLE);
-                String distance = (int) mLocation.distanceTo(mPlace.getLocation()) + "m";
+                String distance = (int) mLocation.distanceTo(mRestaurant.getLocation()) + "m";
                 mBinding.placeItemDistanceTv.setText(distance);
             } else {
                 mBinding.placeItemDistanceTv.setVisibility(View.INVISIBLE);
@@ -127,25 +129,25 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             // TODO Display the amount of workmates who liked the place
 
-            if(mPlace.getWorkmatesInterested()>0){
+            if(mRestaurant.getWorkmatesInterested()>0){
                 mBinding.placeItemWorkmateIv.setVisibility(View.VISIBLE);
-                String workmatesInterested = "(" + mPlace.getWorkmatesInterested() + ")";
+                String workmatesInterested = "(" + mRestaurant.getWorkmatesInterested() + ")";
                 mBinding.placeItemWorkmateAmountTv.setText(workmatesInterested);
             }else {
                 mBinding.placeItemWorkmateIv.setVisibility(View.INVISIBLE);
             }
 
-            if(mPlace.getRating() > 0) {
+            if(mRestaurant.getRating() > 0) {
                 mBinding.placeItemStar1Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar1Iv.setVisibility(View.INVISIBLE);
             }
-            if(mPlace.getRating() > 1.66) {
+            if(mRestaurant.getRating() > 1.66) {
                 mBinding.placeItemStar2Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar2Iv.setVisibility(View.INVISIBLE);
             }
-            if(mPlace.getRating() > 3.33) {
+            if(mRestaurant.getRating() > 3.33) {
                 mBinding.placeItemStar3Iv.setVisibility(View.VISIBLE);
             } else {
                 mBinding.placeItemStar3Iv.setVisibility(View.INVISIBLE);
@@ -166,7 +168,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                     .subscribeWith(new DisposableObserver<Location>() {
                         @Override
                         public void onNext(@NonNull Location location) {
-                            String distance = (int) location.distanceTo(mPlace.getLocation()) + "m";
+                            String distance = (int) location.distanceTo(mRestaurant.getLocation()) + "m";
                             mBinding.placeItemDistanceTv.setText(distance);
                             mLocation = location;
                         }

@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.jeremydufeux.go4lunch.models.Place;
-import com.jeremydufeux.go4lunch.repositories.PlacesDataRepository;
+import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,117 +29,17 @@ public class SharedViewModel extends ViewModel {
     private final MutableLiveData<Boolean> mLocationGrantedLiveData;
     private final MutableLiveData<Location> mLocationLiveData;
 
-    // For List and Map View
-    private final PlacesDataRepository mPlacesDataRepository;
-
-    private final CompositeDisposable mDisposable = new CompositeDisposable();
-    private final HashMap<String, Place> mPlaceList;
-    private final MutableLiveData<List<Place>> mPlaceListLiveData;
-
     // For Map View
     private double mapViewCameraLatitude;
     private double mapViewCameraLongitude;
     private float mapViewCameraZoom;
     private boolean mapViewDataSet;
 
-    public SharedViewModel(PlacesDataRepository placesDataRepository) {
-        mPlacesDataRepository = placesDataRepository;
-
-        mPlaceList = new HashMap<>();
-        mPlaceListLiveData = new MutableLiveData<>();
-
+    public SharedViewModel() {
         mLocationGrantedLiveData = new MutableLiveData<>();
         mLocationLiveData = new MutableLiveData<>();
 
         mSystemSettingsDialogRequest = new MutableLiveData<>();
-    }
-
-    // -------------
-    // For List and Map View
-    // -------------
-
-    public void getNearbyPlaces(String latlng, String radius, String type) {
-        mDisposable.add(mPlacesDataRepository.getNearbyPlaces(latlng, radius, type)
-                .subscribeWith(new DisposableObserver<Pair<List<Place>, String>>() {
-                    @Override
-                    public void onNext(@NonNull Pair<List<Place>, String> placeListWithNextPageToken) {
-                        getPlaceSearchResult(placeListWithNextPageToken);
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError getNearbyPlaces " + e.toString());
-                    }
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    public void getNextPageNearbyPlaces(String pageToken) {
-        mDisposable.add(Observable.just("")
-                        .delay(2, TimeUnit.SECONDS)
-                        .flatMap(s -> mPlacesDataRepository.getNextPageNearbyPlaces(pageToken))
-                        .subscribeWith(new DisposableObserver<Pair<List<Place>, String>>() {
-                            @Override
-                            public void onNext(@NonNull Pair<List<Place>, String> placeListWithNextPageToken) {
-                                getPlaceSearchResult(placeListWithNextPageToken);
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-                                Log.d("Debug", "onError getNearbyPlaces " + e.toString());
-                            }
-
-                            @Override
-                            public void onComplete() {
-                            }
-                        }));
-    }
-
-    public void getDetailsForPlaceId(String placeId){
-        mDisposable.add(mPlacesDataRepository.getDetailsForPlaceId(placeId)
-                .subscribeWith(new DisposableObserver<Place>() {
-                    @Override
-                    public void onNext(@NonNull Place place) {
-                        updatePlaceListWithDetails(place);
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError getDetailsForPlaceId " + e.toString());
-                    }
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    private void getPlaceSearchResult(Pair<List<Place>, String> placeListWithNextPageToken){
-        assert placeListWithNextPageToken.first != null;
-        updatePlaceListNewResults(placeListWithNextPageToken.first);
-        if(placeListWithNextPageToken.second != null && !placeListWithNextPageToken.second.isEmpty()){
-            // TODO Disabled to avoid billing
-            //getNextPageNearbyPlaces(placeListWithNextPageToken.second);
-        }
-    }
-
-    private void updatePlaceListNewResults(List<Place> places) {
-        for (Place place : places){
-            if(!mPlaceList.containsKey(place.getUId())){
-                mPlaceList.put(place.getUId(), place);
-                getDetailsForPlaceId(place.getUId());
-            }
-        }
-        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
-    }
-
-    private void updatePlaceListWithDetails(Place placeDetails) {
-        mPlaceList.put(placeDetails.getUId(), placeDetails);
-
-        mPlaceListLiveData.postValue(new ArrayList<>(mPlaceList.values()));
-    }
-
-    public MutableLiveData<List<Place>> observePlaceList() {
-        return mPlaceListLiveData;
     }
 
     // -------------
@@ -209,24 +109,6 @@ public class SharedViewModel extends ViewModel {
 
     public void setMapViewDataSet(boolean mapViewDataSet) {
         this.mapViewDataSet = mapViewDataSet;
-    }
-
-    // -------------
-    // For Detail View
-    // -------------
-
-    public Place getPlaceWithId(String placeId) {
-        return mPlaceList.get(placeId);
-    }
-
-    // -------------
-    // For View Model
-    // -------------
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mDisposable.dispose();
     }
 
 }

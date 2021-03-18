@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class Place {
+public class Restaurant {
     private final String mUId;
     private String mName;
     private String mAddress;
@@ -37,7 +37,7 @@ public class Place {
     private MarkerOptions mMarkerOptions;
     private boolean mOpeningHoursAvailable;
 
-    public Place(String placeId, String name, Double lat, Double lng) {
+    public Restaurant(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
         mName = name;
 

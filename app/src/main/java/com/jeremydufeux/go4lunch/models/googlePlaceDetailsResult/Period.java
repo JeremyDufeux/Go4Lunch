@@ -1,5 +1,5 @@
 
-package com.jeremydufeux.go4lunch.models.placeDetailsResult;
+package com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
