@@ -36,6 +36,7 @@ public class Restaurant {
     private Marker mMarker;
     private MarkerOptions mMarkerOptions;
     private boolean mOpeningHoursAvailable;
+    private boolean mAlwaysOpen;
 
     public Restaurant(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
@@ -98,6 +99,15 @@ public class Restaurant {
         return mOpeningHoursAvailable;
     }
 
+    public boolean isAlwaysOpen() {
+        return mAlwaysOpen;
+    }
+
+    public void setAlwaysOpen(boolean alwaysOpen) {
+        mOpeningHoursAvailable = true;
+        mAlwaysOpen = alwaysOpen;
+    }
+
     public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
         mOpeningHoursAvailable = true;
         Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
@@ -149,6 +159,7 @@ public class Restaurant {
     public void setUtcOffset(int utcOffset) {
         this.mUtcOffset = utcOffset;
     }
+
     public String getPhoneNumber() {
         return mPhoneNumber;
     }

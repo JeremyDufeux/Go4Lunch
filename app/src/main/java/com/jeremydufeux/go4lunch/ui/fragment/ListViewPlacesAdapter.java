@@ -98,12 +98,11 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
                     .centerCrop()
                     .into(mBinding.placeItemPictureIv);
 
-
             // TODO Move in viewmodel and get a string
             if(mRestaurant.isOpeningHoursAvailable()) {
                 if (mRestaurant.isOpenNow()) {
                     String closingSoonTime = mRestaurant.getClosingSoonTime();
-                    if (!closingSoonTime.isEmpty()) {
+                    if (!closingSoonTime.isEmpty() && !mRestaurant.isAlwaysOpen()) {
                         String openUntil = context.getString(R.string.open_until) + " " + closingSoonTime;
                         mBinding.placeItemOpenTv.setText(openUntil);
                     } else {

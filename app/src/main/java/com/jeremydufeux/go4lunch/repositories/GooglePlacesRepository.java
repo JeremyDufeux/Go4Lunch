@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.repositories;
+    package com.jeremydufeux.go4lunch.repositories;
 
 import android.util.Log;
 
@@ -44,7 +44,6 @@ public class GooglePlacesRepository {
     }
 
     public Observable<Restaurant> getDetailsForPlaceId(String placeId) {
-        Log.d("Debug", "getDetailsForPlaceId");
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
         String fields = "place_id,"
@@ -107,13 +106,19 @@ public class GooglePlacesRepository {
             restaurant.setUtcOffset(placeDetail.getUtcOffset()*60000);
 
             if(placeDetail.getOpeningHours().getPeriods() != null) {
+
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
-                    restaurant.addOpeningHours(period.getOpen().getDay(),
-                            Integer.parseInt(period.getOpen().getTime().substring(0, 2)),
-                            Integer.parseInt(period.getOpen().getTime().substring(2, 4)),
-                            Integer.parseInt(period.getClose().getTime().substring(0, 2)),
-                            Integer.parseInt(period.getClose().getTime().substring(2, 4))
-                            );
+
+                    if(period.getOpen().getDay() == 0 && period.getOpen().getTime().equals("0000")){
+                        restaurant.setAlwaysOpen(true);
+                    } else {
+                        restaurant.addOpeningHours(period.getOpen().getDay(),
+                                Integer.parseInt(period.getOpen().getTime().substring(0, 2)),
+                                Integer.parseInt(period.getOpen().getTime().substring(2, 4)),
+                                Integer.parseInt(period.getClose().getTime().substring(0, 2)),
+                                Integer.parseInt(period.getClose().getTime().substring(2, 4))
+                        );
+                    }
                 }
             }
         }
