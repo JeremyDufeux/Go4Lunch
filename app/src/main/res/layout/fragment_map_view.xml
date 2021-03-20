@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.MapViewFragment">
 
+    <Button
+        android:id="@+id/map_view_fragment_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:alpha="0.0"
+        android:background="@drawable/rounded_button"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/search_this_area"
+        android:textAllCaps="false"/>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map_view_fragment_map"
         android:layout_width="match_parent"

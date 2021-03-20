@@ -61,6 +61,7 @@
     <string name="like_image">Like Image</string>
     <string name="website_image">Website image</string>
     <string name="go_to_this_restaurant_button">Go to this restaurant button</string>
+    <string name="search_this_area">Search this area</string>
 
     <!-- New strings to sort -->
 </resources>

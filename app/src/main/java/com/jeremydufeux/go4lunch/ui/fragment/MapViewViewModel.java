@@ -9,10 +9,10 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -70,20 +70,19 @@ public class MapViewViewModel extends ViewModel {
     }
 
     private void receiptResultFromNearbyPlaces(List<Restaurant> restaurants) {
+        mRestaurantRepository.replaceRestaurantList(restaurants);
         for (Restaurant restaurant : restaurants){
-            if(!mRestaurantRepository.isRestaurantAlreadyInList(restaurant.getUId())){
-                getDetailsForPlaceId(restaurant.getUId());
-            }
+            getDetailsForPlaceId(restaurant.getUId());
         }
     }
 
     private void receiptResultFromPlacesDetails(Restaurant restaurant) {
         mExecutor.execute(() ->
-            mRestaurantRepository.addNewRestaurant(restaurant)
+            mRestaurantRepository.addRestaurantDetails(restaurant)
         );
     }
 
-    public LiveData<List<Restaurant>> observeRestaurantList(){
+    public LiveData<HashMap<String,Restaurant>> observeRestaurantList(){
         return mRestaurantRepository.observeRestaurantList();
     }
 }

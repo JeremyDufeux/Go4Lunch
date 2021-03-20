@@ -8,13 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public class RestaurantRepository {
     private final HashMap<String,Restaurant> mRestaurantHashMap = new HashMap<>();
-    private final List<Restaurant> mRestaurantList = new ArrayList<>();
-    private final MutableLiveData<List<Restaurant>> mRestaurantListLiveData;
+    private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantListLiveData;
+    private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantDetailsListLiveData;
 
     private static final RestaurantRepository INSTANCE = new RestaurantRepository();
 
@@ -24,26 +25,33 @@ public class RestaurantRepository {
 
     private RestaurantRepository() {
         mRestaurantListLiveData = new MutableLiveData<>();
+        mRestaurantDetailsListLiveData = new MutableLiveData<>();
     }
 
-    public boolean isRestaurantAlreadyInList(String uId){
-        return mRestaurantHashMap.containsKey(uId);
-    }
-
-    public void addNewRestaurant(Restaurant restaurant) {
-        if(!mRestaurantHashMap.containsKey(restaurant.getUId())) {
+    public void replaceRestaurantList(List<Restaurant> restaurants) {
+        mRestaurantHashMap.clear();
+        for(Restaurant restaurant : restaurants){
             mRestaurantHashMap.put(restaurant.getUId(), restaurant);
-            mRestaurantList.add(restaurant);
-            //mRestaurantListLiveData.postValue(mRestaurantList); // TODO To check
-            mRestaurantListLiveData.postValue(new ArrayList<>(mRestaurantHashMap.values()));
         }
+        mRestaurantListLiveData.postValue(mRestaurantHashMap);
     }
 
-    public LiveData<List<Restaurant>> observeRestaurantList() {
+    public void addRestaurantDetails(Restaurant restaurant) {
+        mRestaurantHashMap.put(restaurant.getUId(), restaurant);
+        mRestaurantDetailsListLiveData.postValue(mRestaurantHashMap);
+    }
+
+    public LiveData<HashMap<String,Restaurant>> observeRestaurantList() {
+        return mRestaurantListLiveData;
+    }
+
+    public LiveData<HashMap<String,Restaurant>> observeRestaurantDetailsList() {
         return mRestaurantListLiveData;
     }
 
     public Restaurant getRestaurantWithId(String placeId) {
         return mRestaurantHashMap.get(placeId);
     }
+
+
 }

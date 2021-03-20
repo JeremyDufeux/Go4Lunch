@@ -26,6 +26,8 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.subjects.PublishSubject;
@@ -84,9 +86,8 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         mObservableLocation.onNext(location);
     }
 
-    void onPlacesChanged(List<Restaurant> restaurants) {
-        Log.d("Debug", "onPlacesChanged");
-        mRestaurantList = restaurants;
+    void onPlacesChanged(HashMap<String,Restaurant> restaurants) {
+        mRestaurantList = new ArrayList<>(restaurants.values());
         mAdapter.updateList(mRestaurantList);
     }
 

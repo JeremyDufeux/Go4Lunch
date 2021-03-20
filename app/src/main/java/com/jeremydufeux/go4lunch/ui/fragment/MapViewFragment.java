@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,7 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -53,8 +51,11 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     private GoogleMap mMap;
     private Location mLocation;
 
-    private List<Restaurant> mRestaurants = new ArrayList<>();
-    private Boolean mMapReady = false;
+    private HashMap<String, Restaurant> mRestaurants = new HashMap<>();
+    private boolean mMapReady = false;
+    private boolean mShowSearchButtonOnIdle = false;
+    private boolean mFirstMove = true;
+    private boolean mFetchPlacesAfterCameraIdle = false;
 
     // ---------------
     // Setup
@@ -83,6 +84,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
+        mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisAreaAction());
 
         mMapViewViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), this::onRestaurantListChanged);
 
@@ -108,7 +110,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMapReady = true;
         mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::enableLocation);
         getSavedData();
-        updateMap();
+        mShowSearchButtonOnIdle = false;
     }
 
     private boolean onMarkerClick(Marker marker) {
@@ -125,6 +127,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
                     mSharedViewModel.getMapViewCameraLongitude(),
                     mSharedViewModel.getMapViewCameraZoom(),
                     false);
+            updateMap();
         }
     }
 
@@ -138,7 +141,13 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
             mSharedViewModel.setSystemSettingsDialogRequest(true);
         } else {
             focusToLocation();
+            mShowSearchButtonOnIdle = true;
         }
+    }
+
+    private void searchThisAreaAction() {
+        hideSearchButton();
+        fetchPlacesAtCameraPosition();
     }
 
     private void onUserLocationChanged(Location location) {
@@ -153,7 +162,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private void focusToLocation() {
         focusCamera(mLocation.getLatitude(), mLocation.getLongitude(), DEFAULT_ZOOM_VALUE, true);
-        getNearbyPlaces(mLocation.getLatitude() + "," + mLocation.getLongitude());
+        if(mFirstMove){
+            mFirstMove = false;
+            mFetchPlacesAfterCameraIdle = true;
+        }
     }
 
     private void focusCamera(double lat, double lng, float zoom, boolean animCamera){
@@ -164,6 +176,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         } else {
             mMap.moveCamera(cameraUpdate);
         }
+        mShowSearchButtonOnIdle = false;
     }
 
     // ---------------
@@ -171,8 +184,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     // ---------------
 
     public void onCameraIdle() {
-        fetchPlacesAtCameraPosition();
-        updateMap();
+        if(mFetchPlacesAfterCameraIdle){
+            fetchPlacesAtCameraPosition();
+            mFetchPlacesAfterCameraIdle = false;
+        }
+
+        if(mShowSearchButtonOnIdle) {
+            showSearchButton();
+        } else {
+            mShowSearchButtonOnIdle = true;
+        }
     }
 
     private void fetchPlacesAtCameraPosition(){
@@ -187,14 +208,22 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         //mMapViewViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
     }
 
-    private void onRestaurantListChanged(List<Restaurant> restaurantList) {
-        Log.d("Debug", "onRestaurantListChanged " + restaurantList.size());
+    private void onRestaurantListChanged(HashMap<String, Restaurant> restaurantList) {
         mRestaurants = restaurantList;
         updateMap();
     }
 
+    private void removeLastMarkers(HashMap<String, Restaurant> restaurantList){
+        for(Restaurant restaurant : mRestaurants.values()){
+            if(!restaurantList.containsKey(restaurant.getUId())){
+                restaurant.getMarker().remove();
+            }
+        }
+    }
+
     private void updateMap() {
-        if (mMapReady && mRestaurants != null) {
+        if (mMapReady) {
+            mMap.clear();
             if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                 addMarkersInViewport();
             } else {
@@ -204,19 +233,17 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void addMarkersInViewport(){
-        for (Restaurant restaurant : mRestaurants) {
-            if (mMap.getProjection().getVisibleRegion().latLngBounds.contains(restaurant.getLatlng())) {
-                if (restaurant.getMarker() == null) {
-                    restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
-                    restaurant.getMarker().setTag(restaurant.getUId());
-                }
+        for (Restaurant restaurant : mRestaurants.values()) {
+            if (restaurant.getMarker() == null) {
+                restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
+                restaurant.getMarker().setTag(restaurant.getUId());
             }
         }
     }
 
     private void hideAllMarkers(){
         mMap.clear();
-        for (Restaurant restaurant : mRestaurants) {
+        for (Restaurant restaurant : mRestaurants.values()) {
             restaurant.setMarker(null);
         }
     }
@@ -247,7 +274,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mSharedViewModel.setMapViewCameraZoom(mMap.getCameraPosition().zoom);
         mSharedViewModel.setMapViewDataSet(true);
 
-        for (Restaurant restaurant : mRestaurants) {
+        for (Restaurant restaurant : mRestaurants.values()) {
             restaurant.setMarker(null);
         }
     }
@@ -259,6 +286,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private double getVisibleRegionRadius(){
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight);
+        return SphericalUtil.computeDistanceBetween(visibleRegion.nearLeft, visibleRegion.nearRight);
+    }
+
+
+    private void showSearchButton(){
+        mBinding.mapViewFragmentSearchButton.animate().alpha(1).setDuration(1000);
+    }
+    private void hideSearchButton(){
+        mBinding.mapViewFragmentSearchButton.animate().alpha(0).setDuration(200);
     }
 }

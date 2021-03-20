@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class ListViewViewModel extends ViewModel {
@@ -15,8 +17,8 @@ public class ListViewViewModel extends ViewModel {
         mRestaurantRepository = restaurantRepository;
     }
 
-    public LiveData<List<Restaurant>> observeRestaurantList(){
-        return mRestaurantRepository.observeRestaurantList();
+    public LiveData<HashMap<String,Restaurant>> observeRestaurantList(){
+        return mRestaurantRepository.observeRestaurantDetailsList();
     }
 
 }
