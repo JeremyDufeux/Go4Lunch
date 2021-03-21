@@ -1,7 +1,8 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class RestaurantDetailsFragment extends BaseFragment {
 
-    private SharedViewModel mSharedViewModel;
     private RestaurantDetailsViewModel mRestaurantDetailsViewModel;
     private FragmentRestaurantDetailsBinding mBinding;
     private RestaurantDetailsWorkmatesAdapter mAdapter;
@@ -42,7 +42,6 @@ public class RestaurantDetailsFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
         mRestaurantDetailsViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(RestaurantDetailsViewModel.class);
     }
 
@@ -116,7 +115,9 @@ public class RestaurantDetailsFragment extends BaseFragment {
     }
 
     private void callRestaurant() {
-        // TODO open phone Dialer
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:" + mRestaurant.getPhoneNumber()));
+        startActivity(callIntent);
     }
 
     private void likeRestaurant() {
@@ -124,6 +125,8 @@ public class RestaurantDetailsFragment extends BaseFragment {
     }
 
     private void visitRestaurantWebsite() {
-        // TODO open browser
+        Intent openBrowserIntent = new Intent(Intent.ACTION_VIEW);
+        openBrowserIntent.setData(Uri.parse(mRestaurant.getWebsite()));
+        startActivity(openBrowserIntent);
     }
 }

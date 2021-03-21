@@ -14,6 +14,7 @@ import java.util.List;
 
 public class RestaurantRepository {
     private final HashMap<String,Restaurant> mRestaurantHashMap = new HashMap<>();
+
     private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantListLiveData;
     private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantDetailsListLiveData;
 
