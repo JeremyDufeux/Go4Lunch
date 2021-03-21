@@ -62,6 +62,9 @@
     <string name="website_image">Website image</string>
     <string name="go_to_this_restaurant_button">Go to this restaurant button</string>
     <string name="search_this_area">Search this area</string>
+    <string name="position_unknown_for_now">Position unknown for now</string>
+    <string name="zoom_to_see_restaurants">Zoom to see restaurants</string>
+    <string name="no_restaurants_found">No restaurants found</string>
 
     <!-- New strings to sort -->
 </resources>

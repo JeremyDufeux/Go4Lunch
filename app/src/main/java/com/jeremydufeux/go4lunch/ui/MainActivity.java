@@ -1,5 +1,13 @@
 package com.jeremydufeux.go4lunch.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Looper;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,14 +19,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Looper;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -197,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements
                     locationCallback,
                     Looper.getMainLooper());
 
+            // TODO Store value in memory?
             mSharedViewModel.setLocationPermissionGranted(true);
         }else {
             requestPermission();
@@ -206,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements
     private void requestPermission(){
         EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), PERMS_RC_LOCATION, ACCESS_FINE_LOCATION);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {

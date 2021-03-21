@@ -18,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
 import com.jeremydufeux.go4lunch.BaseFragment;
 import com.jeremydufeux.go4lunch.MainNavDirections;
@@ -53,9 +54,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private HashMap<String, Restaurant> mRestaurants = new HashMap<>();
     private boolean mMapReady = false;
-    private boolean mShowSearchButtonOnIdle = false;
+    private boolean mCanShowSearchButton = false;
     private boolean mFirstMove = true;
     private boolean mFetchPlacesAfterCameraIdle = false;
+    private boolean mCanShowZoomSnackbar = false;
 
     // ---------------
     // Setup
@@ -110,7 +112,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMapReady = true;
         mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::enableLocation);
         getSavedData();
-        mShowSearchButtonOnIdle = false;
+        mCanShowSearchButton = false;
     }
 
     private boolean onMarkerClick(Marker marker) {
@@ -141,7 +143,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
             mSharedViewModel.setSystemSettingsDialogRequest(true);
         } else {
             focusToLocation();
-            mShowSearchButtonOnIdle = true;
+            mCanShowSearchButton = true;
         }
     }
 
@@ -161,10 +163,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void focusToLocation() {
-        focusCamera(mLocation.getLatitude(), mLocation.getLongitude(), DEFAULT_ZOOM_VALUE, true);
-        if(mFirstMove){
-            mFirstMove = false;
-            mFetchPlacesAfterCameraIdle = true;
+        if(mLocation!=null) {
+            focusCamera(mLocation.getLatitude(), mLocation.getLongitude(), DEFAULT_ZOOM_VALUE, true);
+            if (mFirstMove) {
+                mFirstMove = false;
+                mFetchPlacesAfterCameraIdle = true;
+            }
+        } else {
+            showSnackBar(getString(R.string.position_unknown_for_now));
         }
     }
 
@@ -176,7 +182,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         } else {
             mMap.moveCamera(cameraUpdate);
         }
-        mShowSearchButtonOnIdle = false;
+        mCanShowSearchButton = false;
     }
 
     // ---------------
@@ -189,10 +195,23 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
             mFetchPlacesAfterCameraIdle = false;
         }
 
-        if(mShowSearchButtonOnIdle) {
-            showSearchButton();
+        if(mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
+            if(mCanShowSearchButton) {
+                showSearchButton();
+            } else {
+                mCanShowSearchButton = true;
+            }
+            addMarkersInViewport();
+            mCanShowZoomSnackbar = true;
         } else {
-            mShowSearchButtonOnIdle = true;
+            hideSearchButton();
+            hideAllMarkers();
+
+            if(mCanShowZoomSnackbar) {
+                showSnackBar(getString(R.string.zoom_to_see_restaurants));
+                mCanShowZoomSnackbar = false;
+            }
+            mCanShowSearchButton = true;
         }
     }
 
@@ -203,14 +222,16 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     }
 
     private void getNearbyPlaces(String latlng) {
-        // TODO Disabled to avoid billing
         mMapViewViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()));
-        //mMapViewViewModel.getDetailsForPlaceId("ChIJg_g8C-BxjEcRhu3by9eChu8");
     }
 
     private void onRestaurantListChanged(HashMap<String, Restaurant> restaurantList) {
+        removeLastMarkers(restaurantList);
         mRestaurants = restaurantList;
         updateMap();
+        if(restaurantList.size()==0){
+            showSnackBar(getString(R.string.no_restaurants_found));
+        }
     }
 
     private void removeLastMarkers(HashMap<String, Restaurant> restaurantList){
@@ -223,10 +244,14 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
 
     private void updateMap() {
         if (mMapReady) {
-            mMap.clear();
             if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                 addMarkersInViewport();
+                mCanShowZoomSnackbar = true;
             } else {
+                if(mCanShowZoomSnackbar) {
+                    showSnackBar(getString(R.string.zoom_to_see_restaurants));
+                    mCanShowZoomSnackbar = false;
+                }
                 hideAllMarkers();
             }
         }
@@ -268,6 +293,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         super.onDestroyView();
         mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
         mSharedViewModel.observeUserLocation().removeObservers(this);
+        mMapViewViewModel.observeRestaurantList().removeObservers(this);
 
         mSharedViewModel.setMapViewCameraLatitude(mMap.getCameraPosition().target.latitude);
         mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);
@@ -284,15 +310,19 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     // Utils
     // ---------------
 
-    private double getVisibleRegionRadius(){
-        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        return SphericalUtil.computeDistanceBetween(visibleRegion.nearLeft, visibleRegion.nearRight);
+    private void showSnackBar(String message){
+        Snackbar.make(mBinding.mapViewFragmentCoordinator, message, Snackbar.LENGTH_LONG).show();
     }
 
+    private double getVisibleRegionRadius(){
+        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight)/2;
+    }
 
     private void showSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(1).setDuration(1000);
     }
+
     private void hideSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(0).setDuration(200);
     }
