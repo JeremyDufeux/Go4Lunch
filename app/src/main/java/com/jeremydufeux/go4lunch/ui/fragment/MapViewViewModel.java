@@ -2,7 +2,6 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -17,6 +16,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 
 public class MapViewViewModel extends ViewModel {
     private static final String PLACE_TYPE_RESTAURANT = "restaurant";
@@ -82,7 +82,7 @@ public class MapViewViewModel extends ViewModel {
         );
     }
 
-    public LiveData<HashMap<String,Restaurant>> observeRestaurantList(){
+    public BehaviorSubject<HashMap<String,Restaurant>> observeRestaurantList(){
         return mRestaurantRepository.observeRestaurantList();
     }
 }

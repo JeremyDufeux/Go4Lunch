@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,16 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -48,6 +57,8 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     private SharedViewModel mSharedViewModel;
     private MapViewViewModel mMapViewViewModel;
     private FragmentMapViewBinding mBinding;
+
+    private final CompositeDisposable mDisposable = new CompositeDisposable();
 
     private GoogleMap mMap;
     private Location mLocation;
@@ -88,7 +99,10 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
         mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisAreaAction());
 
-        mMapViewViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), this::onRestaurantListChanged);
+        mDisposable.add(mMapViewViewModel.observeRestaurantList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onRestaurantListChanged()));
 
         configureMaps();
 
@@ -225,13 +239,15 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMapViewViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()));
     }
 
-    private void onRestaurantListChanged(HashMap<String, Restaurant> restaurantList) {
-        removeLastMarkers(restaurantList);
-        mRestaurants = restaurantList;
-        updateMap();
-        if(restaurantList.size()==0){
-            showSnackBar(getString(R.string.no_restaurants_found));
-        }
+    private Consumer<HashMap<String, Restaurant>> onRestaurantListChanged() {
+        return stringRestaurantHashMap -> {
+            removeLastMarkers(stringRestaurantHashMap);
+            mRestaurants = stringRestaurantHashMap;
+            updateMap();
+            if(stringRestaurantHashMap.size()==0){
+                showSnackBar(getString(R.string.no_restaurants_found));
+            }
+        };
     }
 
     private void removeLastMarkers(HashMap<String, Restaurant> restaurantList){
@@ -293,7 +309,7 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         super.onDestroyView();
         mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
         mSharedViewModel.observeUserLocation().removeObservers(this);
-        mMapViewViewModel.observeRestaurantList().removeObservers(this);
+        mDisposable.clear();
 
         mSharedViewModel.setMapViewCameraLatitude(mMap.getCameraPosition().target.latitude);
         mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);

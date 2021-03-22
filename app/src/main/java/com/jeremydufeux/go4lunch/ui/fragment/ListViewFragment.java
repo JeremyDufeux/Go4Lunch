@@ -28,8 +28,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -43,6 +48,8 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
 
     private List<Restaurant> mRestaurantList = new ArrayList<>();
     private final Subject<Location> mObservableLocation = PublishSubject.create();
+
+    private final CompositeDisposable mDisposable = new CompositeDisposable();
 
     public ListViewFragment() {}
 
@@ -72,7 +79,11 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     }
 
     private void configureObservers() {
-        mListViewViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), this::onPlacesChanged);
+        mDisposable.add(mListViewViewModel.observeRestaurantList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onRestaurantListChanged()));
+
         mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::onLocationPermissionGranted);
     }
 
@@ -86,9 +97,11 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         mObservableLocation.onNext(location);
     }
 
-    void onPlacesChanged(HashMap<String,Restaurant> restaurants) {
-        mRestaurantList = new ArrayList<>(restaurants.values());
-        mAdapter.updateList(mRestaurantList);
+    private Consumer<HashMap<String, Restaurant>> onRestaurantListChanged() {
+        return stringRestaurantHashMap -> {
+            mRestaurantList = new ArrayList<>(stringRestaurantHashMap.values());
+            mAdapter.updateList(mRestaurantList);
+        };
     }
 
     private void configureRecyclerView() {
@@ -114,6 +127,6 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         super.onDestroyView();
         mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
         mSharedViewModel.observeUserLocation().removeObservers(this);
-        mListViewViewModel.observeRestaurantList().removeObservers(this);
+        mDisposable.clear();
     }
 }

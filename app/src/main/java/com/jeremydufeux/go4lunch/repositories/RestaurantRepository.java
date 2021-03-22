@@ -2,21 +2,18 @@ package com.jeremydufeux.go4lunch.repositories;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class RestaurantRepository {
-    private final HashMap<String,Restaurant> mRestaurantHashMap = new HashMap<>();
+import io.reactivex.subjects.BehaviorSubject;
 
-    private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantListLiveData;
-    private final MutableLiveData<HashMap<String,Restaurant>> mRestaurantDetailsListLiveData;
+public class RestaurantRepository {
+    private final HashMap<String,Restaurant> mRestaurantHashMap;
+
+    private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantListObservable;
+    private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantDetailsListObservable;
 
     private static final RestaurantRepository INSTANCE = new RestaurantRepository();
 
@@ -25,8 +22,10 @@ public class RestaurantRepository {
     }
 
     private RestaurantRepository() {
-        mRestaurantListLiveData = new MutableLiveData<>();
-        mRestaurantDetailsListLiveData = new MutableLiveData<>();
+        mRestaurantHashMap = new HashMap<>();
+
+        mRestaurantListObservable = BehaviorSubject.create();
+        mRestaurantDetailsListObservable = BehaviorSubject.create();
     }
 
     public void replaceRestaurantList(List<Restaurant> restaurants) {
@@ -34,22 +33,21 @@ public class RestaurantRepository {
         for(Restaurant restaurant : restaurants){
             mRestaurantHashMap.put(restaurant.getUId(), restaurant);
         }
-        mRestaurantListLiveData.postValue(mRestaurantHashMap);
+        mRestaurantListObservable.onNext(mRestaurantHashMap);
     }
 
     public void addRestaurantDetails(Restaurant restaurant) {
         mRestaurantHashMap.put(restaurant.getUId(), restaurant);
-        mRestaurantDetailsListLiveData.postValue(mRestaurantHashMap);
+        mRestaurantDetailsListObservable.onNext(mRestaurantHashMap);
     }
 
-    public LiveData<HashMap<String,Restaurant>> observeRestaurantList() {
-        return mRestaurantListLiveData;
+    public BehaviorSubject<HashMap<String, Restaurant>> observeRestaurantList() {
+        return mRestaurantListObservable;
     }
 
-    public LiveData<HashMap<String,Restaurant>> observeRestaurantDetailsList() {
-        return mRestaurantListLiveData;
+    public BehaviorSubject<HashMap<String, Restaurant>> observeRestaurantDetailsList() {
+        return mRestaurantDetailsListObservable;
     }
-
     public Restaurant getRestaurantWithId(String placeId) {
         return mRestaurantHashMap.get(placeId);
     }
