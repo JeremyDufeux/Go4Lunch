@@ -103,11 +103,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         }
     }
 
-    private void showLoginButtons() {
-        alphaViewAnimation(mBinding.loginFragmentFirebaseAuthGoogleBtn);
-        alphaViewAnimation(mBinding.loginFragmentFrameLayoutFacebookButton.frameFirebaseAuthFacebookBtn);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -267,10 +262,8 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         Snackbar.make(mBinding.loginFragmentCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
-    private void alphaViewAnimation(View view){
-        Animation animation = new AlphaAnimation(0.0f, 1.0f);
-        animation.setDuration(1000);
-        animation.setStartOffset(500);
-        view.setAnimation(animation);
+    private void showLoginButtons(){
+        mBinding.loginFragmentFirebaseAuthGoogleBtn.animate().alpha(1).setDuration(1000).setStartDelay(500).start();
+        mBinding.loginFragmentFrameLayoutFacebookButton.frameFirebaseAuthFacebookBtn.animate().alpha(1).setDuration(1000).setStartDelay(500).start();
     }
 }
