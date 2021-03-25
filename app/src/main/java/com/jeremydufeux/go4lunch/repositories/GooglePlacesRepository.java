@@ -1,15 +1,13 @@
-    package com.jeremydufeux.go4lunch.repositories;
-
-import android.util.Log;
+package com.jeremydufeux.go4lunch.repositories;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.api.PlacesService;
-import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
+import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +23,12 @@ public class GooglePlacesRepository {
 
     private String mNextPageToken;
 
-    public Observable<List<Restaurant>> getNearbyPlaces(String latlng, String radius, String type){
+    public Observable<List<Restaurant>> getNearbyPlaces(double latitude, double longitude, double radius, String type){
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-        return placesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, radius, type)
+        String latlng = latitude + "," + longitude;
+
+        return placesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, String.valueOf(radius), type)
                 .map(this::getPlacesFromResults)
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS);

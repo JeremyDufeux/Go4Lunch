@@ -1,25 +1,10 @@
 package com.jeremydufeux.go4lunch.ui;
 
 import android.location.Location;
-import android.util.Log;
-import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class SharedViewModel extends ViewModel {
 
@@ -73,42 +58,6 @@ public class SharedViewModel extends ViewModel {
 
     public Location getLocation() {
         return mLocation;
-    }
-
-    // -------------
-    // For MapView
-    // -------------
-
-    public double getMapViewCameraLatitude() {
-        return mapViewCameraLatitude;
-    }
-
-    public void setMapViewCameraLatitude(double mapViewCameraLatitude) {
-        this.mapViewCameraLatitude = mapViewCameraLatitude;
-    }
-
-    public double getMapViewCameraLongitude() {
-        return mapViewCameraLongitude;
-    }
-
-    public void setMapViewCameraLongitude(double mapViewCameraLongitude) {
-        this.mapViewCameraLongitude = mapViewCameraLongitude;
-    }
-
-    public float getMapViewCameraZoom() {
-        return mapViewCameraZoom;
-    }
-
-    public void setMapViewCameraZoom(float mapViewCameraZoom) {
-        this.mapViewCameraZoom = mapViewCameraZoom;
-    }
-
-    public boolean isMapViewDataSet() {
-        return mapViewDataSet;
-    }
-
-    public void setMapViewDataSet(boolean mapViewDataSet) {
-        this.mapViewDataSet = mapViewDataSet;
     }
 
 }

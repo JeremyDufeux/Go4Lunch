@@ -1,9 +1,6 @@
 package com.jeremydufeux.go4lunch.ui;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +20,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,23 +31,12 @@ import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-import org.jetbrains.annotations.NotNull;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         FirebaseAuth.AuthStateListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final int PERMS_RC_LOCATION = 1;
-
     private MainActivityViewModel mViewModel;
-    private SharedViewModel mSharedViewModel;
     private ActivityMainBinding mBinding;
     private ActivityMainDrawerHeaderBinding mHeaderBinding;
 
@@ -82,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements
         configureDrawer();
         configureNavControllerListener();
         configureFirebaseAuthListener();
-        configurePermissionsRequest();
     }
 
     // ---------------
@@ -92,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
-        mSharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
     }
 
     private void configureNavController() {
@@ -154,75 +133,6 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
 
-    private void configurePermissionsRequest() {
-        mSharedViewModel.observeSystemSettingsDialogRequest().observe(this, this::onSystemSettingsDialog);
-    }
-
-    private void onSystemSettingsDialog(Boolean request) {
-        if(request) {
-            mSharedViewModel.setSystemSettingsDialogRequest(false);
-            openSystemSettingsDialog();
-        }
-    }
-
-    private void openSystemSettingsDialog() {
-        new AppSettingsDialog.Builder(this).build().show();
-    }
-
-    @SuppressLint("MissingPermission")
-    @AfterPermissionGranted(PERMS_RC_LOCATION)
-    private void configureLocation() {
-        if (EasyPermissions.hasPermissions(this, ACCESS_FINE_LOCATION)) {
-            LocationCallback locationCallback = new LocationCallback() {
-                @Override
-                public void onLocationResult(@NotNull LocationResult locationResult) {
-                    mSharedViewModel.setUserLocation(locationResult.getLastLocation());
-                }
-            };
-
-            LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setInterval(5000);
-            locationRequest.setFastestInterval(1000);
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-                if (location != null) {
-                    mSharedViewModel.setUserLocation(location);
-                }
-            });
-
-            fusedLocationClient.requestLocationUpdates(locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper());
-
-            // TODO Store value in memory?
-            mSharedViewModel.setLocationPermissionGranted(true);
-        }else {
-            requestPermission();
-        }
-    }
-
-    private void requestPermission(){
-        EasyPermissions.requestPermissions(this, getString(R.string.permission_rationale_location), PERMS_RC_LOCATION, ACCESS_FINE_LOCATION);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE && EasyPermissions.hasPermissions(this, ACCESS_FINE_LOCATION)) {
-            configureLocation();
-        }
-    }
-
     // ---------------
     // Firebase Auth
     // ---------------
@@ -232,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null){
             mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::onUserDataChange);
-            configureLocation();
         }
     }
 

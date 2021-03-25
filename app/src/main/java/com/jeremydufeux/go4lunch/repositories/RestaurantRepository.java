@@ -1,7 +1,5 @@
 package com.jeremydufeux.go4lunch.repositories;
 
-import android.util.Log;
-
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.util.HashMap;
@@ -33,7 +31,7 @@ public class RestaurantRepository {
         for(Restaurant restaurant : restaurants){
             mRestaurantHashMap.put(restaurant.getUId(), restaurant);
         }
-        mRestaurantListObservable.onNext(mRestaurantHashMap);
+        mRestaurantListObservable.onNext(new HashMap<>(mRestaurantHashMap)); // TODO To check
     }
 
     public void addRestaurantDetails(Restaurant restaurant) {

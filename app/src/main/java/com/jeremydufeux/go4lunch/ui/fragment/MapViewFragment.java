@@ -1,16 +1,24 @@
 package com.jeremydufeux.go4lunch.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,7 +36,6 @@ import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,38 +44,36 @@ import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static com.jeremydufeux.go4lunch.ui.MainActivity.PERMS_RC_LOCATION;
 
-public class MapViewFragment extends BaseFragment implements OnMapReadyCallback {
+public class MapViewFragment extends BaseFragment implements
+        OnMapReadyCallback,
+        EasyPermissions.PermissionCallbacks,
+        MapViewViewModel.MapViewCallback {
 
-    private static final float DEFAULT_ZOOM_VALUE = 16;
-    private static final float LIMIT_ZOOM_VALUE = 14.6f;
+    public static final int PERMS_RC_LOCATION = 1;
+    public static final float DEFAULT_ZOOM_VALUE = 16;
+    public static final float LIMIT_ZOOM_VALUE = 14.6f;
 
-    private SharedViewModel mSharedViewModel;
-    private MapViewViewModel mMapViewViewModel;
+    private MapViewViewModel mViewModel;
     private FragmentMapViewBinding mBinding;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
     private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationClient;
     private Location mLocation;
 
-    private HashMap<String, Restaurant> mRestaurants = new HashMap<>();
-    private boolean mMapReady = false;
-    private boolean mCanShowSearchButton = false;
-    private boolean mFirstMove = true;
-    private boolean mFetchPlacesAfterCameraIdle = false;
-    private boolean mCanShowZoomSnackbar = false;
+    private boolean mPermissionDenied = false;
+
+    public HashMap<String, Restaurant> mRestaurantList = new HashMap<>();
 
     // ---------------
     // Setup
@@ -85,12 +90,18 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configureViewModels();
+        configureLocationClient();
     }
 
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-        mMapViewViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
+        mViewModel.setMapViewCallback(this);
+        mViewModel.setCanShowSearchButton(false);
+    }
+
+    private void configureLocationClient() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
     }
 
     @Override
@@ -98,11 +109,6 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
         mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisAreaAction());
-
-        mDisposable.add(mMapViewViewModel.observeRestaurantList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onRestaurantListChanged()));
 
         configureMaps();
 
@@ -123,10 +129,97 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         mMap.setOnMarkerClickListener(this::onMarkerClick);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMapReady = true;
-        mSharedViewModel.observeLocationPermissionGranted().observe(getViewLifecycleOwner(), this::enableLocation);
-        getSavedData();
-        mCanShowSearchButton = false;
+
+        enableLocation();
+        configureRestaurantObserver();
+
+        mViewModel.checkForSavedData();
+    }
+
+    private void configureRestaurantObserver(){
+        mDisposable.add(mViewModel.onRestaurantListChanged()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(onRestaurantListChanged())
+        );
+    }
+
+    // ---------------
+    // Map interactions
+    // ---------------
+
+    private void requestFocusToLocation(){
+        if (EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
+            mViewModel.focusToLocation();
+        } else {
+            enableLocation();
+        }
+    }
+
+    public void focusCamera(LatLng latLng, float zoom, boolean animCamera) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
+        if (animCamera) {
+            mMap.animateCamera(cameraUpdate);
+        } else {
+            mMap.moveCamera(cameraUpdate);
+        }
+    }
+
+    private void searchThisAreaAction() {
+        hideSearchButton();
+        mViewModel.getNearbyPlaces(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, getVisibleRegionRadius());
+    }
+
+    private void onCameraIdle() {
+        mViewModel.onCameraIdle(mMap.getCameraPosition().target.latitude,
+                mMap.getCameraPosition().target.longitude,
+                mMap.getCameraPosition().zoom,
+                getVisibleRegionRadius());
+    }
+
+    // ---------------
+    // Places
+    // ---------------
+
+    private DisposableObserver<HashMap<String, Restaurant>> onRestaurantListChanged(){
+        return new DisposableObserver<HashMap<String, Restaurant>>() {
+            @Override
+            public void onNext(@NonNull HashMap<String, Restaurant> restaurantList) {
+                removeUnusedMarkers(restaurantList);
+                mRestaurantList = restaurantList;
+                if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
+                    addMarkers();
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d("Debug", "onError " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+    }
+
+    private void removeUnusedMarkers(HashMap<String, Restaurant> restaurantList) {
+        for (Restaurant restaurant : mRestaurantList.values()) {
+            if (!restaurantList.containsKey(restaurant.getUId())) {
+                restaurant.getMarker().remove();
+            }
+        }
+    }
+
+    public void addMarkers(){
+        for (Restaurant restaurant : mRestaurantList.values()) {
+            restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
+            restaurant.getMarker().setTag(restaurant.getUId());
+        }
+    }
+
+    public void removeMarkers(){
+        mMap.clear();
     }
 
     private boolean onMarkerClick(Marker marker) {
@@ -137,166 +230,87 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
         return false;
     }
 
-    private void getSavedData() {
-        if(mSharedViewModel.isMapViewDataSet()){
-            focusCamera(mSharedViewModel.getMapViewCameraLatitude(),
-                    mSharedViewModel.getMapViewCameraLongitude(),
-                    mSharedViewModel.getMapViewCameraZoom(),
-                    false);
-            updateMap();
-        }
-    }
-
     // ---------------
-    // Map interactions
+    // Location
     // ---------------
 
-    @AfterPermissionGranted(PERMS_RC_LOCATION)
-    private void requestFocusToLocation(){
-        if (!EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
-            mSharedViewModel.setSystemSettingsDialogRequest(true);
+    private void enableLocation() {
+        if (EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
+            configureLocation();
         } else {
-            focusToLocation();
-            mCanShowSearchButton = true;
-        }
-    }
-
-    private void searchThisAreaAction() {
-        hideSearchButton();
-        fetchPlacesAtCameraPosition();
-    }
-
-    private void onUserLocationChanged(Location location) {
-        if (location != null) {
-            mLocation = location;
-            if(!mSharedViewModel.isMapViewDataSet()) {
-                focusToLocation();
-                mSharedViewModel.setMapViewDataSet(true);
-            }
-        }
-    }
-
-    private void focusToLocation() {
-        if(mLocation!=null) {
-            focusCamera(mLocation.getLatitude(), mLocation.getLongitude(), DEFAULT_ZOOM_VALUE, true);
-            if (mFirstMove) {
-                mFirstMove = false;
-                mFetchPlacesAfterCameraIdle = true;
-            }
-        } else {
-            showSnackBar(getString(R.string.position_unknown_for_now));
-        }
-    }
-
-    private void focusCamera(double lat, double lng, float zoom, boolean animCamera){
-        LatLng latLng = new LatLng(lat, lng);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
-        if(animCamera){
-            mMap.animateCamera(cameraUpdate);
-        } else {
-            mMap.moveCamera(cameraUpdate);
-        }
-        mCanShowSearchButton = false;
-    }
-
-    // ---------------
-    // Places
-    // ---------------
-
-    public void onCameraIdle() {
-        if(mFetchPlacesAfterCameraIdle){
-            fetchPlacesAtCameraPosition();
-            mFetchPlacesAfterCameraIdle = false;
-        }
-
-        if(mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
-            if(mCanShowSearchButton) {
-                showSearchButton();
+            if(mPermissionDenied){
+                openSystemSettingsDialog();
             } else {
-                mCanShowSearchButton = true;
+                requestPermission();
             }
-            addMarkersInViewport();
-            mCanShowZoomSnackbar = true;
-        } else {
-            hideSearchButton();
-            hideAllMarkers();
-
-            if(mCanShowZoomSnackbar) {
-                showSnackBar(getString(R.string.zoom_to_see_restaurants));
-                mCanShowZoomSnackbar = false;
-            }
-            mCanShowSearchButton = true;
         }
     }
 
-    private void fetchPlacesAtCameraPosition(){
-        double lat = mMap.getCameraPosition().target.latitude;
-        double lng = mMap.getCameraPosition().target.longitude;
-        getNearbyPlaces(lat + "," + lng);
-    }
+    @SuppressLint("MissingPermission")
+    @AfterPermissionGranted(PERMS_RC_LOCATION)
+    private void configureLocation() {
+        mPermissionDenied = false;
+        mViewModel.setLocationPermissionGranted(true);
+        mMap.setMyLocationEnabled(true);
 
-    private void getNearbyPlaces(String latlng) {
-        mMapViewViewModel.getNearbyPlaces(latlng, String.valueOf(getVisibleRegionRadius()));
-    }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            mLocation = location;
+            mViewModel.setLocation(mLocation);
+        });
 
-    private Consumer<HashMap<String, Restaurant>> onRestaurantListChanged() {
-        return stringRestaurantHashMap -> {
-            removeLastMarkers(stringRestaurantHashMap);
-            mRestaurants = stringRestaurantHashMap;
-            updateMap();
-            if(stringRestaurantHashMap.size()==0){
-                showSnackBar(getString(R.string.no_restaurants_found));
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NotNull LocationResult locationResult) {
+                mLocation = locationResult.getLastLocation();
+                mViewModel.setLocation(mLocation);
             }
         };
-    }
 
-    private void removeLastMarkers(HashMap<String, Restaurant> restaurantList){
-        for(Restaurant restaurant : mRestaurants.values()){
-            if(!restaurantList.containsKey(restaurant.getUId())){
-                restaurant.getMarker().remove();
-            }
-        }
-    }
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-    private void updateMap() {
-        if (mMapReady) {
-            if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
-                addMarkersInViewport();
-                mCanShowZoomSnackbar = true;
-            } else {
-                if(mCanShowZoomSnackbar) {
-                    showSnackBar(getString(R.string.zoom_to_see_restaurants));
-                    mCanShowZoomSnackbar = false;
-                }
-                hideAllMarkers();
-            }
-        }
-    }
-
-    private void addMarkersInViewport(){
-        for (Restaurant restaurant : mRestaurants.values()) {
-            if (restaurant.getMarker() == null) {
-                restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
-                restaurant.getMarker().setTag(restaurant.getUId());
-            }
-        }
-    }
-
-    private void hideAllMarkers(){
-        mMap.clear();
-        for (Restaurant restaurant : mRestaurants.values()) {
-            restaurant.setMarker(null);
-        }
+        mFusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 
     // ---------------
     // Permissions
     // ---------------
-    @SuppressLint("MissingPermission")
-    private void enableLocation(Boolean locationPermissionGranted) {
-        if (mMap != null && locationPermissionGranted) {
-            mMap.setMyLocationEnabled(true);
-            mSharedViewModel.observeUserLocation().observe(this, this::onUserLocationChanged);
+
+    private void requestPermission(){
+        requestPermissions( new String[]{ACCESS_FINE_LOCATION}, PERMS_RC_LOCATION);
+    }
+
+    public void openSystemSettingsDialog() {
+        new AppSettingsDialog.Builder(this).build().show();
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        mPermissionDenied = false;
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        mPermissionDenied = true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE && EasyPermissions.hasPermissions(requireActivity(), ACCESS_FINE_LOCATION)) {
+            mPermissionDenied = false;
+            enableLocation();
         }
     }
 
@@ -307,39 +321,32 @@ public class MapViewFragment extends BaseFragment implements OnMapReadyCallback 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mSharedViewModel.observeLocationPermissionGranted().removeObservers(this);
-        mSharedViewModel.observeUserLocation().removeObservers(this);
         mDisposable.clear();
 
-        mSharedViewModel.setMapViewCameraLatitude(mMap.getCameraPosition().target.latitude);
-        mSharedViewModel.setMapViewCameraLongitude(mMap.getCameraPosition().target.longitude);
-        mSharedViewModel.setMapViewCameraZoom(mMap.getCameraPosition().zoom);
-        mSharedViewModel.setMapViewDataSet(true);
+        mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
+                mMap.getCameraPosition().target.longitude,
+                mMap.getCameraPosition().zoom);
 
-        for (Restaurant restaurant : mRestaurants.values()) {
-            restaurant.setMarker(null);
-        }
     }
-
 
     // ---------------
     // Utils
     // ---------------
-
-    private void showSnackBar(String message){
-        Snackbar.make(mBinding.mapViewFragmentCoordinator, message, Snackbar.LENGTH_LONG).show();
-    }
 
     private double getVisibleRegionRadius(){
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
         return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight)/2;
     }
 
-    private void showSearchButton(){
+    public void showSnackBar(int stringId){
+        Snackbar.make(mBinding.mapViewFragmentCoordinator, getString(stringId), Snackbar.LENGTH_LONG).show();
+    }
+
+    public void showSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(1).setDuration(1000);
     }
 
-    private void hideSearchButton(){
+    public void hideSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(0).setDuration(200);
     }
 }

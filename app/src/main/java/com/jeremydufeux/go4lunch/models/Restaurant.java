@@ -1,7 +1,6 @@
 package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -59,6 +58,55 @@ public class Restaurant {
         }
     }
 
+    public void calculateDistanceFromUser() {
+        //TODO
+    }
+
+    public void determineOpening() {
+        //TODO
+    }
+
+    public void setAlwaysOpen(boolean alwaysOpen) {
+        mOpeningHoursAvailable = true;
+        mAlwaysOpen = alwaysOpen;
+    }
+
+    public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
+        mOpeningHoursAvailable = true;
+        Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
+    }
+
+    // If closing soon, return the closing time, else return an empty String
+    public String getClosingSoonTime(){
+        Calendar nowCal = Calendar.getInstance();
+
+        for(OpenPeriod period : Objects.requireNonNull(mOpeningHours.get(nowCal.get(Calendar.DAY_OF_WEEK) - 1))){
+            Calendar openCal = Calendar.getInstance();
+            openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
+            openCal.set(Calendar.MINUTE, period.getOpeningMinute());
+            openCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
+
+            Calendar closeCal = Calendar.getInstance();
+            closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
+            closeCal.set(Calendar.MINUTE, period.getClosingMinute());
+            closeCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
+
+            if( period.getClosingHour() == 0 && period.getClosingMinute() == 0){
+                closeCal.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            if (nowCal.after(openCal) && nowCal.before(closeCal)) {
+                nowCal.add(Calendar.HOUR_OF_DAY, 1);
+
+                if(nowCal.after(closeCal)){
+                    closeCal.set(Calendar.ZONE_OFFSET, nowCal.getTimeZone().getRawOffset());
+                    return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());
+                }
+            }
+        }
+        return "";
+    }
+
     public String getUId() {
         return mUId;
     }
@@ -103,49 +151,8 @@ public class Restaurant {
         return mAlwaysOpen;
     }
 
-    public void setAlwaysOpen(boolean alwaysOpen) {
-        mOpeningHoursAvailable = true;
-        mAlwaysOpen = alwaysOpen;
-    }
-
-    public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
-        mOpeningHoursAvailable = true;
-        Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
-    }
-
     public boolean isOpenNow() {
         return isOpenNow;
-    }
-
-    // If closing soon, return the closing time, else return an empty String
-    public String getClosingSoonTime(){
-        Calendar nowCal = Calendar.getInstance();
-
-        for(OpenPeriod period : Objects.requireNonNull(mOpeningHours.get(nowCal.get(Calendar.DAY_OF_WEEK) - 1))){
-            Calendar openCal = Calendar.getInstance();
-            openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
-            openCal.set(Calendar.MINUTE, period.getOpeningMinute());
-            openCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
-
-            Calendar closeCal = Calendar.getInstance();
-            closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
-            closeCal.set(Calendar.MINUTE, period.getClosingMinute());
-            closeCal.set(Calendar.ZONE_OFFSET, mUtcOffset);
-
-            if( period.getClosingHour() == 0 && period.getClosingMinute() == 0){
-                closeCal.add(Calendar.DAY_OF_MONTH, 1);
-            }
-
-            if (nowCal.after(openCal) && nowCal.before(closeCal)) {
-                nowCal.add(Calendar.HOUR_OF_DAY, 1);
-
-                if(nowCal.after(closeCal)){
-                    closeCal.set(Calendar.ZONE_OFFSET, nowCal.getTimeZone().getRawOffset());
-                    return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());
-                }
-            }
-        }
-        return "";
     }
 
     public void setOpenNow(boolean openNow) {

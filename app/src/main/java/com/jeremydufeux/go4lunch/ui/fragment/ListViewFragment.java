@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,6 @@ import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,7 +37,7 @@ import io.reactivex.subjects.Subject;
 public class ListViewFragment extends BaseFragment implements ListViewPlacesAdapter.OnPlaceListener {
 
     private SharedViewModel mSharedViewModel;
-    private ListViewViewModel mListViewViewModel;
+    private ListViewViewModel mViewModel;
 
     private FragmentListViewBinding mBinding;
     private ListViewPlacesAdapter mAdapter;
@@ -66,7 +62,7 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mSharedViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(SharedViewModel.class);
-        mListViewViewModel = new ViewModelProvider(this, viewModelFactory).get(ListViewViewModel.class);
+        mViewModel = new ViewModelProvider(this, viewModelFactory).get(ListViewViewModel.class);
     }
 
     @Override
@@ -79,7 +75,7 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     }
 
     private void configureObservers() {
-        mDisposable.add(mListViewViewModel.observeRestaurantList()
+        mDisposable.add(mViewModel.observeRestaurantList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onRestaurantListChanged()));
@@ -97,9 +93,9 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
         mObservableLocation.onNext(location);
     }
 
-    private Consumer<HashMap<String, Restaurant>> onRestaurantListChanged() {
-        return stringRestaurantHashMap -> {
-            mRestaurantList = new ArrayList<>(stringRestaurantHashMap.values());
+    private Consumer<List<Restaurant>> onRestaurantListChanged() {
+        return restaurantList -> {
+            mRestaurantList = restaurantList;
             mAdapter.updateList(mRestaurantList);
         };
     }

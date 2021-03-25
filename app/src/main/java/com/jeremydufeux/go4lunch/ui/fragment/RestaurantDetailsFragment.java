@@ -16,13 +16,12 @@ import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 public class RestaurantDetailsFragment extends BaseFragment {
 
-    private RestaurantDetailsViewModel mRestaurantDetailsViewModel;
+    private RestaurantDetailsViewModel mViewModel;
     private FragmentRestaurantDetailsBinding mBinding;
     private RestaurantDetailsWorkmatesAdapter mAdapter;
 
@@ -42,7 +41,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mRestaurantDetailsViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(RestaurantDetailsViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(RestaurantDetailsViewModel.class);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
         assert getArguments() != null;
         String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();
 
-        mRestaurant = mRestaurantDetailsViewModel.getRestaurantWithId(restaurantId);
+        mRestaurant = mViewModel.getRestaurantWithId(restaurantId);
 
         configureRecyclerView();
         updateView();
