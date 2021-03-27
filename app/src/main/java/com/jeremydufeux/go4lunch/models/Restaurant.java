@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
+import android.view.View;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,61 +20,86 @@ public class Restaurant {
     private final String mUId;
     private String mName;
     private String mAddress;
-    private String mPhotoReference;
     private String mPhoneNumber;
     private String mWebsite;
     private String mPhotoUrl;
     private float mRating;
-    private int mWorkmatesInterested;
-    private boolean isOpenNow;
-    // The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
-    // The list in value contain period of time where the place is open during the day, represented by the nested class OpenPeriod
+    private int mWorkmatesInterestedAmount;
+
+    // For Opening
+    /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
+     The list in value contain period of time where the place is open during the day, represented by the nested class OpenPeriod  **/
     private final HashMap<Integer, List<OpenPeriod>>  mOpeningHours;
-    private int mUtcOffset;
-    private LatLng mLatlng;
-    private Location mLocation;
-    private Marker mMarker;
-    private MarkerOptions mMarkerOptions;
+    private boolean mOpenNow;
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
+    private int mUtcOffset;
+
+    private Location mLocation;
+    private String mMeterDistanceFromUser;
+
+    private Marker mMarker;
+    private final MarkerOptions mMarkerOptions;
+
+    // For ListViewPlacesAdapter
+    private int mDistanceTvVisibility;
+    private int mStar1IvVisibility;
+    private int mStar2IvVisibility;
+    private int mStar3IvVisibility;
+    private int mOpenTvString;
+    private String mOpenTvCloseTimeString;
+    private int mOpenTvVisibility;
+    private int mOpenTvColor;
+    private int mWorkmateTvVisibility;
+    private int mWorkmateIvVisibility;
 
     public Restaurant(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
         mName = name;
 
-        mLatlng = new LatLng(lat,lng );
         mLocation = new Location("");
         mLocation.setLatitude(lat);
         mLocation.setLongitude(lng);
 
         mMarkerOptions = new MarkerOptions()
-                .position(mLatlng)
+                .position(new LatLng(lat, lng))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
 
         mOpeningHours = new HashMap<>();
-
         for(int i = 0; i < Calendar.DAY_OF_WEEK; i++){
             List<OpenPeriod> dayHours = new ArrayList<>();
             mOpeningHours.put(i, dayHours);
         }
     }
 
-    public void calculateDistanceFromUser() {
-        //TODO
+    public void calculateDistanceFromUser(Location location) {
+        if(location != null) {
+            mMeterDistanceFromUser = (int)location.distanceTo(mLocation) + "m";
+            mDistanceTvVisibility = View.VISIBLE;
+        } else {
+            mDistanceTvVisibility = View.INVISIBLE;
+        }
     }
 
     public void determineOpening() {
-        //TODO
-    }
-
-    public void setAlwaysOpen(boolean alwaysOpen) {
-        mOpeningHoursAvailable = true;
-        mAlwaysOpen = alwaysOpen;
-    }
-
-    public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
-        mOpeningHoursAvailable = true;
-        Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
+        mOpenTvColor = R.color.grey;
+        if(mOpeningHoursAvailable) {
+            mOpenTvCloseTimeString = getClosingSoonTime();
+            if (mOpenNow) {
+                if (!mOpenTvCloseTimeString.isEmpty() && !mAlwaysOpen) {
+                    mOpenTvString = R.string.open_until;
+                } else {
+                    mOpenTvString = R.string.open_now;
+                }
+            } else {
+                mOpenTvString = R.string.closed;
+                mOpenTvColor = R.color.red;
+            }
+            mOpenTvVisibility = View.VISIBLE;
+        } else {
+            mOpenTvString = R.string.no_open_hours;
+            mOpenTvVisibility = View.INVISIBLE;
+        }
     }
 
     // If closing soon, return the closing time, else return an empty String
@@ -107,6 +133,46 @@ public class Restaurant {
         return "";
     }
 
+    public void determineWorkmatesViewVisibility(){
+        if(mWorkmatesInterestedAmount > 0){
+            mWorkmateTvVisibility = View.VISIBLE;
+            mWorkmateIvVisibility = View.VISIBLE;
+        } else {
+            mWorkmateTvVisibility = View.INVISIBLE;
+            mWorkmateIvVisibility = View.INVISIBLE;
+        }
+    }
+
+    public void setAlwaysOpen(boolean alwaysOpen) {
+        mOpeningHoursAvailable = true;
+        mAlwaysOpen = alwaysOpen;
+    }
+
+    public void addOpeningHours(int dayOfWeek, int openingHour, int openingMinute, int closingHour, int closingMinute) {
+        mOpeningHoursAvailable = true;
+        Objects.requireNonNull(mOpeningHours.get(dayOfWeek)).add(new OpenPeriod(openingHour, openingMinute, closingHour, closingMinute));
+    }
+
+    public void setRating(float rating) {
+        mRating = rating;
+
+        if(mRating > 0) {
+            mStar1IvVisibility = View.VISIBLE;
+        } else {
+            mStar1IvVisibility = View.INVISIBLE;
+        }
+        if(mRating > 1.66) {
+            mStar2IvVisibility = View.VISIBLE;
+        } else {
+            mStar2IvVisibility = View.INVISIBLE;
+        }
+        if(mRating > 3.33) {
+            mStar3IvVisibility = View.VISIBLE;
+        } else {
+            mStar3IvVisibility = View.INVISIBLE;
+        }
+    }
+
     public String getUId() {
         return mUId;
     }
@@ -131,36 +197,16 @@ public class Restaurant {
         return mRating;
     }
 
-    public void setRating(float rating) {
-        mRating = rating;
+    public int getWorkmatesInterestedAmount() {
+        return mWorkmatesInterestedAmount;
     }
 
-    public int getWorkmatesInterested() {
-        return mWorkmatesInterested;
-    }
-
-    public void setWorkmatesInterested(int workmatesInterested) {
-        mWorkmatesInterested = workmatesInterested;
-    }
-
-    public boolean isOpeningHoursAvailable() {
-        return mOpeningHoursAvailable;
-    }
-
-    public boolean isAlwaysOpen() {
-        return mAlwaysOpen;
-    }
-
-    public boolean isOpenNow() {
-        return isOpenNow;
+    public void setWorkmatesInterestedAmount(int workmatesInterestedAmount) {
+        mWorkmatesInterestedAmount = workmatesInterestedAmount;
     }
 
     public void setOpenNow(boolean openNow) {
-        isOpenNow = openNow;
-    }
-
-    public int getUtcOffset() {
-        return mUtcOffset;
+        mOpenNow = openNow;
     }
 
     public void setUtcOffset(int utcOffset) {
@@ -191,28 +237,16 @@ public class Restaurant {
         mPhotoUrl = photoUrl;
     }
 
-    public String getPhotoReference() {
-        return mPhotoReference;
-    }
-
-    public void setPhotoReference(String photoReference) {
-        mPhotoReference = photoReference;
-    }
-
-    public LatLng getLatlng() {
-        return mLatlng;
-    }
-
-    public void setLatlng(LatLng latlng) {
-        mLatlng = latlng;
-    }
-
     public Location getLocation() {
         return mLocation;
     }
 
     public void setLocation(Location location) {
         mLocation = location;
+    }
+
+    public String getMeterDistanceFromUser() {
+        return mMeterDistanceFromUser;
     }
 
     public Marker getMarker() {
@@ -227,15 +261,51 @@ public class Restaurant {
         return mMarkerOptions;
     }
 
-    public void setMarkerOptions(MarkerOptions markerOptions) {
-        mMarkerOptions = markerOptions;
+    public int getOpenTvString() {
+        return mOpenTvString;
+    }
+
+    public int getDistanceTvVisibility() {
+        return mDistanceTvVisibility;
+    }
+
+    public int getStar1IvVisibility() {
+        return mStar1IvVisibility;
+    }
+
+    public int getStar2IvVisibility() {
+        return mStar2IvVisibility;
+    }
+
+    public int getStar3IvVisibility() {
+        return mStar3IvVisibility;
+    }
+
+    public int getOpenTvVisibility() {
+        return mOpenTvVisibility;
+    }
+
+    public int getOpenTvColor() {
+        return mOpenTvColor;
+    }
+
+    public String getOpenTvCloseTimeString() {
+        return mOpenTvCloseTimeString;
+    }
+
+    public int getWorkmateTvVisibility() {
+        return mWorkmateTvVisibility;
+    }
+
+    public int getWorkmateIvVisibility() {
+        return mWorkmateIvVisibility;
     }
 
     private static class OpenPeriod{
-        private int openingHour;
-        private int openingMinute;
-        private int closingHour;
-        private int closingMinute;
+        private final int openingHour;
+        private final int openingMinute;
+        private final int closingHour;
+        private final int closingMinute;
 
         public OpenPeriod(int openingHour, int openingMinute, int closingHour, int closingMinute) {
             this.openingHour = openingHour;

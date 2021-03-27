@@ -42,18 +42,24 @@
     <string name="john_smith">John SMITH</string>
     <string name="jsmith_1337_gmail_com">jsmith.1337@gmail.com</string>
 
-    <!-- Map Fragment -->
+    <!-- Map View -->
     <string name="locate_me">Locate me</string>
 
     <!-- Location permissions    -->
     <string name="permission_rationale_location">Access to the location service is required to show restaurants around.</string>
+
+    <!-- List View -->
     <string name="rating">Rating</string>
     <string name="place_picture">Place picture</string>
     <string name="workmates_interested">Workmates interested</string>
+    <string name="workmates_interested_amount">(%1$d)</string>
     <string name="closed">Closed</string>
     <string name="open_now">Open now</string>
-    <string name="open_until">Open until</string>
+    <string name="open_until">Open until %1$s</string>
+    <string name="no_open_hours" translatable="false" />
     <string name="restaurant_photo">Restaurant photo</string>
+
+    <!-- New strings to sort -->
     <string name="website">WEBSITE</string>
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
@@ -66,5 +72,4 @@
     <string name="zoom_to_see_restaurants">Zoom to see restaurants</string>
     <string name="no_restaurants_found">No restaurants found</string>
 
-    <!-- New strings to sort -->
 </resources>
