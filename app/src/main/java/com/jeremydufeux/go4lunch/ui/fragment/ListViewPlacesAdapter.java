@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.AdapterPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -69,6 +70,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             glide.load(restaurant.getPhotoUrl())
                     .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.placeItemPictureIv);
 
             String openString = context.getResources().getString(restaurant.getOpenTvString(), restaurant.getOpenTvCloseTimeString());
