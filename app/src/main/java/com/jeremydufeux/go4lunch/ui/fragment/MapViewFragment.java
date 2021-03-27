@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -43,10 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -64,8 +60,6 @@ public class MapViewFragment extends BaseFragment implements
 
     private MapViewViewModel mViewModel;
     private FragmentMapViewBinding mBinding;
-
-    private final CompositeDisposable mDisposable = new CompositeDisposable();
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -131,17 +125,14 @@ public class MapViewFragment extends BaseFragment implements
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
         enableLocation();
-        configureRestaurantObserver();
 
         mViewModel.checkForSavedData();
+
+        configureRestaurantObserver();
     }
 
     private void configureRestaurantObserver(){
-        mDisposable.add(mViewModel.onRestaurantListChanged()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(onRestaurantListChanged())
-        );
+        mViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), onRestaurantListChanged());
     }
 
     // ---------------
@@ -181,26 +172,14 @@ public class MapViewFragment extends BaseFragment implements
     // Places
     // ---------------
 
-    private DisposableObserver<HashMap<String, Restaurant>> onRestaurantListChanged(){
-        return new DisposableObserver<HashMap<String, Restaurant>>() {
-            @Override
-            public void onNext(@NonNull HashMap<String, Restaurant> restaurantList) {
+    private Observer<HashMap<String, Restaurant>> onRestaurantListChanged(){
+        return restaurantList -> {
                 removeUnusedMarkers(restaurantList);
                 mRestaurantList = restaurantList;
                 if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                     addMarkers();
                 }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                Log.d("Debug", "onError " + e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+            };
     }
 
     private void removeUnusedMarkers(HashMap<String, Restaurant> restaurantList) {
@@ -321,12 +300,10 @@ public class MapViewFragment extends BaseFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mDisposable.clear();
 
         mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
                 mMap.getCameraPosition().target.longitude,
                 mMap.getCameraPosition().zoom);
-
     }
 
     // ---------------

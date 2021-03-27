@@ -3,20 +3,18 @@ package com.jeremydufeux.go4lunch.ui.fragment;
 import android.location.Location;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
-import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.Executor;
 
-import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -26,14 +24,12 @@ import static com.jeremydufeux.go4lunch.ui.fragment.MapViewFragment.DEFAULT_ZOOM
 import static com.jeremydufeux.go4lunch.ui.fragment.MapViewFragment.LIMIT_ZOOM_VALUE;
 
 public class MapViewViewModel extends ViewModel {
-    private static final String PLACE_TYPE_RESTAURANT = "restaurant";
-
-    private final GooglePlacesRepository mGooglePlacesRepository;
-    private final RestaurantRepository mRestaurantRepository;
+    private final RestaurantUseCase mRestaurantUseCase;
     private final UserDataRepository mUserDataRepository;
-    private final Executor mExecutor;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
+
+    private MutableLiveData<HashMap<String, Restaurant>> mRestaurantListLiveData;
 
     private boolean mEnableFirstMoveToLocation = true;
     private boolean mFetchNearbyPlacesAfterCameraIdle = false;
@@ -42,64 +38,41 @@ public class MapViewViewModel extends ViewModel {
     private boolean mCanAddMarkers = false;
     private Location mLocation;
 
-    public MapViewViewModel(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository, UserDataRepository userDataRepository, Executor executor) {
-        mGooglePlacesRepository = googlePlacesRepository;
-        mRestaurantRepository = restaurantRepository;
+    public MapViewViewModel(RestaurantUseCase restaurantUseCase, UserDataRepository userDataRepository) {
+        mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
-        mExecutor = executor;
+
+        mRestaurantListLiveData = new MutableLiveData<>();
+
+        mDisposable.add(mRestaurantUseCase.observeRestaurantList()
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(getRestaurantList()));
     }
 
-    public Observable<HashMap<String, Restaurant>> onRestaurantListChanged() {
-        return mRestaurantRepository.observeRestaurantList();
+    public DisposableObserver<HashMap<String, Restaurant>> getRestaurantList(){
+        return new DisposableObserver<HashMap<String, Restaurant>>() {
+            @Override
+            public void onNext(@NonNull HashMap<String, Restaurant> restaurantHashMap) {
+                mRestaurantListLiveData.postValue(restaurantHashMap);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d("Debug", "onError getRestaurantList " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+    }
+
+    public LiveData<HashMap<String, Restaurant>> observeRestaurantList(){
+        return mRestaurantListLiveData;
     }
 
     public void getNearbyPlaces(double latitude, double longitude, double radius) {
-        mDisposable.add(mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius, PLACE_TYPE_RESTAURANT)
-                .subscribeOn(Schedulers.io()) // TODO To check
-                .subscribeWith(new DisposableObserver<List<Restaurant>>() {
-                    @Override
-                    public void onNext(@NonNull List<Restaurant> result) {
-                        receiptResultFromNearbyPlaces(result);
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError getNearbyPlaces " + e.toString());
-                    }
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    public void getDetailsForPlaceId(String placeId){
-        mDisposable.add(mGooglePlacesRepository.getDetailsForPlaceId(placeId)
-                .subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableObserver<Restaurant>() {
-                    @Override
-                    public void onNext(@NonNull Restaurant restaurant) {
-                        receiptResultFromPlacesDetails(restaurant);
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.d("Debug", "onError getDetailsForPlaceId " + e.toString());
-                    }
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
-    private void receiptResultFromNearbyPlaces(List<Restaurant> restaurants) {
-        mRestaurantRepository.replaceRestaurantList(restaurants);
-        for (Restaurant restaurant : restaurants){
-            getDetailsForPlaceId(restaurant.getUId());
-        }
-    }
-
-    private void receiptResultFromPlacesDetails(Restaurant restaurant) {
-        mExecutor.execute(() ->
-            mRestaurantRepository.addRestaurantDetails(restaurant)
-        );
+        mRestaurantUseCase.getNearbyPlaces(latitude, longitude, radius);
     }
 
     public void setLocation(Location location) {
@@ -129,7 +102,6 @@ public class MapViewViewModel extends ViewModel {
             mEnableFirstMoveToLocation = false;
         }
     }
-
 
     public void onCameraIdle(double latitude, double longitude, float zoom, double radius) {
         if(mFetchNearbyPlacesAfterCameraIdle){
@@ -172,6 +144,12 @@ public class MapViewViewModel extends ViewModel {
         }
     }
 
+    @Override
+    protected void onCleared() {
+        mRestaurantUseCase.clearDisposable();
+        super.onCleared();
+    }
+
     // -------------
     // Map saved data
     // -------------
@@ -193,6 +171,7 @@ public class MapViewViewModel extends ViewModel {
         mCallback = callback;
     }
 
+    // TODO Replace with live event
     public interface MapViewCallback{
         void focusCamera(LatLng latLng, float zoom, boolean animCamera);
         void openSystemSettingsDialog();

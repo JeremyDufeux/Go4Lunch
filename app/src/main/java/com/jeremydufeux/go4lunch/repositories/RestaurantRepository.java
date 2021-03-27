@@ -5,6 +5,7 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class RestaurantRepository {
@@ -26,12 +27,10 @@ public class RestaurantRepository {
         mRestaurantDetailsListObservable = BehaviorSubject.create();
     }
 
-    public void replaceRestaurantList(List<Restaurant> restaurants) {
+    public void replaceRestaurantList(HashMap<String, Restaurant> restaurants) {
         mRestaurantHashMap.clear();
-        for(Restaurant restaurant : restaurants){
-            mRestaurantHashMap.put(restaurant.getUId(), restaurant);
-        }
-        mRestaurantListObservable.onNext(new HashMap<>(mRestaurantHashMap)); // TODO To check
+        mRestaurantHashMap.putAll(restaurants);
+        mRestaurantListObservable.onNext(new HashMap<>(mRestaurantHashMap));
     }
 
     public void addRestaurantDetails(Restaurant restaurant) {
@@ -39,16 +38,18 @@ public class RestaurantRepository {
         mRestaurantDetailsListObservable.onNext(mRestaurantHashMap);
     }
 
-    public BehaviorSubject<HashMap<String, Restaurant>> observeRestaurantList() {
+    public Observable<HashMap<String, Restaurant>> observeRestaurantList() {
         return mRestaurantListObservable;
     }
 
-    public BehaviorSubject<HashMap<String, Restaurant>> observeRestaurantDetailsList() {
+    public Observable<HashMap<String, Restaurant>> observeRestaurantDetailsList() {
         return mRestaurantDetailsListObservable;
     }
     public Restaurant getRestaurantWithId(String placeId) {
         return mRestaurantHashMap.get(placeId);
     }
+
+
 
 
 }

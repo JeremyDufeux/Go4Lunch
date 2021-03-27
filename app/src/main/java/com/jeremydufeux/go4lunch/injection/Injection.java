@@ -2,6 +2,7 @@ package com.jeremydufeux.go4lunch.injection;
 
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 
@@ -23,11 +24,15 @@ public class Injection {
     }
 
     private static GooglePlacesRepository provideGooglePlaceRepository() {
-        return new GooglePlacesRepository();
+        return GooglePlacesRepository.getInstance();
     }
 
     private static UserDataRepository provideUserLocationRepository() {
         return UserDataRepository.getInstance();
+    }
+
+    private static RestaurantUseCase provideRestaurantUseCase(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository) {
+        return new RestaurantUseCase(googlePlacesRepository, restaurantRepository);
     }
 
     public static ViewModelFactory provideViewModelFactory(){
@@ -35,8 +40,9 @@ public class Injection {
         GooglePlacesRepository googlePlacesRepository = provideGooglePlaceRepository();
         RestaurantRepository restaurantRepository = provideRestaurantRepository();
         UserDataRepository userDataRepository = provideUserLocationRepository();
+        RestaurantUseCase restaurantUseCase = provideRestaurantUseCase(googlePlacesRepository, restaurantRepository);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(workmatesRepository, googlePlacesRepository, restaurantRepository, userDataRepository, executor);
+        return new ViewModelFactory(workmatesRepository, googlePlacesRepository, restaurantRepository, userDataRepository, restaurantUseCase, executor);
     }
 
 }

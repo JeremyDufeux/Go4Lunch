@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.ui.MainActivityViewModel;
@@ -23,17 +24,20 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final GooglePlacesRepository mGooglePlacesRepository;
     private final RestaurantRepository mRestaurantRepository;
     private final UserDataRepository mUserDataRepository;
+    private final RestaurantUseCase mRestaurantUseCase;
     private final Executor mExecutor;
 
     public ViewModelFactory(WorkmatesRepository workmatesRepository,
                             GooglePlacesRepository googlePlacesRepository,
                             RestaurantRepository restaurantRepository,
                             UserDataRepository userDataRepository,
+                            RestaurantUseCase restaurantUseCase,
                             Executor executor) {
         mWorkmatesRepository = workmatesRepository;
         mGooglePlacesRepository = googlePlacesRepository;
         mRestaurantRepository = restaurantRepository;
         mUserDataRepository = userDataRepository;
+        mRestaurantUseCase = restaurantUseCase;
         mExecutor = executor;
     }
 
@@ -55,7 +59,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new LoginViewModel(mWorkmatesRepository, mExecutor);
         }
         else if(modelClass.isAssignableFrom(MapViewViewModel.class)){
-            return (T) new MapViewViewModel(mGooglePlacesRepository, mRestaurantRepository, mUserDataRepository, mExecutor);
+            return (T) new MapViewViewModel(mRestaurantUseCase, mUserDataRepository);
         }
         else if(modelClass.isAssignableFrom(RestaurantDetailsViewModel.class)){
             return (T) new RestaurantDetailsViewModel(mRestaurantRepository);
