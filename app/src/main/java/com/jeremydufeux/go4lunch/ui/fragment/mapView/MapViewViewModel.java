@@ -10,8 +10,17 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.AddMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.FocusCameraLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.HideSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.OpenSystemSettingsLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.RemoveMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
+import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.util.HashMap;
 
@@ -29,7 +38,8 @@ public class MapViewViewModel extends ViewModel {
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
-    private MutableLiveData<HashMap<String, Restaurant>> mRestaurantListLiveData;
+    private final MutableLiveData<HashMap<String, Restaurant>> mRestaurantListLiveData = new MutableLiveData<>();
+    private final SingleLiveEvent<LiveEvent> mSingleLiveEvent = new SingleLiveEvent<>();
 
     private boolean mEnableFirstMoveToLocation = true;
     private boolean mFetchNearbyPlacesAfterCameraIdle = false;
@@ -41,8 +51,6 @@ public class MapViewViewModel extends ViewModel {
     public MapViewViewModel(RestaurantUseCase restaurantUseCase, UserDataRepository userDataRepository) {
         mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
-
-        mRestaurantListLiveData = new MutableLiveData<>();
 
         mDisposable.add(mRestaurantUseCase.observeRestaurantList()
                 .subscribeOn(Schedulers.io())
@@ -81,7 +89,7 @@ public class MapViewViewModel extends ViewModel {
         if(mEnableFirstMoveToLocation){ // First location reception, move camera to
             mFetchNearbyPlacesAfterCameraIdle = true;
             LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mCallback.focusCamera(latLng, DEFAULT_ZOOM_VALUE, true);
+            mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, DEFAULT_ZOOM_VALUE, true));
             mEnableFirstMoveToLocation = false;
         }
     }
@@ -98,7 +106,7 @@ public class MapViewViewModel extends ViewModel {
         if(mUserDataRepository.isMapViewDataSet()){
             LatLng latLng = new LatLng( mUserDataRepository.getMapViewCameraLatitude(),
                                         mUserDataRepository.getMapViewCameraLongitude());
-            mCallback.focusCamera(latLng, mUserDataRepository.getMapViewCameraZoom(), false);
+            mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, mUserDataRepository.getMapViewCameraZoom(), false));
             mEnableFirstMoveToLocation = false;
         }
     }
@@ -114,21 +122,21 @@ public class MapViewViewModel extends ViewModel {
 
         if (zoom > LIMIT_ZOOM_VALUE) {
             if (mCanShowSearchButton) {
-                mCallback.showSearchButton();
+                mSingleLiveEvent.setValue(new ShowSearchButtonLiveEvent());
             } else {
                 mCanShowSearchButton = true;
             }
             if(mCanAddMarkers){
-                mCallback.addMarkers();
+                mSingleLiveEvent.setValue(new AddMarkersLiveEvent());
                 mCanAddMarkers = false;
             }
             mCanShowZoomSnackbar = true;
         } else {
-            mCallback.hideSearchButton();
-            mCallback.removeMarkers();
+            mSingleLiveEvent.setValue(new HideSearchButtonLiveEvent());
+            mSingleLiveEvent.setValue(new RemoveMarkersLiveEvent());
 
             if (mCanShowZoomSnackbar) {
-                mCallback.showSnackBar(R.string.zoom_to_see_restaurants);
+                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.zoom_to_see_restaurants));
                 mCanShowZoomSnackbar = false;
             }
             mCanShowSearchButton = true;
@@ -138,18 +146,27 @@ public class MapViewViewModel extends ViewModel {
 
     public void focusToLocation() {
         if(mUserDataRepository.isPermissionGranted()) {
-            mCallback.focusCamera(getLatLng(mLocation), DEFAULT_ZOOM_VALUE, true);
+            mSingleLiveEvent.setValue(new FocusCameraLiveEvent(getLatLng(mLocation), DEFAULT_ZOOM_VALUE, true));
         } else {
-            mCallback.openSystemSettingsDialog();
+            mSingleLiveEvent.setValue(new OpenSystemSettingsLiveEvent());
         }
     }
 
     @Override
     protected void onCleared() {
         mRestaurantUseCase.clearDisposable();
+        mDisposable.clear();
         super.onCleared();
     }
 
+    // -------------
+    // Live Event
+    // -------------
+
+    public LiveData<LiveEvent> observeEvents(){
+        return mSingleLiveEvent;
+    }
+    
     // -------------
     // Map saved data
     // -------------
@@ -160,28 +177,7 @@ public class MapViewViewModel extends ViewModel {
         mUserDataRepository.setMapViewCameraZoom(zoom);
         mUserDataRepository.setMapViewDataSet(true);
     }
-
-    // -------------
-    // Map Callback
-    // -------------
-
-    private MapViewCallback mCallback;
-
-    public void setMapViewCallback(MapViewCallback callback){
-        mCallback = callback;
-    }
-
-    // TODO Replace with live event
-    public interface MapViewCallback{
-        void focusCamera(LatLng latLng, float zoom, boolean animCamera);
-        void openSystemSettingsDialog();
-        void showSearchButton();
-        void hideSearchButton();
-        void showSnackBar(int stringId);
-        void addMarkers();
-        void removeMarkers();
-    }
-
+    
     // ---------------
     // Utils
     // ---------------

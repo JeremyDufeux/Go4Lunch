@@ -36,6 +36,14 @@ import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.AddMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.FocusCameraLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.HideSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.OpenSystemSettingsLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.RemoveMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,12 +59,11 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MapViewFragment extends BaseFragment implements
         OnMapReadyCallback,
-        EasyPermissions.PermissionCallbacks,
-        MapViewViewModel.MapViewCallback {
+        EasyPermissions.PermissionCallbacks{
 
-    public static final int PERMS_RC_LOCATION = 1;
-    public static final float DEFAULT_ZOOM_VALUE = 16;
-    public static final float LIMIT_ZOOM_VALUE = 14.6f;
+    static final int PERMS_RC_LOCATION = 1;
+    static final float DEFAULT_ZOOM_VALUE = 16;
+    static final float LIMIT_ZOOM_VALUE = 14.6f;
 
     private MapViewViewModel mViewModel;
     private FragmentMapViewBinding mBinding;
@@ -67,7 +74,7 @@ public class MapViewFragment extends BaseFragment implements
 
     private boolean mPermissionDenied = false;
 
-    public HashMap<String, Restaurant> mRestaurantList = new HashMap<>();
+    HashMap<String, Restaurant> mRestaurantList = new HashMap<>();
 
     // ---------------
     // Setup
@@ -90,7 +97,6 @@ public class MapViewFragment extends BaseFragment implements
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
-        mViewModel.setMapViewCallback(this);
         mViewModel.setCanShowSearchButton(false);
     }
 
@@ -100,6 +106,8 @@ public class MapViewFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mViewModel.observeEvents().observe(getViewLifecycleOwner(), onEventReceived());
+
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
         mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisAreaAction());
@@ -147,7 +155,7 @@ public class MapViewFragment extends BaseFragment implements
         }
     }
 
-    public void focusCamera(LatLng latLng, float zoom, boolean animCamera) {
+    private void focusCamera(LatLng latLng, float zoom, boolean animCamera) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
         if (animCamera) {
             mMap.animateCamera(cameraUpdate);
@@ -190,14 +198,14 @@ public class MapViewFragment extends BaseFragment implements
         }
     }
 
-    public void addMarkers(){
+    private void addMarkers(){
         for (Restaurant restaurant : mRestaurantList.values()) {
             restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
             restaurant.getMarker().setTag(restaurant.getUId());
         }
     }
 
-    public void removeMarkers(){
+    private void removeMarkers(){
         mMap.clear();
     }
 
@@ -263,7 +271,7 @@ public class MapViewFragment extends BaseFragment implements
         requestPermissions( new String[]{ACCESS_FINE_LOCATION}, PERMS_RC_LOCATION);
     }
 
-    public void openSystemSettingsDialog() {
+    private void openSystemSettingsDialog() {
         new AppSettingsDialog.Builder(this).build().show();
     }
 
@@ -294,13 +302,46 @@ public class MapViewFragment extends BaseFragment implements
     }
 
     // ---------------
+    // Event
+    // ---------------
+
+    private Observer<LiveEvent> onEventReceived() {
+        return event -> {
+            if(event instanceof FocusCameraLiveEvent) {
+                focusCamera(((FocusCameraLiveEvent) event).getLatLng(),
+                        ((FocusCameraLiveEvent) event).getZoom(),
+                        ((FocusCameraLiveEvent) event).isAnimate());
+            }
+            else if(event instanceof OpenSystemSettingsLiveEvent){
+                openSystemSettingsDialog();
+            }
+            else if(event instanceof ShowSearchButtonLiveEvent){
+                showSearchButton();
+            }
+            else if(event instanceof HideSearchButtonLiveEvent){
+                hideSearchButton();
+            }
+            else if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
+            else if(event instanceof AddMarkersLiveEvent){
+                addMarkers();
+            }
+            else if(event instanceof RemoveMarkersLiveEvent){
+                removeMarkers();
+            }
+        };
+    }
+
+    // ---------------
     // Save Data
     // ---------------
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        mViewModel.observeEvents().removeObservers(this);
+        mViewModel.observeRestaurantList().removeObservers(this);
         mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
                 mMap.getCameraPosition().target.longitude,
                 mMap.getCameraPosition().zoom);
@@ -315,15 +356,15 @@ public class MapViewFragment extends BaseFragment implements
         return SphericalUtil.computeDistanceBetween(visibleRegion.farLeft, visibleRegion.nearRight)/2;
     }
 
-    public void showSnackBar(int stringId){
+    private void showSnackBar(int stringId){
         Snackbar.make(mBinding.mapViewFragmentCoordinator, getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 
-    public void showSearchButton(){
+    private void showSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(1).setDuration(1000);
     }
 
-    public void hideSearchButton(){
+    private void hideSearchButton(){
         mBinding.mapViewFragmentSearchButton.animate().alpha(0).setDuration(200);
     }
 }

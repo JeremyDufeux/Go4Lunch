@@ -75,6 +75,7 @@ public class RestaurantUseCase{
             }
             @Override
             public void onError(@NonNull Throwable e) {
+                // TODO create observers for errors
                 Log.d("Debug", "onError getNearbyPlaces " + e.toString());
             }
             @Override
