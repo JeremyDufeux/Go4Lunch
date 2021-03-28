@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment;
+package com.jeremydufeux.go4lunch.ui.fragment.listView;
 
 import android.content.Context;
 import android.view.LayoutInflater;

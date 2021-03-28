@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layoutDescription="@xml/fragment_restaurant_details_scene"
     app:showPaths="false"
-    tools:context=".ui.fragment.RestaurantDetailsFragment">
+    tools:context=".ui.fragment.restaurantDetails.RestaurantDetailsFragment">
 
     <ImageView
         android:id="@+id/fragment_restaurant_details_photo_iv"

@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment;
+package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
 import android.location.Location;
 import android.util.Log;
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 
 import java.util.HashMap;
@@ -20,8 +20,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.jeremydufeux.go4lunch.ui.fragment.MapViewFragment.DEFAULT_ZOOM_VALUE;
-import static com.jeremydufeux.go4lunch.ui.fragment.MapViewFragment.LIMIT_ZOOM_VALUE;
+import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.DEFAULT_ZOOM_VALUE;
+import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.LIMIT_ZOOM_VALUE;
 
 public class MapViewViewModel extends ViewModel {
     private final RestaurantUseCase mRestaurantUseCase;

@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment;
+package com.jeremydufeux.go4lunch.ui.fragment.loginView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,14 +29,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
-import com.jeremydufeux.go4lunch.BaseFragment;
+import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.ui.SharedViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +72,6 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     private void configureViewModels() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginViewModel.class);
-        SharedViewModel sharedViewModel = new ViewModelProvider(this, viewModelFactory).get(SharedViewModel.class);
         mViewModel.observeResult().observe(this, this::firestoreResultObserver);
     }
 

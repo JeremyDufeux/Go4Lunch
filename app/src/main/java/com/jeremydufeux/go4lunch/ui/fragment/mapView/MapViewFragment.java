@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment;
+package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
-import com.jeremydufeux.go4lunch.BaseFragment;
+import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;

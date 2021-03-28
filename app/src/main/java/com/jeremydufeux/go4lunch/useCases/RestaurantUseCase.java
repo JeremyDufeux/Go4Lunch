@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.repositories;
+package com.jeremydufeux.go4lunch.useCases;
 
 import android.util.Log;
 
@@ -9,6 +9,8 @@ import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
+import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
+import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;

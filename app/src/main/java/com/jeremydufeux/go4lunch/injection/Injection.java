@@ -2,7 +2,7 @@ package com.jeremydufeux.go4lunch.injection;
 
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
-import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 
@@ -42,7 +42,7 @@ public class Injection {
         UserDataRepository userDataRepository = provideUserLocationRepository();
         RestaurantUseCase restaurantUseCase = provideRestaurantUseCase(googlePlacesRepository, restaurantRepository);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(workmatesRepository, googlePlacesRepository, restaurantRepository, userDataRepository, restaurantUseCase, executor);
+        return new ViewModelFactory(workmatesRepository, restaurantRepository, userDataRepository, restaurantUseCase, executor);
     }
 
 }

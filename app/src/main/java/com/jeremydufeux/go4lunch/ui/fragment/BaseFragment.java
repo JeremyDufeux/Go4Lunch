@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch;
+package com.jeremydufeux.go4lunch.ui.fragment;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;

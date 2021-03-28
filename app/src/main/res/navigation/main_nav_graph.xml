@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/login_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.LoginFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.loginView.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,25 +19,25 @@
 
     <fragment
         android:id="@+id/map_view_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.MapViewFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment"
         android:label="@string/i_m_hungry"
         tools:layout="@layout/fragment_map_view"/>
 
     <fragment
         android:id="@+id/list_view_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.ListViewFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.listView.ListViewFragment"
         android:label="@string/i_m_hungry"
         tools:layout="@layout/fragment_list_view"/>
 
     <fragment
         android:id="@+id/workmates_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.WorkmatesFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.workmates.WorkmatesFragment"
         android:label="@string/available_workmates"
         tools:layout="@layout/fragment_workmates"/>
 
     <fragment
         android:id="@+id/restaurant_details_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.RestaurantDetailsFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails.RestaurantDetailsFragment"
         android:label="@string/your_lunch"
         tools:layout="@layout/fragment_restaurant_details" >
 
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="com.jeremydufeux.go4lunch.ui.fragment.SettingsFragment"
+        android:name="com.jeremydufeux.go4lunch.ui.fragment.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
 

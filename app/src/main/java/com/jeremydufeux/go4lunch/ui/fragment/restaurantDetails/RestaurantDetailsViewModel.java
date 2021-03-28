@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment;
+package com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails;
 
 import androidx.lifecycle.ViewModel;
 
