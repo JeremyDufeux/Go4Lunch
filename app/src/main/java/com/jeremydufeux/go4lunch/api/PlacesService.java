@@ -28,11 +28,11 @@ public interface PlacesService {
     int cacheSize = 10 * 1024 * 1024; // 10 MB
     Cache cache = new Cache(getCacheDir(), cacheSize);
 
-    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    //HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .cache(cache)
-            .addInterceptor(interceptor)
+            //.addInterceptor(interceptor)
             .build();
 
     Retrofit retrofit = new Retrofit.Builder()
