@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Go4Lunch);
         super.onCreate(savedInstanceState);
 
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
