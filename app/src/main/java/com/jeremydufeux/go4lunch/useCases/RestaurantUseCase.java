@@ -15,12 +15,15 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 public class RestaurantUseCase{
     private final GooglePlacesRepository mGooglePlacesRepository;
     private final RestaurantRepository mRestaurantRepository;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
+
+    private final PublishSubject<Throwable> mErrorsObservable = PublishSubject.create();
 
     public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository) {
         mGooglePlacesRepository = googlePlacesRepository;
@@ -53,8 +56,7 @@ public class RestaurantUseCase{
             }
             @Override
             public void onError(@NonNull Throwable e) {
-                // TODO create observers for errors
-                Log.d("Debug", "onError getNearbyPlaces " + e.toString());
+                mErrorsObservable.onNext(e);
             }
             @Override
             public void onComplete() {
@@ -71,7 +73,7 @@ public class RestaurantUseCase{
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d("Debug", "onError getNearbyPlaces " + e.toString());
+                mErrorsObservable.onNext(e);
             }
             @Override
             public void onComplete() {
@@ -81,6 +83,10 @@ public class RestaurantUseCase{
 
     public Observable<HashMap<String, Restaurant>> observeRestaurantList(){
         return mRestaurantRepository.observeRestaurantList();
+    }
+
+    public Observable<Throwable> observeErrors(){
+        return mErrorsObservable;
     }
 
     public void clearDisposable(){

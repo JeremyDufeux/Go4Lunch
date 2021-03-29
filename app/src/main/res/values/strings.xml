@@ -11,7 +11,7 @@
     <string name="background">Background</string>
     <string name="logo">Logo</string>
     <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
-    <string name="error_no_internet">No internet !</string>
+    <string name="error_no_internet">It seem like you\'re not connected to internet…</string>
     <string name="error_timeout">Connection timeout !</string>
     <string name="error_unknown_error">An unknown error append&#8230;</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>

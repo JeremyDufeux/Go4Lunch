@@ -19,7 +19,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class GooglePlacesRepository {
-
+    public static final int PLACE_SERVICE_TIMEOUT = 10;
     private String mNextPageToken;
 
     private static final GooglePlacesRepository INSTANCE = new GooglePlacesRepository();
@@ -40,7 +40,7 @@ public class GooglePlacesRepository {
                     mNextPageToken = results.getNextPageToken();
                     return results;
                 })
-                .timeout(10, TimeUnit.SECONDS);
+                .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }
 
     public Observable<PlaceSearchResults> getNextPageNearbyPlaces() {
@@ -48,7 +48,7 @@ public class GooglePlacesRepository {
 
         return placesService.fetchNextPageNearbyPlaces(BuildConfig.MAPS_API_KEY, mNextPageToken)
                 .subscribeOn(Schedulers.io())
-                .timeout(10, TimeUnit.SECONDS);
+                .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }
 
     public Observable<PlaceDetailsResults> getDetailsForPlaceId(String placeId) {
@@ -68,6 +68,6 @@ public class GooglePlacesRepository {
 
         return placesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, placeId, fields)
                 .subscribeOn(Schedulers.io())
-                .timeout(10, TimeUnit.SECONDS);
+                .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }
 }

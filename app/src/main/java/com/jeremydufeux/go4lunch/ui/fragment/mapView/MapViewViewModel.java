@@ -1,5 +1,6 @@
 package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
+import android.accounts.NetworkErrorException;
 import android.location.Location;
 import android.util.Log;
 
@@ -22,12 +23,16 @@ import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.DEFAULT_ZOOM_VALUE;
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.LIMIT_ZOOM_VALUE;
@@ -52,6 +57,11 @@ public class MapViewViewModel extends ViewModel {
         mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
 
+        mDisposable.add(mRestaurantUseCase.observeErrors()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(getErrors()));
+
         mDisposable.add(mRestaurantUseCase.observeRestaurantList()
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(getRestaurantList()));
@@ -75,6 +85,32 @@ public class MapViewViewModel extends ViewModel {
         };
     }
 
+    public DisposableObserver<Throwable> getErrors(){
+        return new DisposableObserver<Throwable>() {
+            @Override
+            public void onNext(@NonNull Throwable throwable) {
+                Log.d("Debug", "onNext: throwable.getMessage() : " + throwable.toString());
+                if(throwable instanceof TimeoutException){
+                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
+                }
+                else if(throwable instanceof UnknownHostException) {
+                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
+                }
+                else {
+                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_unknown_error));
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+    }
+
     public LiveData<HashMap<String, Restaurant>> observeRestaurantList(){
         return mRestaurantListLiveData;
     }
@@ -84,13 +120,15 @@ public class MapViewViewModel extends ViewModel {
     }
 
     public void setLocation(Location location) {
-        mLocation = location;
-        mUserDataRepository.setLocation(mLocation);
-        if(mEnableFirstMoveToLocation){ // First location reception, move camera to
-            mFetchNearbyPlacesAfterCameraIdle = true;
-            LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, DEFAULT_ZOOM_VALUE, true));
-            mEnableFirstMoveToLocation = false;
+        if(location != null) {
+            mLocation = location;
+            mUserDataRepository.setLocation(mLocation);
+            if (mEnableFirstMoveToLocation) { // First location reception, move camera to
+                mFetchNearbyPlacesAfterCameraIdle = true;
+                LatLng latLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+                mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, DEFAULT_ZOOM_VALUE, true));
+                mEnableFirstMoveToLocation = false;
+            }
         }
     }
 
