@@ -36,14 +36,7 @@ import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.AddMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.FocusCameraLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.HideSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.OpenSystemSettingsLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.RemoveMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.*;
 
 import org.jetbrains.annotations.NotNull;
 

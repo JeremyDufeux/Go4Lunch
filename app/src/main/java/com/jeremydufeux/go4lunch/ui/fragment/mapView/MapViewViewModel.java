@@ -1,6 +1,5 @@
 package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
-import android.accounts.NetworkErrorException;
 import android.location.Location;
 import android.util.Log;
 
@@ -11,14 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.AddMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.FocusCameraLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.HideSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.OpenSystemSettingsLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.RemoveMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.*;
 import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
@@ -32,7 +24,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.DEFAULT_ZOOM_VALUE;
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.LIMIT_ZOOM_VALUE;
@@ -184,7 +175,11 @@ public class MapViewViewModel extends ViewModel {
 
     public void focusToLocation() {
         if(mUserDataRepository.isPermissionGranted()) {
-            mSingleLiveEvent.setValue(new FocusCameraLiveEvent(getLatLng(mLocation), DEFAULT_ZOOM_VALUE, true));
+            if(mLocation != null){
+                mSingleLiveEvent.setValue(new FocusCameraLiveEvent(getLatLng(mLocation), DEFAULT_ZOOM_VALUE, true));
+            } else{
+                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.position_unknown_for_now));
+            }
         } else {
             mSingleLiveEvent.setValue(new OpenSystemSettingsLiveEvent());
         }
