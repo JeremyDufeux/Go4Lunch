@@ -3,24 +3,27 @@ package com.jeremydufeux.go4lunch.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateErrorLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 public class WorkmatesRepository {
 
-    private final MutableLiveData<FirestoreResult> mResult;
+    private final SingleLiveEvent<LiveEvent> mResult;
 
     public WorkmatesRepository() {
-        mResult = new MutableLiveData<>();
+        mResult = new SingleLiveEvent<>();
     }
 
     public void createWorkmate(Workmate workmate) {
         WorkmateHelper.createWorkmate(workmate).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                mResult.setValue(new FirestoreResult(true));
+                mResult.setValue(new CreateWorkmateSuccessLiveEvent());
             } else {
-                mResult.setValue(new FirestoreResult(task.getException()));
+                mResult.setValue(new CreateWorkmateErrorLiveEvent(task.getException()));
             }
         });
     }
@@ -36,7 +39,7 @@ public class WorkmatesRepository {
         return workmate;
     }
 
-    public LiveData<FirestoreResult> observeResult() {
+    public LiveData<LiveEvent> observeResult() {
         return mResult;
     }
 }

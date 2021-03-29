@@ -31,11 +31,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
 import com.jeremydufeux.go4lunch.injection.Injection;
 import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateErrorLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -240,13 +242,14 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         }
     }
 
-    private void firestoreResultObserver(FirestoreResult result){
-        if(result.getSuccess()) {
+    private void firestoreResultObserver(LiveEvent result){
+
+        if(result instanceof CreateWorkmateSuccessLiveEvent) {
             navigateToMapFragment();
-        } else {
+        } else if( result instanceof CreateWorkmateErrorLiveEvent){
             showSnackBar(getString(R.string.error_unknown_error));
-            assert result.getException() != null;
-            Log.d("Debug", "onFirestoreResult : " + result.getException().toString());
+
+            Log.d("Debug", "onFirestoreResult : " + ((CreateWorkmateErrorLiveEvent) result).getException().toString());
         }
     }
 

@@ -3,9 +3,9 @@ package com.jeremydufeux.go4lunch.ui.fragment.loginView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.jeremydufeux.go4lunch.api.FirestoreResult;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 
 import java.util.concurrent.Executor;
 
@@ -25,7 +25,7 @@ public class LoginViewModel extends ViewModel {
         );
     }
 
-    public LiveData<FirestoreResult> observeResult(){
+    public LiveData<LiveEvent> observeResult(){
         return mWorkmatesRepository.observeResult();
     }
 }
