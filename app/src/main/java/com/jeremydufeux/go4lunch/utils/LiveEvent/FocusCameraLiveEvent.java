@@ -1,12 +1,11 @@
-package com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent;
+package com.jeremydufeux.go4lunch.utils.LiveEvent;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.jeremydufeux.go4lunch.utils.LiveEvent;
 
 public class FocusCameraLiveEvent implements LiveEvent {
-    private LatLng mLatLng;
-    private float mZoom;
-    private boolean mAnimate;
+    private final LatLng mLatLng;
+    private final float mZoom;
+    private final boolean mAnimate;
 
     public FocusCameraLiveEvent(LatLng latLng, float zoom, boolean animate) {
         mLatLng = latLng;

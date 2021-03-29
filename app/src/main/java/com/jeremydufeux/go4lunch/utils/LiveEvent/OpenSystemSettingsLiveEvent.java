@@ -1,6 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment.mapView.LiveEvent;
-
-import com.jeremydufeux.go4lunch.utils.LiveEvent;
+package com.jeremydufeux.go4lunch.utils.LiveEvent;
 
 public class OpenSystemSettingsLiveEvent implements LiveEvent {
     public OpenSystemSettingsLiveEvent() {
