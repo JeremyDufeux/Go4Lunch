@@ -2,30 +2,24 @@ package com.jeremydufeux.go4lunch.repositories;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
 import com.jeremydufeux.go4lunch.api.PlacesService;
-import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.AddressComponent;
-import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
-import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+@Singleton
 public class GooglePlacesRepository {
     public static final int PLACE_SERVICE_TIMEOUT = 10;
     private String mNextPageToken;
 
-    private static final GooglePlacesRepository INSTANCE = new GooglePlacesRepository();
-
-    public static GooglePlacesRepository getInstance(){
-        return INSTANCE;
+    @Inject
+    GooglePlacesRepository(){
     }
 
     public Observable<PlaceSearchResults> getNearbyPlaces(double latitude, double longitude, double radius){

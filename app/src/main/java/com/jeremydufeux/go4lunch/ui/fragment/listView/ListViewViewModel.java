@@ -13,22 +13,33 @@ import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+@HiltViewModel
 public class ListViewViewModel extends ViewModel {
 
+    private RestaurantRepository mRestaurantRepository;
+    private UserDataRepository mUserDataRepository;
+
     private final CompositeDisposable mDisposable = new CompositeDisposable();
-    private final MutableLiveData<List<Restaurant>> mRestaurantListLiveData;
+    private final MutableLiveData<List<Restaurant>> mRestaurantListLiveData = new MutableLiveData<>();
 
+    @Inject
     public ListViewViewModel(RestaurantRepository restaurantRepository, UserDataRepository userDataRepository) {
-        mRestaurantListLiveData = new MutableLiveData<>();
+        mRestaurantRepository = restaurantRepository;
+        mUserDataRepository = userDataRepository;
+    }
 
-        mDisposable.add(restaurantRepository.observeRestaurantDetailsList()
+    public void startObservers(){
+        mDisposable.add(mRestaurantRepository.observeRestaurantDetailsList()
                 .subscribeOn(Schedulers.computation())
-                .map(new UpdateRestaurantMapper(userDataRepository.getLocation()))
+                .map(new UpdateRestaurantMapper(mUserDataRepository.getLocation()))
                 .subscribeWith(getRestaurantList()));
     }
 
@@ -57,6 +68,10 @@ public class ListViewViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+        clearDisposable();
+    }
+
+    public void clearDisposable(){
         mDisposable.clear();
     }
 }

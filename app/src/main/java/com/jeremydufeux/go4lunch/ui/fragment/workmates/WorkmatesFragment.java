@@ -5,10 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
+import androidx.fragment.app.Fragment;
+
 import com.jeremydufeux.go4lunch.R;
 
-public class WorkmatesFragment extends BaseFragment {
+public class WorkmatesFragment extends Fragment {
 
     public WorkmatesFragment() {}
 

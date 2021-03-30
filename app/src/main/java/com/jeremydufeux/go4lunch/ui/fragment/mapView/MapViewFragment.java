@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -29,12 +31,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
-import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
-import com.jeremydufeux.go4lunch.injection.Injection;
-import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.*;
 
@@ -44,13 +43,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class MapViewFragment extends BaseFragment implements
+@AndroidEntryPoint
+public class MapViewFragment extends Fragment implements
         OnMapReadyCallback,
         EasyPermissions.PermissionCallbacks{
 
@@ -82,15 +83,16 @@ public class MapViewFragment extends BaseFragment implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("Debug", "Map onCreate");
         super.onCreate(savedInstanceState);
         configureViewModels();
         configureLocationClient();
     }
 
     private void configureViewModels() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MapViewViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(MapViewViewModel.class);
         mViewModel.setCanShowSearchButton(false);
+        mViewModel.startObservers();
     }
 
     private void configureLocationClient() {
@@ -260,6 +262,7 @@ public class MapViewFragment extends BaseFragment implements
     // Permissions
     // ---------------
 
+    @SuppressWarnings("deprecation")
     private void requestPermission(){
         requestPermissions( new String[]{ACCESS_FINE_LOCATION}, PERMS_RC_LOCATION);
     }
@@ -278,12 +281,14 @@ public class MapViewFragment extends BaseFragment implements
         mPermissionDenied = true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -333,11 +338,14 @@ public class MapViewFragment extends BaseFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mViewModel.clearDisposables();
         mViewModel.observeEvents().removeObservers(this);
         mViewModel.observeRestaurantList().removeObservers(this);
         mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
                 mMap.getCameraPosition().target.longitude,
                 mMap.getCameraPosition().zoom);
+        mBinding = null;
+        mMap = null;
     }
 
     // ---------------

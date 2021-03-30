@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.ui.fragment.loginView;
+package com.jeremydufeux.go4lunch.ui.fragment.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -27,13 +28,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
-import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
-import com.jeremydufeux.go4lunch.injection.Injection;
-import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
@@ -45,11 +45,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import static com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes.SIGN_IN_CANCELLED;
 import static com.google.android.gms.common.api.CommonStatusCodes.NETWORK_ERROR;
 import static com.google.android.gms.common.api.CommonStatusCodes.TIMEOUT;
 
-public class LoginFragment extends BaseFragment implements FacebookCallback<LoginResult> {
+@AndroidEntryPoint
+public class LoginFragment extends Fragment implements FacebookCallback<LoginResult> {
     private static final int RC_SIGN_IN = 1000;
 
     private LoginViewModel mViewModel;
@@ -72,8 +75,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     }
 
     private void configureViewModels() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(LoginViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         mViewModel.observeResult().observe(this, this::firestoreResultObserver);
     }
 
@@ -101,6 +103,7 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -115,6 +118,13 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
 
     private void navigateToMapFragment() {
         Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_login_fragment_to_map_view_fragment);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.observeResult().removeObservers(this);
+        mBinding = null;
     }
 
     // ---------------
@@ -132,6 +142,8 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
     }
 
+
+    @SuppressWarnings("deprecation")
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -227,6 +239,19 @@ public class LoginFragment extends BaseFragment implements FacebookCallback<Logi
     // ---------------
     // FireStore
     // ---------------
+
+    private FirebaseAuth getAuth(){
+        return FirebaseAuth.getInstance();
+    }
+
+    @Nullable
+    private FirebaseUser getCurrentUser(){
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private Boolean isCurrentUserLoggedIn(){
+        return getCurrentUser() != null;
+    }
 
     private void createUserInFireStore(){
         if (getCurrentUser() != null){

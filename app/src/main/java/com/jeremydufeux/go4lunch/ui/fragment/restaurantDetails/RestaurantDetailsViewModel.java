@@ -5,9 +5,15 @@ import androidx.lifecycle.ViewModel;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class RestaurantDetailsViewModel extends ViewModel {
     private final RestaurantRepository mRestaurantRepository;
 
+    @Inject
     public RestaurantDetailsViewModel(RestaurantRepository restaurantRepository) {
         mRestaurantRepository = restaurantRepository;
     }

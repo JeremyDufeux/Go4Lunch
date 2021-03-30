@@ -7,19 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
-import com.jeremydufeux.go4lunch.injection.Injection;
-import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RestaurantDetailsFragment extends BaseFragment {
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
+public class RestaurantDetailsFragment extends Fragment {
 
     private RestaurantDetailsViewModel mViewModel;
     private FragmentRestaurantDetailsBinding mBinding;
@@ -40,8 +41,7 @@ public class RestaurantDetailsFragment extends BaseFragment {
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(RestaurantDetailsViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity()).get(RestaurantDetailsViewModel.class);
     }
 
     @Override

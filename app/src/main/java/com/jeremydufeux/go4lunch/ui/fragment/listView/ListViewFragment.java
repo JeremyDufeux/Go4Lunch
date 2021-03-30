@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -13,12 +14,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.jeremydufeux.go4lunch.ui.fragment.BaseFragment;
 import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
-import com.jeremydufeux.go4lunch.injection.Injection;
-import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListViewFragment extends BaseFragment implements ListViewPlacesAdapter.OnPlaceListener {
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
+public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.OnPlaceListener {
 
     private ListViewViewModel mViewModel;
 
@@ -48,8 +49,8 @@ public class ListViewFragment extends BaseFragment implements ListViewPlacesAdap
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(ListViewViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ListViewViewModel.class);
+        mViewModel.startObservers();
     }
 
     @Override

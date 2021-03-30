@@ -3,24 +3,22 @@ package com.jeremydufeux.go4lunch.repositories;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.util.HashMap;
-import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+@Singleton
 public class RestaurantRepository {
     private final HashMap<String,Restaurant> mRestaurantHashMap;
 
     private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantListObservable;
     private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantDetailsListObservable;
 
-    private static final RestaurantRepository INSTANCE = new RestaurantRepository();
-
-    public static RestaurantRepository getInstance(){
-        return INSTANCE;
-    }
-
-    private RestaurantRepository() {
+    @Inject
+    RestaurantRepository() {
         mRestaurantHashMap = new HashMap<>();
 
         mRestaurantListObservable = BehaviorSubject.create();

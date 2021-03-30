@@ -10,10 +10,13 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import javax.inject.Inject;
+
 public class WorkmatesRepository {
 
     private final SingleLiveEvent<LiveEvent> mResult;
 
+    @Inject
     public WorkmatesRepository() {
         mResult = new SingleLiveEvent<>();
     }

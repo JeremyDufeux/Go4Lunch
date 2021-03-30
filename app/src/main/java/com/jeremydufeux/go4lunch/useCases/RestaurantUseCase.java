@@ -10,6 +10,8 @@ import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -25,6 +27,7 @@ public class RestaurantUseCase{
 
     private final PublishSubject<Throwable> mErrorsObservable = PublishSubject.create();
 
+    @Inject
     public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository) {
         mGooglePlacesRepository = googlePlacesRepository;
         mRestaurantRepository = restaurantRepository;

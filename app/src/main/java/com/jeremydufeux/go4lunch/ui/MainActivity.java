@@ -27,10 +27,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
-import com.jeremydufeux.go4lunch.injection.Injection;
-import com.jeremydufeux.go4lunch.injection.ViewModelFactory;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         FirebaseAuth.AuthStateListener,
@@ -71,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------
 
     private void configureViewModels() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
-        mViewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
     }
 
     private void configureNavController() {

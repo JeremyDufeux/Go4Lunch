@@ -19,6 +19,9 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,6 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.DEFAULT_ZOOM_VALUE;
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.LIMIT_ZOOM_VALUE;
 
+@HiltViewModel
 public class MapViewViewModel extends ViewModel {
     private final RestaurantUseCase mRestaurantUseCase;
     private final UserDataRepository mUserDataRepository;
@@ -44,10 +48,13 @@ public class MapViewViewModel extends ViewModel {
     private boolean mCanAddMarkers = false;
     private Location mLocation;
 
+    @Inject
     public MapViewViewModel(RestaurantUseCase restaurantUseCase, UserDataRepository userDataRepository) {
         mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
+    }
 
+    public void startObservers(){
         mDisposable.add(mRestaurantUseCase.observeErrors()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -187,9 +194,13 @@ public class MapViewViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
+        super.onCleared();
+        clearDisposables();
+    }
+
+    public void clearDisposables() {
         mRestaurantUseCase.clearDisposable();
         mDisposable.clear();
-        super.onCleared();
     }
 
     // -------------

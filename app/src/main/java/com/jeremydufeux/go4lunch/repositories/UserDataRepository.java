@@ -1,10 +1,11 @@
 package com.jeremydufeux.go4lunch.repositories;
 
 import android.location.Location;
-import android.util.Log;
 
-import io.reactivex.subjects.BehaviorSubject;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class UserDataRepository {
     private Location mLocation;
     private boolean mPermissionGranted;
@@ -15,13 +16,8 @@ public class UserDataRepository {
     private float mapViewCameraZoom;
     private boolean mapViewDataSet;
 
-    private static final UserDataRepository INSTANCE = new UserDataRepository();
-
-    public static UserDataRepository getInstance(){
-        return INSTANCE;
-    }
-
-    private UserDataRepository() {
+    @Inject
+    UserDataRepository() {
     }
 
     public void setLocation(Location location){
