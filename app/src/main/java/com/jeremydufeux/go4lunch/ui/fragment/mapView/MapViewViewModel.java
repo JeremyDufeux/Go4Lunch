@@ -1,7 +1,6 @@
 package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
 import android.location.Location;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,9 +9,16 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.*;
-import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
+import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.AddMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.FocusCameraLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.HideSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.OpenSystemSettingsLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.RemoveMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.net.UnknownHostException;
@@ -74,7 +80,7 @@ public class MapViewViewModel extends ViewModel {
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d("Debug", "onError getRestaurantList " + e.toString());
+                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
             }
 
             @Override
@@ -83,19 +89,18 @@ public class MapViewViewModel extends ViewModel {
         };
     }
 
-    public DisposableObserver<Throwable> getErrors(){
-        return new DisposableObserver<Throwable>() {
+    public DisposableObserver<Exception> getErrors(){
+        return new DisposableObserver<Exception>() {
             @Override
-            public void onNext(@NonNull Throwable throwable) {
-                Log.d("Debug", "onNext: throwable.getMessage() : " + throwable.toString());
-                if(throwable instanceof TimeoutException){
+            public void onNext(@NonNull Exception exception) {
+                if(exception instanceof TimeoutException){
                     mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
                 }
-                else if(throwable instanceof UnknownHostException) {
+                else if(exception instanceof UnknownHostException) {
                     mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
                 }
                 else {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_unknown_error));
+                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
                 }
             }
 

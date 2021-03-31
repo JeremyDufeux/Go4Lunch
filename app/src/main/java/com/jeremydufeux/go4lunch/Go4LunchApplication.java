@@ -1,9 +1,9 @@
 package com.jeremydufeux.go4lunch;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
 import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
-public class Go4LunchApplication extends Application {
+public class Go4LunchApplication extends MultiDexApplication {
 }

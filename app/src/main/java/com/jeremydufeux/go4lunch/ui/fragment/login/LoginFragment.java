@@ -2,7 +2,6 @@ package com.jeremydufeux.go4lunch.ui.fragment.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,18 +30,15 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
-import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateErrorLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -76,7 +72,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        mViewModel.observeResult().observe(this, this::firestoreResultObserver);
+        mViewModel.observeCreateWorkmateResult().observe(this, this::firestoreResultObserver);
     }
 
     @Override
@@ -123,7 +119,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mViewModel.observeResult().removeObservers(this);
+        mViewModel.observeCreateWorkmateResult().removeObservers(this);
         mBinding = null;
     }
 
@@ -163,7 +159,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                                 createUserInFireStore();
                             } else {
                                 // If sign in fails, display a message to the user.
-                                showSnackBar(getString(R.string.error_unknown_error));
+                                showSnackBar(getString(R.string.error));
                             }
                         });
             }
@@ -180,7 +176,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                     showSnackBar(getString(R.string.error_authentication_canceled));
                     break;
                 default:
-                    showSnackBar(getString(R.string.error_unknown_error));
+                    showSnackBar(getString(R.string.error));
                     break;
             }
         }
@@ -217,7 +213,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         if(Objects.equals(error.getMessage(), getString(R.string.error_facebook_connection_failure))) {
             showSnackBar(getString(R.string.error_no_internet));
         } else {
-            showSnackBar(getString(R.string.error_unknown_error));
+            showSnackBar(getString(R.string.error));
         }
     }
 
@@ -231,7 +227,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                         createUserInFireStore();
                     } else {
                         // If sign in fails, display a message to the user.
-                        showSnackBar(getString(R.string.error_unknown_error));
+                        showSnackBar(getString(R.string.error));
                     }
                 });
     }
@@ -255,15 +251,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     private void createUserInFireStore(){
         if (getCurrentUser() != null){
-            List<? extends UserInfo> providerData = getCurrentUser().getProviderData();
-
-            String uid = getCurrentUser().getUid();
-            String name = providerData.get(1).getDisplayName();
-            String email = providerData.get(1).getEmail();
-            String pictureUrl = Objects.requireNonNull(providerData.get(1).getPhotoUrl()).toString();
-
-            Workmate workmate = new Workmate(uid, name, email, pictureUrl);
-            mViewModel.createWorkmate(workmate);
+            mViewModel.createWorkmate(getCurrentUser());
         }
     }
 
@@ -271,10 +259,10 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
         if(result instanceof CreateWorkmateSuccessLiveEvent) {
             navigateToMapFragment();
-        } else if( result instanceof CreateWorkmateErrorLiveEvent){
-            showSnackBar(getString(R.string.error_unknown_error));
+        } else if( result instanceof ErrorLiveEvent){
+            showSnackBar(getString(R.string.error));
 
-            Log.d("Debug", "onFirestoreResult : " + ((CreateWorkmateErrorLiveEvent) result).getException().toString());
+            Log.d("Debug", "onFirestoreResult : " + ((ErrorLiveEvent) result).getException().toString());
         }
     }
 

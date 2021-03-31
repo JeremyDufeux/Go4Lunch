@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
 import java.util.Date;
@@ -17,9 +18,9 @@ public class WorkmateHelper {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
-    // --- Create ---
-    public static Task<Void> createWorkmate(Workmate workmate) {
-        return WorkmateHelper.getWorkmatesCollection().document(workmate.getUId()).set(workmate);
+    // --- Get all workmates ---
+    public static Query getWorkmates(){
+        return WorkmateHelper.getWorkmatesCollection();
     }
 
     // --- Get ---
@@ -27,9 +28,18 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
+    // --- Create ---
+    public static Task<Void> createWorkmate(Workmate workmate) {
+        return WorkmateHelper.getWorkmatesCollection().document(workmate.getUId()).set(workmate);
+    }
+
     // --- Update ---
-    public static Task<Void> updateUserName(String userName, String uid) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("userName", userName);
+    public static Task<Void> updateFirstName(String firstName, String uid) {
+        return WorkmateHelper.getWorkmatesCollection().document(uid).update("firstName", firstName);
+    }
+
+    public static Task<Void> updateLastName(String lastName, String uid) {
+        return WorkmateHelper.getWorkmatesCollection().document(uid).update("lastName", lastName);
     }
 
     public static Task<Void> updateEmail(String uid, String email) {

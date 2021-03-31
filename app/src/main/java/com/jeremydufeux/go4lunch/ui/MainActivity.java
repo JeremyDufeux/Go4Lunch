@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void onUserDataChange(Workmate workmate) {
         Glide.with(this).load(workmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
-        mHeaderBinding.drawerNameTv.setText(workmate.getUserName());
+        mHeaderBinding.drawerNameTv.setText(workmate.getDisplayName());
         mHeaderBinding.drawerEmailTv.setText(workmate.getEmail());
     }
 

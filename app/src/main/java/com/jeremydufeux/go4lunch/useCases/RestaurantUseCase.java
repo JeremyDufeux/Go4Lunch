@@ -1,7 +1,5 @@
 package com.jeremydufeux.go4lunch.useCases;
 
-import android.util.Log;
-
 import com.jeremydufeux.go4lunch.mappers.NearbyPlacesResultMapper;
 import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -25,7 +23,7 @@ public class RestaurantUseCase{
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
-    private final PublishSubject<Throwable> mErrorsObservable = PublishSubject.create();
+    private final PublishSubject<Exception> mErrorsObservable = PublishSubject.create();
 
     @Inject
     public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository) {
@@ -59,7 +57,7 @@ public class RestaurantUseCase{
             }
             @Override
             public void onError(@NonNull Throwable e) {
-                mErrorsObservable.onNext(e);
+                mErrorsObservable.onNext(new Exception(e));
             }
             @Override
             public void onComplete() {
@@ -76,7 +74,7 @@ public class RestaurantUseCase{
 
             @Override
             public void onError(@NonNull Throwable e) {
-                mErrorsObservable.onNext(e);
+                mErrorsObservable.onNext(new Exception(e));
             }
             @Override
             public void onComplete() {
@@ -88,7 +86,7 @@ public class RestaurantUseCase{
         return mRestaurantRepository.observeRestaurantList();
     }
 
-    public Observable<Throwable> observeErrors(){
+    public Observable<Exception> observeErrors(){
         return mErrorsObservable;
     }
 

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.databinding.AdapterPlaceItemBinding;
+import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     @NonNull
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        AdapterPlaceItemBinding binding = AdapterPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        FragmentListViewPlaceItemBinding binding = FragmentListViewPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new PlacesViewHolder(binding);
     }
 
@@ -54,10 +54,10 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     }
 
     static class PlacesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final AdapterPlaceItemBinding mBinding;
+        private final FragmentListViewPlaceItemBinding mBinding;
         OnPlaceListener mPlaceListener;
 
-        public PlacesViewHolder(@NonNull AdapterPlaceItemBinding itemBinding) {
+        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
         }

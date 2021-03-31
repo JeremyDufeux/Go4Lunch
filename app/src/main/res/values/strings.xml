@@ -13,7 +13,7 @@
     <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
     <string name="error_no_internet">It seem like you\'re not connected to internet…</string>
     <string name="error_timeout">Connection timeout !</string>
-    <string name="error_unknown_error">An unknown error append&#8230;</string>
+    <string name="error">An error append&#8230;</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="error_facebook_connection_failure" translatable="false">CONNECTION_FAILURE: CONNECTION_FAILURE</string>
@@ -71,5 +71,7 @@
     <string name="position_unknown_for_now">Your position unknown for now</string>
     <string name="zoom_to_see_restaurants">Zoom to see restaurants</string>
     <string name="no_restaurants_found">No restaurants found</string>
+    <string name="workmate_is_eating_at_restaurant">"%1$s is eating at %2$s"</string>
+    <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
 
 </resources>

@@ -94,6 +94,7 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mViewModel.clearDisposables();
         mViewModel.observeRestaurantList().removeObservers(this);
     }
 }

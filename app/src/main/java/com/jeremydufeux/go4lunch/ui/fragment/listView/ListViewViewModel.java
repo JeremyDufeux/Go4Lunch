@@ -68,10 +68,10 @@ public class ListViewViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        clearDisposable();
+        clearDisposables();
     }
 
-    public void clearDisposable(){
+    public void clearDisposables(){
         mDisposable.clear();
     }
 }

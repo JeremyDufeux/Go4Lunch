@@ -1,32 +1,37 @@
-package com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails;
+package com.jeremydufeux.go4lunch.ui.fragment.workmates;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsWorkmateItemBinding;
+import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.databinding.FragmentWorkmateItemBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<RestaurantDetailsWorkmatesAdapter.WorkmateViewHolder> {
+public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.WorkmateViewHolder>{
 
     private final RequestManager mGlide;
     private final List<Workmate> mWorkmateList = new ArrayList<>();
 
-    public RestaurantDetailsWorkmatesAdapter(RequestManager glide) {
+    public WorkmatesAdapter(RequestManager glide) {
         mGlide = glide;
     }
 
     @NonNull
     @Override
     public WorkmateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        FragmentRestaurantDetailsWorkmateItemBinding binding = FragmentRestaurantDetailsWorkmateItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        FragmentWorkmateItemBinding binding = FragmentWorkmateItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new WorkmateViewHolder(binding);
     }
 
@@ -48,15 +53,29 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
     }
 
     static class WorkmateViewHolder extends RecyclerView.ViewHolder {
-        private final FragmentRestaurantDetailsWorkmateItemBinding mBinding;
+        private final FragmentWorkmateItemBinding mBinding;
 
-        public WorkmateViewHolder(@NonNull FragmentRestaurantDetailsWorkmateItemBinding itemBinding) {
+        public WorkmateViewHolder(@NonNull FragmentWorkmateItemBinding itemBinding) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
         }
 
         public void updateViewHolder(RequestManager glide, Workmate workmate){
-            mBinding.workmateItemNameTv.setText(workmate.getFirstName());
+            Context context = mBinding.getRoot().getContext();
+
+            String workmateChosen = context.getResources().getString(
+                    R.string.workmate_is_eating_at_restaurant,
+                    workmate.getFirstName(),
+                    workmate.getChosenRestaurantName());
+
+            String workmateNotChosen = context.getResources().getString(
+                    R.string.workmate_has_not_decided_yet,
+                    workmate.getFirstName());
+
+            mBinding.workmateItemChosenTv.setText(workmateChosen);
+            mBinding.workmateItemChosenTv.setVisibility(workmate.getWorkmateChosenTvVisibility());
+            mBinding.workmateItemNotChosenTv.setText(workmateNotChosen);
+            mBinding.workmateItemNotChosenTv.setVisibility(workmate.getWorkmateNotChosenTvVisibility());
 
             glide.load(workmate.getPictureUrl())
                     .circleCrop()
