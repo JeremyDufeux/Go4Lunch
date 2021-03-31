@@ -12,7 +12,7 @@ import java.util.HashMap;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-public class NearbyPlacesResultMapper implements Function<PlaceSearchResults, HashMap<String, Restaurant>>  {
+public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearchResults, HashMap<String, Restaurant>>  {
 
     @Override
     public HashMap<String, Restaurant> apply(@NonNull PlaceSearchResults results) {

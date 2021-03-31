@@ -18,7 +18,7 @@ import java.util.Objects;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-public class PlaceDetailsResultMapper implements Function<PlaceDetailsResults, Restaurant> {
+public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetailsResults, Restaurant> {
     private static final String MAP_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=%s&maxwidth=800";
     private static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:%s,%s&zoom=17&marker=lonlat:%s,%s;color:%%23ff5721;size:xx-large&apiKey=%s";
 

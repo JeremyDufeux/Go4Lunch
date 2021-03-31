@@ -17,10 +17,10 @@ import java.util.Objects;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-public class UpdateRestaurantMapper implements Function<HashMap<String, Restaurant>, List<Restaurant>> {
+public class RestaurantToListViewMapper implements Function<HashMap<String, Restaurant>, List<Restaurant>> {
     Location mLocation;
 
-    public UpdateRestaurantMapper(Location location) {
+    public RestaurantToListViewMapper(Location location) {
         mLocation = location;
     }
 
