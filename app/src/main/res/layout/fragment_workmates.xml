@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/fragment_workmates_cl"
-    tools:context=".ui.fragment.workmates.WorkmatesFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_workmates_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/fragment_workmate_item"/>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    android:id="@+id/fragment_workmates_rv"
+    tools:listitem="@layout/fragment_workmate_item"
+    tools:context=".ui.fragment.workmates.WorkmatesFragment"/>

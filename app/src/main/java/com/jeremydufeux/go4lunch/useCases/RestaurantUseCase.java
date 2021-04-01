@@ -1,7 +1,7 @@
 package com.jeremydufeux.go4lunch.useCases;
 
-import com.jeremydufeux.go4lunch.mappers.NearbyPlacesResultMapper;
-import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultMapper;
+import com.jeremydufeux.go4lunch.mappers.NearbyPlacesResultToRestaurantMapper;
+import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultToRestaurantMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
@@ -34,14 +34,14 @@ public class RestaurantUseCase{
     public void getNearbyPlaces(double latitude, double longitude, double radius) {
         mDisposable.add(mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius)
                 .subscribeOn(Schedulers.io())
-                .map(new NearbyPlacesResultMapper())
+                .map(new NearbyPlacesResultToRestaurantMapper())
                 .subscribeWith(receiptResultFromNearbyPlaces()));
     }
 
     public void getDetailsForPlaceId(String placeId){
         mDisposable.add(mGooglePlacesRepository.getDetailsForPlaceId(placeId)
                 .subscribeOn(Schedulers.io())
-                .map(new PlaceDetailsResultMapper())
+                .map(new PlaceDetailsResultToRestaurantMapper())
                 .subscribeWith(receiptResultFromPlacesDetails()));
     }
 

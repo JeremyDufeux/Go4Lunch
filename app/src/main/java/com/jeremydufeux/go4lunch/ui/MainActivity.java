@@ -142,7 +142,9 @@ public class MainActivity extends AppCompatActivity implements
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null){
-            mViewModel.getWorkmateWithId(firebaseUser.getUid()).observe(this, this::onUserDataChange);
+            mViewModel.setCurrentUser(firebaseUser.getUid());
+            mViewModel.startObservers();
+            mViewModel.observeCurrentUser().observe(this, this::onUserDataChange);
         }
     }
 
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mViewModel.clearDisposables();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
 }

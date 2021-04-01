@@ -73,5 +73,6 @@
     <string name="no_restaurants_found">No restaurants found</string>
     <string name="workmate_is_eating_at_restaurant">"%1$s is eating at %2$s"</string>
     <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
+    <string name="liked">LIKED</string>
 
 </resources>

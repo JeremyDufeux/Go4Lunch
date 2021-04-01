@@ -2,13 +2,13 @@ package com.jeremydufeux.go4lunch.ui.fragment.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -32,8 +32,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.AddMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.HideSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.OpenSystemSettingsLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.RemoveMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +77,8 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        mViewModel.observeCreateWorkmateResult().observe(this, this::firestoreResultObserver);
+        mViewModel.startObservers();
+        mViewModel.observeEvents().observe(this, onEventReceived());
     }
 
     @Override
@@ -118,9 +124,8 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-        mViewModel.observeCreateWorkmateResult().removeObservers(this);
-        mBinding = null;
+    super.onDestroyView();
+        mViewModel.clearDisposables();
     }
 
     // ---------------
@@ -155,11 +160,11 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                 getAuth().signInWithCredential(credential)
                         .addOnCompleteListener(requireActivity(), taskComplete -> {
                             if (taskComplete.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                // Sign in success
                                 createUserInFireStore();
                             } else {
                                 // If sign in fails, display a message to the user.
-                                showSnackBar(getString(R.string.error));
+                                showSnackBar(R.string.error);
                             }
                         });
             }
@@ -167,16 +172,16 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
             // Google Sign In failed, display a message to the user
             switch (e.getStatusCode()){
                 case NETWORK_ERROR:
-                    showSnackBar(getString(R.string.error_no_internet));
+                    showSnackBar(R.string.error_no_internet);
                     break;
                 case TIMEOUT:
-                    showSnackBar(getString(R.string.error_timeout));
+                    showSnackBar(R.string.error_timeout);
                     break;
                 case SIGN_IN_CANCELLED:
-                    showSnackBar(getString(R.string.error_authentication_canceled));
+                    showSnackBar(R.string.error_authentication_canceled);
                     break;
                 default:
-                    showSnackBar(getString(R.string.error));
+                    showSnackBar(R.string.error);
                     break;
             }
         }
@@ -205,20 +210,19 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     @Override
     public void onCancel() {
-        showSnackBar(getString(R.string.error_authentication_canceled));
+        showSnackBar(R.string.error_authentication_canceled);
     }
 
     @Override
     public void onError(FacebookException error) {
         if(Objects.equals(error.getMessage(), getString(R.string.error_facebook_connection_failure))) {
-            showSnackBar(getString(R.string.error_no_internet));
+            showSnackBar(R.string.error_no_internet);
         } else {
-            showSnackBar(getString(R.string.error));
+            showSnackBar(R.string.error);
         }
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         getAuth().signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
@@ -227,7 +231,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                         createUserInFireStore();
                     } else {
                         // If sign in fails, display a message to the user.
-                        showSnackBar(getString(R.string.error));
+                        showSnackBar(R.string.error);
                     }
                 });
     }
@@ -255,23 +259,23 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         }
     }
 
-    private void firestoreResultObserver(LiveEvent result){
-
-        if(result instanceof CreateWorkmateSuccessLiveEvent) {
-            navigateToMapFragment();
-        } else if( result instanceof ErrorLiveEvent){
-            showSnackBar(getString(R.string.error));
-
-            Log.d("Debug", "onFirestoreResult : " + ((ErrorLiveEvent) result).getException().toString());
-        }
+    private Observer<LiveEvent> onEventReceived(){
+        return event -> {
+            if(event instanceof NavigateToMapFragmentLiveEvent) {
+                navigateToMapFragment();
+            }
+            else if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
+        };
     }
 
     // ---------------
     // Utils
     // ---------------
 
-    private void showSnackBar(String message){
-        Snackbar.make(mBinding.loginFragmentCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    private void showSnackBar(int stringId){
+        Snackbar.make(mBinding.loginFragmentCoordinatorLayout, getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 
     private void showLoginButtons(){

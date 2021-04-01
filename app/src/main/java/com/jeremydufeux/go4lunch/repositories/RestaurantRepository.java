@@ -43,8 +43,8 @@ public class RestaurantRepository {
     public Observable<HashMap<String, Restaurant>> observeRestaurantDetailsList() {
         return mRestaurantDetailsListObservable;
     }
-    public Restaurant getRestaurantWithId(String placeId) {
-        return mRestaurantHashMap.get(placeId);
+    public Observable<Restaurant> getRestaurantWithId(String placeId) {
+        return Observable.just(mRestaurantHashMap.get(placeId));
     }
 
 

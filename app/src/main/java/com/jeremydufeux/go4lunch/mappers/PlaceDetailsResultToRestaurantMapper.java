@@ -22,6 +22,8 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     private static final String MAP_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=%s&maxwidth=800";
     private static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:%s,%s&zoom=17&marker=lonlat:%s,%s;color:%%23ff5721;size:xx-large&apiKey=%s";
 
+    private Restaurant mRestaurant;
+
     @Override
     public Restaurant apply(@NonNull PlaceDetailsResults results) {
         PlaceDetails placeDetail = results.getPlaceDetails();
@@ -29,31 +31,43 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
         double lat = placeDetail.getGeometry().getLocation().getLat();
         double lng = placeDetail.getGeometry().getLocation().getLng();
 
-        Restaurant restaurant = new Restaurant(placeDetail.getPlaceId(), placeDetail.getName(), lat, lng);
+        mRestaurant = new Restaurant(placeDetail.getPlaceId(), placeDetail.getName(), lat, lng);
 
-        setAddress(restaurant, placeDetail);
-        setOpeningData(restaurant, placeDetail);
-        setRating(restaurant, placeDetail);
-        restaurant.setPhotoUrl(getPhotoUrl(placeDetail));
-        restaurant.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
-        restaurant.setWebsite(placeDetail.getWebsite());
+        setAddress(placeDetail);
+        setOpeningData(placeDetail);
+        setRating(placeDetail);
+        mRestaurant.setPhotoUrl(getPhotoUrl(placeDetail));
+        mRestaurant.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
+        mRestaurant.setWebsite(placeDetail.getWebsite());
 
-        return restaurant;
+        if(mRestaurant.getPhoneNumber() != null && !mRestaurant.getPhoneNumber().isEmpty()) {
+            mRestaurant.setDetailsCallLlVisibility(View.VISIBLE);
+        } else {
+            mRestaurant.setDetailsCallLlVisibility(View.GONE);
+        }
+
+        if(mRestaurant.getWebsite() != null && !mRestaurant.getWebsite().isEmpty()) {
+            mRestaurant.setDetailsWebsiteLlVisibility(View.VISIBLE);
+        } else {
+            mRestaurant.setDetailsWebsiteLlVisibility(View.GONE);
+        }
+
+        return mRestaurant;
     }
 
-    private void setAddress(Restaurant restaurant, PlaceDetails placeDetail) {
+    private void setAddress(PlaceDetails placeDetail) {
         String address = getAddressFromAddressComponents(placeDetail.getAddressComponents());
         if(address.isEmpty()){
             address = placeDetail.getVicinity();
         }
-        restaurant.setAddress(address);
+        mRestaurant.setAddress(address);
     }
 
-    private void setOpeningData(Restaurant restaurant, PlaceDetails placeDetail) {
+    private void setOpeningData(PlaceDetails placeDetail) {
         if(placeDetail.getOpeningHours() != null) {
-            restaurant.setOpenNow(placeDetail.getOpeningHours().getOpenNow());
-            restaurant.setOpeningHoursAvailable(true);
-            restaurant.setUtcOffset(placeDetail.getUtcOffset()*60000);
+            mRestaurant.setOpenNow(placeDetail.getOpeningHours().getOpenNow());
+            mRestaurant.setOpeningHoursAvailable(true);
+            mRestaurant.setUtcOffset(placeDetail.getUtcOffset()*60000);
 
             if(placeDetail.getOpeningHours().getPeriods() != null) {
 
@@ -65,7 +79,7 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
 
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
                     if(period.getOpen().getDay() == 0 && period.getOpen().getTime().equals("0000")){
-                        restaurant.setAlwaysOpen(true);
+                        mRestaurant.setAlwaysOpen(true);
                         return;
                     } else {
                         Restaurant.OpenPeriod openPeriod = new Restaurant.OpenPeriod(
@@ -77,7 +91,7 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
                         Objects.requireNonNull(openingHours.get(period.getOpen().getDay())).add(openPeriod);
                     }
                 }
-                restaurant.setOpeningHours(openingHours);
+                mRestaurant.setOpeningHours(openingHours);
             }
         }
     }
@@ -90,23 +104,23 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
         }
     }
 
-    private void setRating(Restaurant restaurant, PlaceDetails placeDetail) {
-        restaurant.setRating(placeDetail.getRating());
+    private void setRating(PlaceDetails placeDetail) {
+        mRestaurant.setRating(placeDetail.getRating());
 
-        if(restaurant.getRating() > 0) {
-            restaurant.setStar1IvVisibility(View.VISIBLE);
+        if(mRestaurant.getRating() > 0) {
+            mRestaurant.setStar1IvVisibility(View.VISIBLE);
         } else {
-            restaurant.setStar1IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar1IvVisibility(View.INVISIBLE);
         }
-        if(restaurant.getRating() > 1.66) {
-            restaurant.setStar2IvVisibility(View.VISIBLE);
+        if(mRestaurant.getRating() > 1.66) {
+            mRestaurant.setStar2IvVisibility(View.VISIBLE);
         } else {
-            restaurant.setStar2IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar2IvVisibility(View.INVISIBLE);
         }
-        if(restaurant.getRating() > 3.33) {
-            restaurant.setStar3IvVisibility(View.VISIBLE);
+        if(mRestaurant.getRating() > 3.33) {
+            mRestaurant.setStar3IvVisibility(View.VISIBLE);
         } else {
-            restaurant.setStar3IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar3IvVisibility(View.INVISIBLE);
         }
     }
 

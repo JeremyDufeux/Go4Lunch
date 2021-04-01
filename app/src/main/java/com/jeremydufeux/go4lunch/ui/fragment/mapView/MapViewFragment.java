@@ -96,7 +96,6 @@ public class MapViewFragment extends Fragment implements
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(MapViewViewModel.class);
-        mViewModel.setCanShowSearchButton(false);
         mViewModel.startObservers();
     }
 
@@ -107,6 +106,7 @@ public class MapViewFragment extends Fragment implements
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewModel.observeEvents().observe(getViewLifecycleOwner(), onEventReceived());
+        mViewModel.setCanShowSearchButton(false);
 
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
@@ -214,7 +214,7 @@ public class MapViewFragment extends Fragment implements
         directions.setRestaurantId((String) Objects.requireNonNull(marker.getTag()));
 
         Navigation.findNavController(mBinding.getRoot()).navigate(directions);
-        return false;
+        return true;
     }
 
     // ---------------
@@ -344,8 +344,6 @@ public class MapViewFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
         mViewModel.clearDisposables();
-        mViewModel.observeEvents().removeObservers(this);
-        mViewModel.observeRestaurantList().removeObservers(this);
         mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
                 mMap.getCameraPosition().target.longitude,
                 mMap.getCameraPosition().zoom);

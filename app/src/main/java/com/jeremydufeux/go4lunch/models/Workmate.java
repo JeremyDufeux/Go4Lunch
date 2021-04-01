@@ -1,6 +1,9 @@
 package com.jeremydufeux.go4lunch.models;
 
-import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -16,11 +19,16 @@ public class Workmate {
 
     private String mChosenRestaurantId;
     private String mChosenRestaurantName;
-    private Timestamp mLastChosenRestaurantDate;
+    private long mLastChosenRestaurantDate;
+
+    private List<String> mLikedRestaurants = new ArrayList<>();
 
     // For Ui
-    private int mWorkmateChosenTvVisibility;
-    private int mWorkmateNotChosenTvVisibility;
+    @Exclude private int mWorkmateChosenTvVisibility;
+    @Exclude private int mWorkmateNotChosenTvVisibility;
+    @Exclude private int mWorkmateGoFabColor;
+    @Exclude private int mWorkmateLikedRestaurantTvText;
+    @Exclude private int mWorkmateLikedRestaurantTvColor;
 
     public Workmate() {
     }
@@ -39,7 +47,7 @@ public class Workmate {
     }
 
     public void setUId(String uId) {
-        this.mUId = uId;
+        mUId = uId;
     }
 
     public String getDisplayName() {
@@ -72,7 +80,7 @@ public class Workmate {
     }
 
     public void setEmail(@Nullable String email) {
-        this.mEmail = email;
+        mEmail = email;
     }
 
     @Nullable
@@ -81,7 +89,7 @@ public class Workmate {
     }
 
     public void setPictureUrl(@Nullable String pictureUrl) {
-        this.mPictureUrl = pictureUrl;
+        mPictureUrl = pictureUrl;
     }
 
     public String getChosenRestaurantId() {
@@ -89,15 +97,15 @@ public class Workmate {
     }
 
     public void setChosenRestaurantId(String chosenRestaurantId) {
-        this.mChosenRestaurantId = chosenRestaurantId;
+        mChosenRestaurantId = chosenRestaurantId;
     }
 
-    public Timestamp getLastChosenRestaurantDate() {
+    public long getLastChosenRestaurantDate() {
         return mLastChosenRestaurantDate;
     }
 
-    public void setLastChosenRestaurantDate(Timestamp lastChosenRestaurantDate) {
-        this.mLastChosenRestaurantDate = lastChosenRestaurantDate;
+    public void setLastChosenRestaurantDate(long lastChosenRestaurantDate) {
+        mLastChosenRestaurantDate = lastChosenRestaurantDate;
     }
 
     public String getChosenRestaurantName() {
@@ -122,5 +130,37 @@ public class Workmate {
 
     public void setWorkmateNotChosenTvVisibility(int workmateNotChosenTvVisibility) {
         mWorkmateNotChosenTvVisibility = workmateNotChosenTvVisibility;
+    }
+
+    public int getWorkmateGoFabColor() {
+        return mWorkmateGoFabColor;
+    }
+
+    public void setWorkmateGoFabColor(int workmateGoFabColor) {
+        mWorkmateGoFabColor = workmateGoFabColor;
+    }
+
+    public List<String> getLikedRestaurants() {
+        return mLikedRestaurants;
+    }
+
+    public void setLikedRestaurants(List<String> likedRestaurants) {
+        mLikedRestaurants = likedRestaurants;
+    }
+
+    public int getWorkmateLikedRestaurantTvText() {
+        return mWorkmateLikedRestaurantTvText;
+    }
+
+    public void setWorkmateLikedRestaurantTvText(int workmateLikedRestaurantTvText) {
+        mWorkmateLikedRestaurantTvText = workmateLikedRestaurantTvText;
+    }
+
+    public int getWorkmateLikedRestaurantTvColor() {
+        return mWorkmateLikedRestaurantTvColor;
+    }
+
+    public void setWorkmateLikedRestaurantTvColor(int workmateLikedRestaurantTvColor) {
+        mWorkmateLikedRestaurantTvColor = workmateLikedRestaurantTvColor;
     }
 }

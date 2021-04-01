@@ -8,12 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +32,7 @@ public class RestaurantDetailsFragment extends Fragment {
     private RestaurantDetailsWorkmatesAdapter mAdapter;
 
     private Restaurant mRestaurant;
+    private Workmate mCurrentUser;
 
     public RestaurantDetailsFragment() {}
 
@@ -42,6 +48,8 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(RestaurantDetailsViewModel.class);
+        mViewModel.startObservers();
+        mViewModel.observeEvents().observe(this, onEventReceived());
     }
 
     @Override
@@ -51,13 +59,30 @@ public class RestaurantDetailsFragment extends Fragment {
         assert getArguments() != null;
         String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();
 
-        mRestaurant = mViewModel.getRestaurantWithId(restaurantId);
+        mViewModel.getRestaurantWithId(restaurantId);
+        mViewModel.observeRestaurant().observe(getViewLifecycleOwner(), observeRestaurant());
+        mViewModel.observeCurrentUser().observe(getViewLifecycleOwner(), observeCurrentUser());
 
+        configureListener();
         configureRecyclerView();
-        updateView();
 
         return mBinding.getRoot();
     }
+
+    private Observer<Restaurant> observeRestaurant(){
+        return restaurant -> {
+            mRestaurant = restaurant;
+            updateRestaurantView();
+        };
+    }
+
+    private Observer<Workmate> observeCurrentUser(){
+        return workmate -> {
+            mCurrentUser = workmate;
+            updateWorkmateView();
+        };
+    }
+
 
     private void configureRecyclerView() {
         mAdapter = new RestaurantDetailsWorkmatesAdapter(Glide.with(this));
@@ -65,7 +90,21 @@ public class RestaurantDetailsFragment extends Fragment {
         mBinding.fragmentRestaurantDetailsWorkmatesRv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
     }
 
-    private void updateView() {
+    private void configureListener(){
+        mBinding.fragmentRestaurantDetailsGoFab.setOnClickListener(v -> choseRestaurant());
+        mBinding.fragmentRestaurantDetailsLikeLl.setOnClickListener(v -> likeRestaurant());
+
+        mBinding.fragmentRestaurantDetailsCallLl.setOnClickListener(v -> callRestaurant());
+        mBinding.fragmentRestaurantDetailsWebsiteLl.setOnClickListener(v -> visitRestaurantWebsite());
+    }
+
+    private void updateWorkmateView() {
+        mBinding.fragmentRestaurantDetailsGoFab.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateGoFabColor()));
+        mBinding.fragmentRestaurantDetailsLikeTv.setText(getString(mCurrentUser.getWorkmateLikedRestaurantTvText()));
+        mBinding.fragmentRestaurantDetailsLikeIv.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateLikedRestaurantTvColor()));
+    }
+
+    private void updateRestaurantView() {
         mBinding.fragmentRestaurantDetailsNameTv.setText(mRestaurant.getName());
         mBinding.fragmentRestaurantDetailsAddressTv.setText(mRestaurant.getAddress());
 
@@ -74,43 +113,16 @@ public class RestaurantDetailsFragment extends Fragment {
                 .centerCrop()
                 .into(mBinding.fragmentRestaurantDetailsPhotoIv);
 
-        if (mRestaurant.getRating() > 0) {
-            mBinding.fragmentRestaurantDetailsStar1Iv.setVisibility(View.VISIBLE);
-        } else {
-            mBinding.fragmentRestaurantDetailsStar1Iv.setVisibility(View.INVISIBLE);
-        }
-        if (mRestaurant.getRating() > 1.66) {
-            mBinding.fragmentRestaurantDetailsStar2Iv.setVisibility(View.VISIBLE);
-        } else {
-            mBinding.fragmentRestaurantDetailsStar2Iv.setVisibility(View.INVISIBLE);
-        }
-        if (mRestaurant.getRating() > 3.33) {
-            mBinding.fragmentRestaurantDetailsStar3Iv.setVisibility(View.VISIBLE);
-        } else {
-            mBinding.fragmentRestaurantDetailsStar3Iv.setVisibility(View.INVISIBLE);
-        }
+        mBinding.fragmentRestaurantDetailsStar1Iv.setVisibility(mRestaurant.getStar1IvVisibility());
+        mBinding.fragmentRestaurantDetailsStar2Iv.setVisibility(mRestaurant.getStar2IvVisibility());
+        mBinding.fragmentRestaurantDetailsStar3Iv.setVisibility(mRestaurant.getStar3IvVisibility());
 
-        // TODO Check if user is going to this place for lunch
-        mBinding.fragmentRestaurantDetailsGoFab.setOnClickListener(v -> choseRestaurant());
-
-        if(mRestaurant.getPhoneNumber() != null && !mRestaurant.getPhoneNumber().isEmpty()) {
-            mBinding.fragmentRestaurantDetailsCallIv.setOnClickListener(v -> callRestaurant());
-        } else {
-            mBinding.fragmentRestaurantDetailsCallLl.setVisibility(View.GONE);
-        }
-
-        // TODO Check if user as liked the place
-        mBinding.fragmentRestaurantDetailsLikeIv.setOnClickListener(v -> likeRestaurant());
-
-        if(mRestaurant.getWebsite() != null && !mRestaurant.getWebsite().isEmpty()) {
-            mBinding.fragmentRestaurantDetailsWebsiteIv.setOnClickListener(v -> visitRestaurantWebsite());
-        } else {
-            mBinding.fragmentRestaurantDetailsWebLl.setVisibility(View.GONE);
-        }
+        mBinding.fragmentRestaurantDetailsCallLl.setVisibility(mRestaurant.getDetailsCallLlVisibility());
+        mBinding.fragmentRestaurantDetailsWebsiteLl.setVisibility(mRestaurant.getDetailsWebsiteLlVisibility());
     }
 
     private void choseRestaurant() {
-        // TODO save to Firebase
+        mViewModel.choseRestaurant(mRestaurant, mCurrentUser);
     }
 
     private void callRestaurant() {
@@ -120,12 +132,34 @@ public class RestaurantDetailsFragment extends Fragment {
     }
 
     private void likeRestaurant() {
-        // TODO save to Firebase
+        mViewModel.likeRestaurant(mRestaurant, mCurrentUser);
     }
 
     private void visitRestaurantWebsite() {
         Intent openBrowserIntent = new Intent(Intent.ACTION_VIEW);
         openBrowserIntent.setData(Uri.parse(mRestaurant.getWebsite()));
         startActivity(openBrowserIntent);
+    }
+
+    private Observer<LiveEvent> onEventReceived(){
+        return event -> {
+            if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
+        };
+    }
+
+    // ---------------
+    // Utils
+    // ---------------
+
+    private void showSnackBar(int stringId){
+        Snackbar.make(mBinding.fragmentRestaurantDetailsMotionLayout, getString(stringId), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.clearDisposables();
     }
 }

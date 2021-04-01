@@ -1,7 +1,6 @@
 package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
-import android.view.View;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -9,12 +8,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jeremydufeux.go4lunch.R;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class Restaurant {
     private final String mUId;
@@ -52,6 +47,8 @@ public class Restaurant {
     private int mOpenTvColor;
     private int mWorkmateTvVisibility;
     private int mWorkmateIvVisibility;
+    private int mDetailsCallLlVisibility;
+    private int mDetailsWebsiteLlVisibility;
 
     public Restaurant(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
@@ -272,6 +269,22 @@ public class Restaurant {
 
     public void setWorkmateIvVisibility(int workmateIvVisibility) {
         mWorkmateIvVisibility = workmateIvVisibility;
+    }
+
+    public int getDetailsCallLlVisibility() {
+        return mDetailsCallLlVisibility;
+    }
+
+    public void setDetailsCallLlVisibility(int detailsCallLlVisibility) {
+        mDetailsCallLlVisibility = detailsCallLlVisibility;
+    }
+
+    public int getDetailsWebsiteLlVisibility() {
+        return mDetailsWebsiteLlVisibility;
+    }
+
+    public void setDetailsWebsiteLlVisibility(int detailsWebsiteLlVisibility) {
+        mDetailsWebsiteLlVisibility = detailsWebsiteLlVisibility;
     }
 
     public static class OpenPeriod{

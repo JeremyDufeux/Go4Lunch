@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.jeremydufeux.go4lunch.mappers.UpdateRestaurantMapper;
+import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
@@ -39,7 +39,7 @@ public class ListViewViewModel extends ViewModel {
     public void startObservers(){
         mDisposable.add(mRestaurantRepository.observeRestaurantDetailsList()
                 .subscribeOn(Schedulers.computation())
-                .map(new UpdateRestaurantMapper(mUserDataRepository.getLocation()))
+                .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation()))
                 .subscribeWith(getRestaurantList()));
     }
 

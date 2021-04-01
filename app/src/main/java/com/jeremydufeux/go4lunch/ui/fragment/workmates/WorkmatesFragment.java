@@ -11,24 +11,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.Query;
-import com.google.maps.android.SphericalUtil;
 import com.jeremydufeux.go4lunch.databinding.FragmentWorkmatesBinding;
-import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.AddMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.FocusCameraLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.HideSearchButtonLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.OpenSystemSettingsLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.RemoveMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSearchButtonLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class WorkmatesFragment extends Fragment {
 
     private WorkmatesViewModel mViewModel;
@@ -77,7 +69,6 @@ public class WorkmatesFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mViewModel.clearDisposables();
-        mViewModel.observeEvents().removeObservers(this);
         mViewModel.observeWorkmateList().removeObserver(mAdapter::updateList);
     }
 
@@ -98,6 +89,6 @@ public class WorkmatesFragment extends Fragment {
     // ---------------
 
     private void showSnackBar(int stringId){
-        Snackbar.make(mBinding.fragmentWorkmatesCl, getString(stringId), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mBinding.fragmentWorkmatesRv, getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 }

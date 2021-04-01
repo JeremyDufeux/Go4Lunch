@@ -1,22 +1,20 @@
 package com.jeremydufeux.go4lunch.ui.fragment.workmates;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.jeremydufeux.go4lunch.R;
-import com.jeremydufeux.go4lunch.mappers.WorkmateMapper;
+import com.jeremydufeux.go4lunch.mappers.WorkmateToWorkmateListViewMapper;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.SuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -42,14 +40,14 @@ public class WorkmatesViewModel extends ViewModel {
     }
 
     public void startObservers(){
-        mDisposable.add(mWorkmatesRepository.observeErrors()
+        mDisposable.add(mWorkmatesRepository.observeTasksResults()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(getErrors()));
+                .subscribeWith(getTasksResults()));
 
-        mDisposable.add(mWorkmatesRepository.getWorkmates()
+        mDisposable.add(mWorkmatesRepository.observeWorkmates()
                 .subscribeOn(Schedulers.computation())
-                .map(new WorkmateMapper())
+                .map(new WorkmateToWorkmateListViewMapper())
                 .subscribeWith(getWorkmateList()));
     }
 
@@ -71,23 +69,20 @@ public class WorkmatesViewModel extends ViewModel {
         };
     }
 
-    public DisposableObserver<Exception> getErrors(){
-        return new DisposableObserver<Exception>() {
+    public DisposableObserver<LiveEvent> getTasksResults(){
+        return new DisposableObserver<LiveEvent>() {
             @Override
-            public void onNext(@NonNull Exception exception) {
-                if(exception instanceof TimeoutException){
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
-                }
-                else if(exception instanceof UnknownHostException) {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
-                }
-                else {
+            public void onNext(@NonNull LiveEvent event) {
+                if(event instanceof SuccessLiveEvent){
+                    mSingleLiveEvent.setValue(new NavigateToMapFragmentLiveEvent());
+                } else {
                     mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
                 }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
+                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
             }
 
             @Override
