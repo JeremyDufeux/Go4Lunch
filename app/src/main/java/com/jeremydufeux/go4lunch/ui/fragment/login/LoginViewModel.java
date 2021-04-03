@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.SignInSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
@@ -55,7 +55,7 @@ public class LoginViewModel extends ViewModel {
         return new DisposableObserver<LiveEvent>() {
             @Override
             public void onNext(@NonNull LiveEvent event) {
-                if(event instanceof CreateWorkmateSuccessLiveEvent){
+                if(event instanceof SignInSuccessLiveEvent){
                     mSingleLiveEvent.setValue(new NavigateToMapFragmentLiveEvent());
                 } else if(event instanceof ErrorLiveEvent) {
                     mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
@@ -73,9 +73,9 @@ public class LoginViewModel extends ViewModel {
         };
     }
 
-    public void createWorkmate(FirebaseUser firebaseUser) {
+    public void authWorkmate(FirebaseUser firebaseUser) {
         mExecutor.execute(() ->
-            mWorkmatesRepository.getOrCreateWorkmate(convertFirebaseUserToWorkmate(firebaseUser))
+            mWorkmatesRepository.authWorkmate(convertFirebaseUserToWorkmate(firebaseUser))
         );
     }
 

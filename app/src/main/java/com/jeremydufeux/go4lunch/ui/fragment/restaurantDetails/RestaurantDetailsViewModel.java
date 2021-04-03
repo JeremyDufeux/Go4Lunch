@@ -10,7 +10,7 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.CreateWorkmateSuccessLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.SignInSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
@@ -61,9 +61,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
         return new DisposableObserver<LiveEvent>() {
             @Override
             public void onNext(@NonNull LiveEvent event) {
-                if(event instanceof CreateWorkmateSuccessLiveEvent){
-                    mSingleLiveEvent.setValue(event);
-                } else if(event instanceof ErrorLiveEvent) {
+                if(event instanceof ErrorLiveEvent) {
                     mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
                 }
             }

@@ -5,7 +5,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -23,7 +22,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
@@ -34,7 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        FirebaseAuth.AuthStateListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     private MainActivityViewModel mViewModel;
@@ -64,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements
         configureToolbar();
         configureDrawer();
         configureNavControllerListener();
-        configureFirebaseAuthListener();
     }
 
     // ---------------
@@ -73,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mViewModel.startObservers();
+        mViewModel.observeCurrentUser().observe(this, this::onUserDataChange);
     }
 
     private void configureNavController() {
@@ -130,28 +128,17 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    private void configureFirebaseAuthListener() {
-        FirebaseAuth.getInstance().addAuthStateListener(this);
-    }
-
     // ---------------
     // Firebase Auth
     // ---------------
 
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser != null){
-            mViewModel.setCurrentUser(firebaseUser.getUid());
-            mViewModel.startObservers();
-            mViewModel.observeCurrentUser().observe(this, this::onUserDataChange);
-        }
-    }
-
     private void onUserDataChange(Workmate workmate) {
         Glide.with(this).load(workmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
+        mHeaderBinding.drawerProfilePicIv.setVisibility(View.VISIBLE);
         mHeaderBinding.drawerNameTv.setText(workmate.getDisplayName());
+        mHeaderBinding.drawerNameTv.setVisibility(View.VISIBLE);
         mHeaderBinding.drawerEmailTv.setText(workmate.getEmail());
+        mHeaderBinding.drawerEmailTv.setVisibility(View.VISIBLE);
     }
 
     private void logout() {
@@ -193,6 +180,5 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mViewModel.clearDisposables();
-        FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
 }

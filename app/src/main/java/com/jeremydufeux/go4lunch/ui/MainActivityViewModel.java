@@ -42,10 +42,6 @@ public class MainActivityViewModel extends ViewModel {
                 .subscribeWith(getCurrentUserResult()));
     }
 
-    public void setCurrentUser(String uId){
-        mWorkmatesRepository.setCurrentUser(uId);
-    }
-
     public DisposableObserver<Workmate> getCurrentUserResult(){
         return new DisposableObserver<Workmate>() {
             @Override

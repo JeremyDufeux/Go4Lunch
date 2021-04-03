@@ -32,14 +32,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.AddMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.HideSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.OpenSystemSettingsLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.RemoveMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -99,6 +93,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         super.onStart();
 
         if (isCurrentUserLoggedIn()) {
+            mViewModel.authWorkmate(getCurrentUser());
             navigateToMapFragment();
         } else {
             showLoginButtons();
@@ -161,7 +156,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                         .addOnCompleteListener(requireActivity(), taskComplete -> {
                             if (taskComplete.isSuccessful()) {
                                 // Sign in success
-                                createUserInFireStore();
+                                afterSignInSuccess();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 showSnackBar(R.string.error);
@@ -228,7 +223,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success
-                        createUserInFireStore();
+                        afterSignInSuccess();
                     } else {
                         // If sign in fails, display a message to the user.
                         showSnackBar(R.string.error);
@@ -253,18 +248,14 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         return getCurrentUser() != null;
     }
 
-    private void createUserInFireStore(){
-        if (getCurrentUser() != null){
-            mViewModel.createWorkmate(getCurrentUser());
-        }
+    private void afterSignInSuccess(){
+        mViewModel.authWorkmate(getCurrentUser());
+        navigateToMapFragment();
     }
 
     private Observer<LiveEvent> onEventReceived(){
         return event -> {
-            if(event instanceof NavigateToMapFragmentLiveEvent) {
-                navigateToMapFragment();
-            }
-            else if(event instanceof ShowSnackbarLiveEvent){
+            if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
             }
         };
