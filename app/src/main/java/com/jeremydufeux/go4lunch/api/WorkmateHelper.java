@@ -4,10 +4,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,42 +35,24 @@ public class WorkmateHelper {
     }
 
     // --- Create ---
-    public static Task<Void> createWorkmate(Workmate workmate) {
+    public static Task<Void> setWorkmate(Workmate workmate) {
         return WorkmateHelper.getWorkmatesCollection().document(workmate.getUId()).set(workmate);
     }
 
-    // --- Update ---
-    public static Task<Void> updateFirstName(String firstName, String uid) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("firstName", firstName);
-    }
-
-    public static Task<Void> updateLastName(String lastName, String uid) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("lastName", lastName);
-    }
-
-    public static Task<Void> updateEmail(String uid, String email) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("email", email);
-    }
-
-    public static Task<Void> updateChosenRestaurantId(String uid, String chosenRestaurantId) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("chosenRestaurantId", chosenRestaurantId);
-    }
-
-    public static Task<Void> updateLastChosenRestaurantDate(String uid, Date lastChosenRestaurantDate) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("lastChosenRestaurantDate", lastChosenRestaurantDate);
-    }
-
-    // --- Delete ---
-    public static Task<Void> deleteWorkmate(String uid) {
-        return WorkmateHelper.getWorkmatesCollection().document(uid).delete();
-    }
-
-    public static Task<Void> setChosenRestaurantForCurrentUser(String workmateUId, String restaurantUId, String restaurantName, long chosenDate) {
+    public static Task<Void> setChosenRestaurantForUserId(String workmateUId, String restaurantUId, String restaurantName) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("chosenRestaurantId", restaurantUId);
         hashMap.put("chosenRestaurantName", restaurantName);
-        hashMap.put("lastChosenRestaurantDate", chosenDate);
+        hashMap.put("chosenRestaurantDate", FieldValue.serverTimestamp());
         return WorkmateHelper.getWorkmatesCollection().document(workmateUId).update(hashMap);
+    }
+
+    public static Task<Void> removeChosenRestaurantForUserId(String uId) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("chosenRestaurantId", FieldValue.delete());
+        hashMap.put("chosenRestaurantName", FieldValue.delete());
+        hashMap.put("chosenRestaurantDate", FieldValue.delete());
+        return WorkmateHelper.getWorkmatesCollection().document(uId).update(hashMap);
     }
 
     public static Task<Void> setLikedRestaurantForCurrentUser(String workmateUId, List<String> likedRestaurants) {
@@ -78,4 +60,5 @@ public class WorkmateHelper {
         hashMap.put("likedRestaurants", likedRestaurants);
         return WorkmateHelper.getWorkmatesCollection().document(workmateUId).update(hashMap);
     }
+
 }

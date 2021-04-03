@@ -1,5 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,13 +12,11 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.SignInSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
-import java.util.Calendar;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -79,14 +79,12 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
     public void getRestaurantWithId(String placeId) {
         mDisposable.add(mRestaurantRepository.getRestaurantWithId(placeId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
                 .subscribeWith(getRestaurantResult()));
 
         mDisposable.add(mWorkmatesRepository.observeCurrentUser()
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
                 .map(new WorkmateToDetailsMapper(placeId))
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(getCurrentUserResult()));
     }
 
@@ -94,12 +92,12 @@ public class RestaurantDetailsViewModel extends ViewModel {
         return new DisposableObserver<Restaurant>() {
             @Override
             public void onNext(@NonNull Restaurant restaurant) {
-                mRestaurantLiveData.setValue(restaurant);
+                mRestaurantLiveData.postValue(restaurant);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
             }
 
             @Override
@@ -112,12 +110,13 @@ public class RestaurantDetailsViewModel extends ViewModel {
         return new DisposableObserver<Workmate>() {
             @Override
             public void onNext(@NonNull Workmate workmate) {
-                mCurrentUserLiveData.setValue(workmate);
+                mCurrentUserLiveData.postValue(workmate);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                Log.d("Debug", "onError " + e.toString());
             }
 
             @Override
@@ -135,12 +134,13 @@ public class RestaurantDetailsViewModel extends ViewModel {
     }
 
     public void choseRestaurant(Restaurant restaurant, Workmate workmate) {
-        if(workmate.getChosenRestaurantId().equals(restaurant.getUId())) {
-            mExecutor.execute(() -> mWorkmatesRepository.setChosenRestaurantForCurrentUser("","", 0L));
-        } else {
-            Calendar now = Calendar.getInstance();
-            mExecutor.execute(() -> mWorkmatesRepository.setChosenRestaurantForCurrentUser(restaurant.getUId(), restaurant.getName(), now.getTimeInMillis()));
-        }
+        mExecutor.execute(() -> {
+            if(workmate.getChosenRestaurantId() != null && workmate.getChosenRestaurantId().equals(restaurant.getUId())) {
+                mWorkmatesRepository.removeChosenRestaurantForUserId();
+            } else {
+                mWorkmatesRepository.setChosenRestaurantForUserId(restaurant.getUId(), restaurant.getName());
+            }
+        });
     }
 
     public void likeRestaurant(Restaurant restaurant, Workmate workmate) {

@@ -72,14 +72,14 @@ public class RestaurantDetailsFragment extends Fragment {
     private Observer<Restaurant> observeRestaurant(){
         return restaurant -> {
             mRestaurant = restaurant;
-            updateRestaurantView();
+            updateViewRestaurant();
         };
     }
 
     private Observer<Workmate> observeCurrentUser(){
         return workmate -> {
             mCurrentUser = workmate;
-            updateWorkmateView();
+            updateViewWithWorkmate();
         };
     }
 
@@ -98,13 +98,13 @@ public class RestaurantDetailsFragment extends Fragment {
         mBinding.fragmentRestaurantDetailsWebsiteLl.setOnClickListener(v -> visitRestaurantWebsite());
     }
 
-    private void updateWorkmateView() {
+    private void updateViewWithWorkmate() {
         mBinding.fragmentRestaurantDetailsGoFab.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateGoFabColor()));
         mBinding.fragmentRestaurantDetailsLikeTv.setText(getString(mCurrentUser.getWorkmateLikedRestaurantTvText()));
         mBinding.fragmentRestaurantDetailsLikeIv.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateLikedRestaurantTvColor()));
     }
 
-    private void updateRestaurantView() {
+    private void updateViewRestaurant() {
         mBinding.fragmentRestaurantDetailsNameTv.setText(mRestaurant.getName());
         mBinding.fragmentRestaurantDetailsAddressTv.setText(mRestaurant.getAddress());
 

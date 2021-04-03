@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.models;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -19,7 +20,7 @@ public class Workmate {
 
     private String mChosenRestaurantId;
     private String mChosenRestaurantName;
-    private long mLastChosenRestaurantDate;
+    private Date mChosenRestaurantDate;
 
     private List<String> mLikedRestaurants = new ArrayList<>();
 
@@ -100,12 +101,12 @@ public class Workmate {
         mChosenRestaurantId = chosenRestaurantId;
     }
 
-    public long getLastChosenRestaurantDate() {
-        return mLastChosenRestaurantDate;
+    public Date getChosenRestaurantDate() {
+        return mChosenRestaurantDate;
     }
 
-    public void setLastChosenRestaurantDate(long lastChosenRestaurantDate) {
-        mLastChosenRestaurantDate = lastChosenRestaurantDate;
+    public void setChosenRestaurantDate(Date chosenRestaurantDate) {
+        mChosenRestaurantDate = chosenRestaurantDate;
     }
 
     public String getChosenRestaurantName() {
@@ -116,30 +117,6 @@ public class Workmate {
         mChosenRestaurantName = chosenRestaurantName;
     }
 
-    public int getWorkmateChosenTvVisibility() {
-        return mWorkmateChosenTvVisibility;
-    }
-
-    public void setWorkmateChosenTvVisibility(int workmateChosenTvVisibility) {
-        mWorkmateChosenTvVisibility = workmateChosenTvVisibility;
-    }
-
-    public int getWorkmateNotChosenTvVisibility() {
-        return mWorkmateNotChosenTvVisibility;
-    }
-
-    public void setWorkmateNotChosenTvVisibility(int workmateNotChosenTvVisibility) {
-        mWorkmateNotChosenTvVisibility = workmateNotChosenTvVisibility;
-    }
-
-    public int getWorkmateGoFabColor() {
-        return mWorkmateGoFabColor;
-    }
-
-    public void setWorkmateGoFabColor(int workmateGoFabColor) {
-        mWorkmateGoFabColor = workmateGoFabColor;
-    }
-
     public List<String> getLikedRestaurants() {
         return mLikedRestaurants;
     }
@@ -148,18 +125,52 @@ public class Workmate {
         mLikedRestaurants = likedRestaurants;
     }
 
+    @Exclude
+    public int getWorkmateChosenTvVisibility() {
+        return mWorkmateChosenTvVisibility;
+    }
+
+    @Exclude
+    public void setWorkmateChosenTvVisibility(int workmateChosenTvVisibility) {
+        mWorkmateChosenTvVisibility = workmateChosenTvVisibility;
+    }
+
+    @Exclude
+    public int getWorkmateNotChosenTvVisibility() {
+        return mWorkmateNotChosenTvVisibility;
+    }
+
+    @Exclude
+    public void setWorkmateNotChosenTvVisibility(int workmateNotChosenTvVisibility) {
+        mWorkmateNotChosenTvVisibility = workmateNotChosenTvVisibility;
+    }
+
+    @Exclude
+    public int getWorkmateGoFabColor() {
+        return mWorkmateGoFabColor;
+    }
+
+    @Exclude
+    public void setWorkmateGoFabColor(int workmateGoFabColor) {
+        mWorkmateGoFabColor = workmateGoFabColor;
+    }
+
+    @Exclude
     public int getWorkmateLikedRestaurantTvText() {
         return mWorkmateLikedRestaurantTvText;
     }
 
+    @Exclude
     public void setWorkmateLikedRestaurantTvText(int workmateLikedRestaurantTvText) {
         mWorkmateLikedRestaurantTvText = workmateLikedRestaurantTvText;
     }
 
+    @Exclude
     public int getWorkmateLikedRestaurantTvColor() {
         return mWorkmateLikedRestaurantTvColor;
     }
 
+    @Exclude
     public void setWorkmateLikedRestaurantTvColor(int workmateLikedRestaurantTvColor) {
         mWorkmateLikedRestaurantTvColor = workmateLikedRestaurantTvColor;
     }
