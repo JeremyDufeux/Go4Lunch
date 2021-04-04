@@ -7,16 +7,18 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearch;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearchResults, HashMap<String, Restaurant>>  {
+public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearchResults, List<Restaurant>>  {
 
     @Override
-    public HashMap<String, Restaurant> apply(@NonNull PlaceSearchResults results) {
-        HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
+    public List<Restaurant> apply(@NonNull PlaceSearchResults results) {
+        List<Restaurant> restaurantList = new ArrayList<>();
 
         for(PlaceSearch placeSearch : results.getPlaceSearches()){
             if(placeSearch.getBusinessStatus()!= null && placeSearch.getBusinessStatus().equals("OPERATIONAL")) {
@@ -28,10 +30,10 @@ public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearc
 
                 Restaurant restaurant = new Restaurant(uId, placeSearch.getName(), lat, lng);
 
-                restaurantHashMap.put(uId, restaurant);
+                restaurantList.add(restaurant);
             }
         }
 
-        return restaurantHashMap;
+        return restaurantList;
     }
 }

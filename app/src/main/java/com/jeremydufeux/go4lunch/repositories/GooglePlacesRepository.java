@@ -48,11 +48,8 @@ public class GooglePlacesRepository {
     public Observable<PlaceDetailsResults> getDetailsForPlaceId(String placeId) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-        String fields = "place_id,"
-                + "name,"
-                + "address_component,"
+        String fields = "address_component,"
                 + "vicinity,"
-                + "geometry,"
                 + "opening_hours,"
                 + "utc_offset,"
                 + "photo,"

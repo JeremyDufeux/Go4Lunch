@@ -83,7 +83,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             mBinding.placeItemWorkmateIv.setVisibility(restaurant.getWorkmateIvVisibility());
             mBinding.placeItemWorkmateAmountTv.setVisibility(restaurant.getWorkmateTvVisibility());
-            mBinding.placeItemWorkmateAmountTv.setText(context.getString(R.string.workmates_interested_amount, restaurant.getWorkmatesInterestedAmount()));
+            mBinding.placeItemWorkmateAmountTv.setText(context.getString(R.string.workmates_interested_amount, restaurant.getInterestedWorkmates().size()));
 
             mBinding.placeItemStar1Iv.setVisibility(restaurant.getStar1IvVisibility());
             mBinding.placeItemStar2Iv.setVisibility(restaurant.getStar2IvVisibility());

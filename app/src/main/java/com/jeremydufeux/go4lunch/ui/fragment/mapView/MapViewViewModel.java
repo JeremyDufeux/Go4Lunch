@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.mappers.RestaurantToMapViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
@@ -29,9 +30,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.DEFAULT_ZOOM_VALUE;
@@ -64,54 +63,30 @@ public class MapViewViewModel extends ViewModel {
         mDisposable.add(mRestaurantUseCase.observeErrors()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(getErrors()));
+                .subscribe(
+                        this::getErrors,
+                        this::getErrors
+                ));
 
         mDisposable.add(mRestaurantUseCase.observeRestaurantList()
                 .subscribeOn(Schedulers.io())
-                .subscribeWith(getRestaurantList()));
+                .map(new RestaurantToMapViewMapper())
+                .subscribe(
+                        mRestaurantListLiveData::postValue,
+                        this::getErrors
+                ));
     }
 
-    public DisposableObserver<HashMap<String, Restaurant>> getRestaurantList(){
-        return new DisposableObserver<HashMap<String, Restaurant>>() {
-            @Override
-            public void onNext(@NonNull HashMap<String, Restaurant> restaurantHashMap) {
-                mRestaurantListLiveData.postValue(restaurantHashMap);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-    }
-
-    public DisposableObserver<Exception> getErrors(){
-        return new DisposableObserver<Exception>() {
-            @Override
-            public void onNext(@NonNull Exception exception) {
-                if(exception instanceof TimeoutException){
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
-                }
-                else if(exception instanceof UnknownHostException) {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
-                }
-                else {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+    public void getErrors(Throwable throwable){
+        if(throwable instanceof TimeoutException){
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
+        }
+        else if(throwable instanceof UnknownHostException) {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
+        }
+        else {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+        }
     }
 
     public LiveData<HashMap<String, Restaurant>> observeRestaurantList(){
@@ -200,11 +175,11 @@ public class MapViewViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+        mRestaurantUseCase.clearDisposable();
         clearDisposables();
     }
 
     public void clearDisposables() {
-        mRestaurantUseCase.clearDisposable();
         mDisposable.clear();
     }
 

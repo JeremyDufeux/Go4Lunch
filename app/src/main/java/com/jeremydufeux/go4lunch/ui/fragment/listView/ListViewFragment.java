@@ -50,7 +50,6 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(this).get(ListViewViewModel.class);
-        mViewModel.startObservers();
     }
 
     @Override
@@ -63,6 +62,7 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
     }
 
     private void configureObservers() {
+        mViewModel.startObservers();
         mViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), onRestaurantListChanged());
     }
 

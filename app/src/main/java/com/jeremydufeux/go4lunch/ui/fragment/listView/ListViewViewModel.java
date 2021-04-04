@@ -24,8 +24,8 @@ import io.reactivex.schedulers.Schedulers;
 @HiltViewModel
 public class ListViewViewModel extends ViewModel {
 
-    private RestaurantRepository mRestaurantRepository;
-    private UserDataRepository mUserDataRepository;
+    private final RestaurantRepository mRestaurantRepository;
+    private final UserDataRepository mUserDataRepository;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
     private final MutableLiveData<List<Restaurant>> mRestaurantListLiveData = new MutableLiveData<>();
@@ -37,7 +37,7 @@ public class ListViewViewModel extends ViewModel {
     }
 
     public void startObservers(){
-        mDisposable.add(mRestaurantRepository.observeRestaurantDetailsList()
+        mDisposable.add(mRestaurantRepository.observeRestaurantList()
                 .subscribeOn(Schedulers.computation())
                 .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation()))
                 .subscribeWith(getRestaurantList()));

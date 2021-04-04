@@ -101,7 +101,7 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
     }
 
     private void determineWorkmatesViewVisibility(Restaurant restaurant) {
-        if(restaurant.getWorkmatesInterestedAmount() > 0){
+        if(restaurant.getInterestedWorkmates().size() > 0){
             restaurant.setWorkmateIvVisibility(View.VISIBLE);
             restaurant.setWorkmateTvVisibility(View.VISIBLE);
         } else {

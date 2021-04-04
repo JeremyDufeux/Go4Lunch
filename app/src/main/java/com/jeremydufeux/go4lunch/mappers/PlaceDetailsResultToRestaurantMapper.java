@@ -24,14 +24,13 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
 
     private Restaurant mRestaurant;
 
+    public PlaceDetailsResultToRestaurantMapper(Restaurant restaurant) {
+        mRestaurant = restaurant;
+    }
+
     @Override
     public Restaurant apply(@NonNull PlaceDetailsResults results) {
         PlaceDetails placeDetail = results.getPlaceDetails();
-
-        double lat = placeDetail.getGeometry().getLocation().getLat();
-        double lng = placeDetail.getGeometry().getLocation().getLng();
-
-        mRestaurant = new Restaurant(placeDetail.getPlaceId(), placeDetail.getName(), lat, lng);
 
         setAddress(placeDetail);
         setOpeningData(placeDetail);
@@ -100,7 +99,7 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
         if(placeDetail.getPhotos() != null){
             return getUrlFromReference(placeDetail.getPhotos().get(0).getPhotoReference());
         } else {
-            return getUrlFromGeoapify(placeDetail.getGeometry().getLocation().getLat(),placeDetail.getGeometry().getLocation().getLng());
+            return getUrlFromGeoapify(mRestaurant.getLocation().getLatitude(), mRestaurant.getLocation().getLongitude());
         }
     }
 

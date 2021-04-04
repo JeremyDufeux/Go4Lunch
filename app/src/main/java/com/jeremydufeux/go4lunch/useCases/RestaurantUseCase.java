@@ -1,85 +1,92 @@
 package com.jeremydufeux.go4lunch.useCases;
 
+import android.util.Log;
+
 import com.jeremydufeux.go4lunch.mappers.NearbyPlacesResultToRestaurantMapper;
 import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultToRestaurantMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
+import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
+@Singleton
 public class RestaurantUseCase{
     private final GooglePlacesRepository mGooglePlacesRepository;
     private final RestaurantRepository mRestaurantRepository;
+    private final WorkmatesRepository mWorkmatesRepository;
 
-    private final CompositeDisposable mDisposable = new CompositeDisposable();
+    private Disposable mDisposable;
 
     private final PublishSubject<Exception> mErrorsObservable = PublishSubject.create();
 
     @Inject
-    public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository, RestaurantRepository restaurantRepository) {
+    public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository,
+                             RestaurantRepository restaurantRepository,
+                             WorkmatesRepository workmatesRepository) {
         mGooglePlacesRepository = googlePlacesRepository;
         mRestaurantRepository = restaurantRepository;
+        mWorkmatesRepository = workmatesRepository;
     }
 
     public void getNearbyPlaces(double latitude, double longitude, double radius) {
-        mDisposable.add(mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius)
+        mRestaurantRepository.clearRestaurantList();
+        mDisposable = getNearbyPlacesObserver(latitude, longitude, radius)
+                .subscribe(
+                        mRestaurantRepository::updateRestaurant,
+                        throwable -> {
+                            mErrorsObservable.onNext(new Exception(throwable));
+                            Log.e("RestaurantUseCase", "getNearbyPlaces: " + throwable.toString());
+                        });
+    }
+
+    private Observable<Restaurant> getNearbyPlacesObserver(double latitude, double longitude, double radius){
+        return mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius)
                 .subscribeOn(Schedulers.io())
                 .map(new NearbyPlacesResultToRestaurantMapper())
-                .subscribeWith(receiptResultFromNearbyPlaces()));
+                .map(restaurants -> {
+                    mRestaurantRepository.setNewListSize(restaurants.size());
+                    return restaurants;
+                })
+                .switchMap((Function<List<Restaurant>, ObservableSource<Restaurant>>)
+                        Observable::fromIterable)
+                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
+                        this::getInterestedWorkmates)
+                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
+                        this::getDetailsForPlaceId)
+                ;
     }
 
-    public void getDetailsForPlaceId(String placeId){
-        mDisposable.add(mGooglePlacesRepository.getDetailsForPlaceId(placeId)
+    private Observable<Restaurant> getInterestedWorkmates(Restaurant restaurant){
+        return mWorkmatesRepository.getInterestedWorkmatesForRestaurants(restaurant.getUId())
                 .subscribeOn(Schedulers.io())
-                .map(new PlaceDetailsResultToRestaurantMapper())
-                .subscribeWith(receiptResultFromPlacesDetails()));
+                .map(interestedWorkmates -> {
+                    restaurant.getInterestedWorkmates().clear();
+                    for(Workmate workmate : interestedWorkmates) {
+                        restaurant.getInterestedWorkmates().add(workmate.getUId());
+                    }
+                    mRestaurantRepository.addNewRestaurant(restaurant);
+                    return restaurant;
+                });
     }
 
-    private DisposableObserver<HashMap<String, Restaurant>> receiptResultFromNearbyPlaces() {
-        return new DisposableObserver<HashMap<String, Restaurant>>() {
-            @Override
-            public void onNext(@NonNull HashMap<String, Restaurant> restaurantHashMap) {
-                for (Restaurant restaurant: restaurantHashMap.values()) {
-                    getDetailsForPlaceId(restaurant.getUId());
-                }
-
-                mRestaurantRepository.replaceRestaurantList(restaurantHashMap);
-            }
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mErrorsObservable.onNext(new Exception(e));
-            }
-            @Override
-            public void onComplete() {
-            }
-        };
-    }
-
-    private DisposableObserver<Restaurant> receiptResultFromPlacesDetails() {
-        return new DisposableObserver<Restaurant>() {
-            @Override
-            public void onNext(@NonNull Restaurant restaurant) {
-                mRestaurantRepository.addRestaurantDetails(restaurant);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mErrorsObservable.onNext(new Exception(e));
-            }
-            @Override
-            public void onComplete() {
-            }
-        };
+    private Observable<Restaurant> getDetailsForPlaceId(Restaurant restaurant){
+        return mGooglePlacesRepository.getDetailsForPlaceId(restaurant.getUId())
+                .subscribeOn(Schedulers.io())
+                .map(new PlaceDetailsResultToRestaurantMapper(restaurant));
     }
 
     public Observable<HashMap<String, Restaurant>> observeRestaurantList(){
@@ -91,6 +98,6 @@ public class RestaurantUseCase{
     }
 
     public void clearDisposable(){
-        mDisposable.clear();
+        mDisposable.dispose();
     }
 }

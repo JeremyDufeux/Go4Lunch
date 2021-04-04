@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jeremydufeux.go4lunch.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Restaurant {
     private String mWebsite;
     private String mPhotoUrl;
     private float mRating;
-    private int mWorkmatesInterestedAmount;
+    private List<String> mInterestedWorkmates = new ArrayList<>();
 
     // For Opening
     /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
@@ -33,8 +34,8 @@ public class Restaurant {
     private Location mLocation;
     private String mMeterDistanceFromUser;
 
+    // For Google Maps
     private Marker mMarker;
-    private final MarkerOptions mMarkerOptions;
 
     // For ListViewPlacesAdapter
     private int mDistanceTvVisibility;
@@ -49,6 +50,7 @@ public class Restaurant {
     private int mWorkmateIvVisibility;
     private int mDetailsCallLlVisibility;
     private int mDetailsWebsiteLlVisibility;
+    private int mMarkerOptionIconResource;
 
     public Restaurant(String placeId, String name, Double lat, Double lng) {
         mUId = placeId;
@@ -57,10 +59,6 @@ public class Restaurant {
         mLocation = new Location("");
         mLocation.setLatitude(lat);
         mLocation.setLongitude(lng);
-
-        mMarkerOptions = new MarkerOptions()
-                .position(new LatLng(lat, lng))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_normal));
     }
 
     public void setAlwaysOpen(boolean alwaysOpen) {
@@ -99,12 +97,12 @@ public class Restaurant {
         return mRating;
     }
 
-    public int getWorkmatesInterestedAmount() {
-        return mWorkmatesInterestedAmount;
+    public List<String> getInterestedWorkmates() {
+        return mInterestedWorkmates;
     }
 
-    public void setWorkmatesInterestedAmount(int workmatesInterestedAmount) {
-        mWorkmatesInterestedAmount = workmatesInterestedAmount;
+    public void setInterestedWorkmates(List<String> interestedWorkmates) {
+        mInterestedWorkmates = interestedWorkmates;
     }
 
     public void setOpenNow(boolean openNow) {
@@ -171,10 +169,6 @@ public class Restaurant {
         mMarker = marker;
     }
 
-    public MarkerOptions getMarkerOptions() {
-        return mMarkerOptions;
-    }
-
     public int getOpenTvString() {
         return mOpenTvString;
     }
@@ -231,6 +225,8 @@ public class Restaurant {
         mMeterDistanceFromUser = meterDistanceFromUser;
     }
 
+
+
     public void setDistanceTvVisibility(int distanceTvVisibility) {
         mDistanceTvVisibility = distanceTvVisibility;
     }
@@ -285,6 +281,14 @@ public class Restaurant {
 
     public void setDetailsWebsiteLlVisibility(int detailsWebsiteLlVisibility) {
         mDetailsWebsiteLlVisibility = detailsWebsiteLlVisibility;
+    }
+
+    public void setMarkerOptionIconResource(int markerOptionIconResource) {
+        mMarkerOptionIconResource = markerOptionIconResource;
+    }
+
+    public int getMarkerOptionIconResource() {
+        return mMarkerOptionIconResource;
     }
 
     public static class OpenPeriod{

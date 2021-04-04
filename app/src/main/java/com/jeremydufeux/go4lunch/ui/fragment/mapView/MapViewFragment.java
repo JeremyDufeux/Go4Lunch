@@ -25,8 +25,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
@@ -96,7 +98,6 @@ public class MapViewFragment extends Fragment implements
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(MapViewViewModel.class);
-        mViewModel.startObservers();
     }
 
     private void configureLocationClient() {
@@ -105,6 +106,7 @@ public class MapViewFragment extends Fragment implements
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mViewModel.startObservers();
         mViewModel.observeEvents().observe(getViewLifecycleOwner(), onEventReceived());
         mViewModel.setCanShowSearchButton(false);
 
@@ -199,8 +201,13 @@ public class MapViewFragment extends Fragment implements
     }
 
     private void addMarkers(){
+        mMap.clear();
         for (Restaurant restaurant : mRestaurantList.values()) {
-            restaurant.setMarker(mMap.addMarker(restaurant.getMarkerOptions()));
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(new LatLng(restaurant.getLocation().getLatitude(), restaurant.getLocation().getLongitude()))
+                    .icon(BitmapDescriptorFactory.fromResource(restaurant.getMarkerOptionIconResource()));
+
+            restaurant.setMarker(mMap.addMarker(markerOptions));
             restaurant.getMarker().setTag(restaurant.getUId());
         }
     }

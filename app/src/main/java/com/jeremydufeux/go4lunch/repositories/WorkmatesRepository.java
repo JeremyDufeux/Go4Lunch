@@ -2,9 +2,7 @@ package com.jeremydufeux.go4lunch.repositories;
 
 import android.util.Log;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
@@ -96,11 +94,27 @@ public class WorkmatesRepository{
         return mWorkmateListObservable;
     }
 
-    public Observable<LiveEvent> observeTasksResults(){
-        return mTaskResultObservable;
+    public Observable<List<Workmate>> getInterestedWorkmatesForRestaurants(String restaurantId){
+        return Observable.create(
+                emitter ->
+                        WorkmateHelper.getTodayWorkmateInterestedForRestaurantId(restaurantId)
+                                .addSnapshotListener((value, error) -> {
+                                    if(error != null){
+                                        mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                                        Log.e("WorkmatesRepository", "setChosenRestaurantForUserId: " + error.toString());
+                                    }
+                                    if(value != null){
+                                        List<Workmate> interestedWorkmates = new ArrayList<>();
+                                        for (DocumentSnapshot doc : value.getDocuments()) {
+                                            interestedWorkmates.add(doc.toObject(Workmate.class));
+                                        }
+                                        emitter.onNext(interestedWorkmates);
+                                    }
+                                }));
     }
 
     public void setChosenRestaurantForUserId(String restaurantUId, String restaurantName) {
+
         WorkmateHelper.setChosenRestaurantForUserId(mCurrentUser.getUId(), restaurantUId, restaurantName)
                 .addOnFailureListener(e ->{
                     mTaskResultObservable.onNext(new ErrorLiveEvent(e));
@@ -122,6 +136,10 @@ public class WorkmatesRepository{
                     mTaskResultObservable.onNext(new ErrorLiveEvent(e));
                     Log.e("WorkmatesRepository", "setLikedRestaurants: " + e.toString());
                 });
+    }
+
+    public Observable<LiveEvent> observeTasksResults(){
+        return mTaskResultObservable;
     }
 }
 

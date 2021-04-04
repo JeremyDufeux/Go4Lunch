@@ -6,10 +6,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static com.jeremydufeux.go4lunch.utils.Utils.getTodayEndTimestamp;
+import static com.jeremydufeux.go4lunch.utils.Utils.getTodayStartTimestamp;
 
 public class WorkmateHelper {
 
@@ -59,6 +63,13 @@ public class WorkmateHelper {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("likedRestaurants", likedRestaurants);
         return WorkmateHelper.getWorkmatesCollection().document(workmateUId).update(hashMap);
+    }
+
+    public static Query getTodayWorkmateInterestedForRestaurantId(String restaurantId){
+        return WorkmateHelper.getWorkmatesCollection()
+                .whereEqualTo("chosenRestaurantId", restaurantId)
+                .whereGreaterThan("chosenRestaurantDate", getTodayStartTimestamp())
+                .whereLessThan("chosenRestaurantDate", getTodayEndTimestamp());
     }
 
 }
