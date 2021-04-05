@@ -17,6 +17,7 @@ public class Utils {
         now.set(Calendar.HOUR_OF_DAY, 0);
         now.clear(Calendar.MINUTE);
         now.clear(Calendar.SECOND);
+        now.add(Calendar.SECOND, -1);
         return new Timestamp(now.getTime());
     }
 
@@ -26,6 +27,7 @@ public class Utils {
         now.clear(Calendar.MINUTE);
         now.clear(Calendar.SECOND);
         now.add(Calendar.DAY_OF_MONTH, 1);
+        now.add(Calendar.SECOND, -1);
         return new Timestamp(now.getTime());
     }
 }
