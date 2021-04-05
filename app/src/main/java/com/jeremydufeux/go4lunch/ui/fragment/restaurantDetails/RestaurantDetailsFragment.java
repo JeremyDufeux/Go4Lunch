@@ -56,7 +56,6 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(RestaurantDetailsViewModel.class);
-        mViewModel.clearWorkmatesLiveData();
         mViewModel.startObservers();
         mViewModel.observeEvents().observe(this, onEventReceived());
     }
@@ -68,7 +67,7 @@ public class RestaurantDetailsFragment extends Fragment {
         assert getArguments() != null;
         String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();
 
-        mViewModel.getRestaurantWithId(restaurantId);
+        mViewModel.initViewModel(restaurantId);
         mViewModel.observeRestaurant().observe(getViewLifecycleOwner(), observeRestaurant());
         mViewModel.observeWorkmates().observe(getViewLifecycleOwner(), observeWorkmates());
         mViewModel.observeCurrentUser().observe(getViewLifecycleOwner(), observeCurrentUser());

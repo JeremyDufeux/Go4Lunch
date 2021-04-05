@@ -12,7 +12,6 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
@@ -25,10 +24,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 @HiltViewModel
@@ -45,6 +41,8 @@ public class RestaurantDetailsViewModel extends ViewModel {
     private final MutableLiveData<Restaurant> mRestaurantLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Workmate>> mWorkmatesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Workmate> mCurrentUserLiveData = new MutableLiveData<>();
+
+    private String mLastRestaurantId = "";
 
     @Inject
     public RestaurantDetailsViewModel(RestaurantRepository restaurantRepository,
@@ -66,6 +64,14 @@ public class RestaurantDetailsViewModel extends ViewModel {
                             Log.e(TAG, "mWorkmatesRepository.observeTasksResults: ", throwable);
                             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
                         }));
+    }
+
+    public void initViewModel(String restaurantId) {
+        getRestaurantWithId(restaurantId);
+        if(!mLastRestaurantId.equals(restaurantId)){
+            clearWorkmatesLiveData();
+        }
+        mLastRestaurantId = restaurantId;
     }
 
     public void getRestaurantWithId(String placeId) {
@@ -143,5 +149,4 @@ public class RestaurantDetailsViewModel extends ViewModel {
     public void clearDisposables() {
         mDisposable.clear();
     }
-
 }
