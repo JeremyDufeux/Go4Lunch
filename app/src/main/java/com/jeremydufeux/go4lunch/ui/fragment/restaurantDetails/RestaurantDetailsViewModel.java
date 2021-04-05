@@ -17,6 +17,7 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -127,6 +128,10 @@ public class RestaurantDetailsViewModel extends ViewModel {
             workmate.getLikedRestaurants().add(restaurant.getUId());
         }
         mExecutor.execute(() -> mWorkmatesRepository.setLikedRestaurants(workmate.getLikedRestaurants()));
+    }
+
+    public void clearWorkmatesLiveData(){
+        mWorkmatesLiveData.setValue(new ArrayList<>());
     }
 
     @Override

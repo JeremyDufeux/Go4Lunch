@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -38,6 +40,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private Restaurant mRestaurant;
     private Workmate mCurrentUser;
+    private List<Workmate> mWorkmateList = new ArrayList<>();
 
     public RestaurantDetailsFragment() {}
 
@@ -53,6 +56,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(RestaurantDetailsViewModel.class);
+        mViewModel.clearWorkmatesLiveData();
         mViewModel.startObservers();
         mViewModel.observeEvents().observe(this, onEventReceived());
     }
@@ -103,6 +107,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void configureRecyclerView() {
         mAdapter = new RestaurantDetailsWorkmatesAdapter(Glide.with(this));
+        mAdapter.updateList(new ArrayList<>());
         mBinding.fragmentRestaurantDetailsWorkmatesRv.setAdapter(mAdapter);
         mBinding.fragmentRestaurantDetailsWorkmatesRv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
     }
