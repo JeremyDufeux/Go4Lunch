@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
@@ -21,6 +23,8 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -61,6 +65,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
         mViewModel.getRestaurantWithId(restaurantId);
         mViewModel.observeRestaurant().observe(getViewLifecycleOwner(), observeRestaurant());
+        mViewModel.observeWorkmates().observe(getViewLifecycleOwner(), observeWorkmates());
         mViewModel.observeCurrentUser().observe(getViewLifecycleOwner(), observeCurrentUser());
 
         configureListener();
@@ -74,6 +79,10 @@ public class RestaurantDetailsFragment extends Fragment {
             mRestaurant = restaurant;
             updateViewRestaurant();
         };
+    }
+
+    private Observer<List<Workmate>> observeWorkmates(){
+        return workmateList -> mAdapter.updateList(workmateList);
     }
 
     private Observer<Workmate> observeCurrentUser(){

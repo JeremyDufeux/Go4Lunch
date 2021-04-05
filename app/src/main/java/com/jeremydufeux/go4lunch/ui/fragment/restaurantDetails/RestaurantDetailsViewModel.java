@@ -17,6 +17,7 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -39,6 +40,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
     // TODO Cast snackbar event only to Main activity
     private final SingleLiveEvent<LiveEvent> mSingleLiveEvent = new SingleLiveEvent<>();
     private final MutableLiveData<Restaurant> mRestaurantLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Workmate>> mWorkmatesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Workmate> mCurrentUserLiveData = new MutableLiveData<>();
 
     @Inject
@@ -82,6 +84,10 @@ public class RestaurantDetailsViewModel extends ViewModel {
                 .subscribeOn(Schedulers.computation())
                 .subscribeWith(getRestaurantResult()));
 
+        mDisposable.add(mWorkmatesRepository.getInterestedWorkmatesForRestaurants(placeId)
+                .subscribeOn(Schedulers.computation())
+                .subscribeWith(getWorkmatesResult()));
+
         mDisposable.add(mWorkmatesRepository.observeCurrentUser()
                 .subscribeOn(Schedulers.computation())
                 .map(new WorkmateToDetailsMapper(placeId))
@@ -93,6 +99,24 @@ public class RestaurantDetailsViewModel extends ViewModel {
             @Override
             public void onNext(@NonNull Restaurant restaurant) {
                 mRestaurantLiveData.postValue(restaurant);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        };
+    }
+
+    public DisposableObserver<List<Workmate>> getWorkmatesResult(){
+        return new DisposableObserver<List<Workmate>>() {
+            @Override
+            public void onNext(@NonNull List<Workmate> workmateList) {
+                mWorkmatesLiveData.postValue(workmateList);
             }
 
             @Override
@@ -127,6 +151,10 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
     public LiveData<Restaurant> observeRestaurant(){
         return mRestaurantLiveData;
+    }
+
+    public LiveData<List<Workmate>> observeWorkmates(){
+        return mWorkmatesLiveData;
     }
 
     public LiveData<Workmate> observeCurrentUser(){
