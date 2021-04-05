@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -119,6 +120,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
         Glide.with(this)
                 .load(mRestaurant.getPhotoUrl())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(mBinding.fragmentRestaurantDetailsPhotoIv);
 
