@@ -78,12 +78,18 @@ public class MapViewViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .map(new RestaurantToMapViewMapper())
                 .subscribe(
-                        mRestaurantListLiveData::postValue,
+                        this::recipeRestaurantList,
                         throwable -> {
                             Log.e(TAG, "mRestaurantUseCase.observeRestaurantList: ", throwable);
                             mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
                         }
                 ));
+    }
+    public void recipeRestaurantList(HashMap<String, Restaurant> restaurantList){
+        mRestaurantListLiveData.postValue(restaurantList);
+        if(restaurantList.size() == 0){
+            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.no_restaurants_found));
+        }
     }
 
     public LiveData<HashMap<String, Restaurant>> observeRestaurantList(){

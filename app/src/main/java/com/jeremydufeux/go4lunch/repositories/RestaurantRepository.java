@@ -50,5 +50,9 @@ public class RestaurantRepository {
 
     public void setNewListSize(int size) {
         newListSize = size;
+        if(newListSize == 0){
+            mRestaurantHashMap.clear();
+            mRestaurantListObservable.onNext(new HashMap<>(mRestaurantHashMap));
+        }
     }
 }
