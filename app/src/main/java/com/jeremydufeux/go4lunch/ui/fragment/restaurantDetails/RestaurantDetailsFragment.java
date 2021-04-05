@@ -93,6 +93,13 @@ public class RestaurantDetailsFragment extends Fragment {
         };
     }
 
+    private Observer<LiveEvent> onEventReceived(){
+        return event -> {
+            if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
+        };
+    }
 
     private void configureRecyclerView() {
         mAdapter = new RestaurantDetailsWorkmatesAdapter(Glide.with(this));
@@ -150,14 +157,6 @@ public class RestaurantDetailsFragment extends Fragment {
         Intent openBrowserIntent = new Intent(Intent.ACTION_VIEW);
         openBrowserIntent.setData(Uri.parse(mRestaurant.getWebsite()));
         startActivity(openBrowserIntent);
-    }
-
-    private Observer<LiveEvent> onEventReceived(){
-        return event -> {
-            if(event instanceof ShowSnackbarLiveEvent){
-                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
-            }
-        };
     }
 
     // ---------------

@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
 import android.location.Location;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -38,6 +39,8 @@ import static com.jeremydufeux.go4lunch.ui.fragment.mapView.MapViewFragment.LIMI
 
 @HiltViewModel
 public class MapViewViewModel extends ViewModel {
+    private static final String TAG = "MapViewViewModel";
+
     private final RestaurantUseCase mRestaurantUseCase;
     private final UserDataRepository mUserDataRepository;
 
@@ -64,8 +67,11 @@ public class MapViewViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::getErrors,
-                        this::getErrors
+                        this::getErrorLiveEvents,
+                        throwable -> {
+                            Log.e(TAG, "mRestaurantUseCase.observeErrors: ", throwable);
+                            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }
                 ));
 
         mDisposable.add(mRestaurantUseCase.observeRestaurantList()
@@ -73,20 +79,11 @@ public class MapViewViewModel extends ViewModel {
                 .map(new RestaurantToMapViewMapper())
                 .subscribe(
                         mRestaurantListLiveData::postValue,
-                        this::getErrors
+                        throwable -> {
+                            Log.e(TAG, "mRestaurantUseCase.observeRestaurantList: ", throwable);
+                            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }
                 ));
-    }
-
-    public void getErrors(Throwable throwable){
-        if(throwable instanceof TimeoutException){
-            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
-        }
-        else if(throwable instanceof UnknownHostException) {
-            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
-        }
-        else {
-            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-        }
     }
 
     public LiveData<HashMap<String, Restaurant>> observeRestaurantList(){
@@ -190,7 +187,19 @@ public class MapViewViewModel extends ViewModel {
     public LiveData<LiveEvent> observeEvents(){
         return mSingleLiveEvent;
     }
-    
+
+    public void getErrorLiveEvents(Throwable throwable){
+        if(throwable instanceof TimeoutException){
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
+        }
+        else if(throwable instanceof UnknownHostException) {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
+        }
+        else {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+        }
+    }
+
     // -------------
     // Map saved data
     // -------------

@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,12 +67,21 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
     private void configureObservers() {
         mViewModel.startObservers();
         mViewModel.observeRestaurantList().observe(getViewLifecycleOwner(), onRestaurantListChanged());
+        mViewModel.observeEvents().observe(getViewLifecycleOwner(), onEventReceived());
     }
 
     private Observer<List<Restaurant>> onRestaurantListChanged() {
         return restaurantList -> {
             mRestaurantList = restaurantList;
             mAdapter.updateList(mRestaurantList);
+        };
+    }
+
+    private Observer<LiveEvent> onEventReceived() {
+        return event -> {
+            if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
         };
     }
 
@@ -89,6 +101,10 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
         directions.setRestaurantId(mRestaurantList.get(position).getUId());
 
         Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+    }
+
+    private void showSnackBar(int stringId){
+        Snackbar.make(mBinding.listViewFragmentCl, getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 
     @Override

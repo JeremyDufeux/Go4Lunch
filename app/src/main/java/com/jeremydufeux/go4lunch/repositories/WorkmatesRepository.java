@@ -21,6 +21,7 @@ import io.reactivex.subjects.PublishSubject;
 
 @Singleton
 public class WorkmatesRepository{
+    private static final String TAG = "WorkmatesRepository";
 
     private final PublishSubject<LiveEvent> mTaskResultObservable = PublishSubject.create();
     private final BehaviorSubject<Workmate> mCurrentUserObservable = BehaviorSubject.create();
@@ -44,16 +45,16 @@ public class WorkmatesRepository{
                             mCurrentUser = workmate;
                             WorkmateHelper.setWorkmate(workmate)
                                     .addOnSuccessListener(aVoid -> startCurrentUserObserver(mCurrentUser.getUId()))
-                                    .addOnFailureListener(e ->{
-                                        mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                                        Log.e("WorkmatesRepository", "authWorkmate: " + e.toString());
+                                    .addOnFailureListener(error -> {
+                                        mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                                        Log.e(TAG, "authWorkmate: ", error);
                                     });
                         }
                     }
                 })
-                .addOnFailureListener(e ->{
-                    mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                    Log.e("WorkmatesRepository", "authWorkmate: " + e.toString());
+                .addOnFailureListener(error -> {
+                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                    Log.e(TAG, "authWorkmate: ", error);
                 });
     }
 
@@ -62,7 +63,7 @@ public class WorkmatesRepository{
                 .addSnapshotListener((value, error) -> {
                     if(error != null){
                         mTaskResultObservable.onNext(new ErrorLiveEvent(error));
-                        Log.e("WorkmatesRepository", "startCurrentUserObserver: error.toString() : " + error.toString());
+                        Log.e(TAG, "startCurrentUserObserver: error.toString() : ", error);
                         return;
                     }
                     if(value != null) {
@@ -78,10 +79,10 @@ public class WorkmatesRepository{
 
     public Observable<List<Workmate>> observeWorkmates(){
         WorkmateHelper.getWorkmates()
-                .addSnapshotListener((value, e) -> {
-                    if(e != null){
-                        mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                        Log.e("WorkmatesRepository", "observeWorkmates: " + e.toString());
+                .addSnapshotListener((value, error) -> {
+                    if(error != null){
+                        mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                        Log.e(TAG, "observeWorkmates: ", error);
                     }
                     if(value != null) {
                         List<Workmate> workmateList = new ArrayList<>();
@@ -101,7 +102,7 @@ public class WorkmatesRepository{
                                 .addSnapshotListener((value, error) -> {
                                     if(error != null){
                                         mTaskResultObservable.onNext(new ErrorLiveEvent(error));
-                                        Log.e("WorkmatesRepository", "setChosenRestaurantForUserId: " + error.toString());
+                                        Log.e(TAG, "setChosenRestaurantForUserId: ", error);
                                     }
                                     if(value != null){
                                         List<Workmate> interestedWorkmates = new ArrayList<>();
@@ -116,25 +117,25 @@ public class WorkmatesRepository{
     public void setChosenRestaurantForUserId(String restaurantUId, String restaurantName) {
 
         WorkmateHelper.setChosenRestaurantForUserId(mCurrentUser.getUId(), restaurantUId, restaurantName)
-                .addOnFailureListener(e ->{
-                    mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                    Log.e("WorkmatesRepository", "setChosenRestaurantForUserId: " + e.toString());
+                .addOnFailureListener(error -> {
+                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                    Log.e(TAG, "setChosenRestaurantForUserId: ", error);
                 });
     }
 
     public void removeChosenRestaurantForUserId() {
         WorkmateHelper.removeChosenRestaurantForUserId(mCurrentUser.getUId())
-                .addOnFailureListener(e ->{
-                    mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                    Log.e("WorkmatesRepository", "removeChosenRestaurantForUserId: " + e.toString());
+                .addOnFailureListener(error -> {
+                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                    Log.e(TAG, "removeChosenRestaurantForUserId: ", error);
                 });
     }
 
     public void setLikedRestaurants(List<String> likedRestaurants) {
         WorkmateHelper.setLikedRestaurantForCurrentUser(mCurrentUser.getUId(), likedRestaurants)
-                .addOnFailureListener(e ->{
-                    mTaskResultObservable.onNext(new ErrorLiveEvent(e));
-                    Log.e("WorkmatesRepository", "setLikedRestaurants: " + e.toString());
+                .addOnFailureListener(error -> {
+                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                    Log.e(TAG, "setLikedRestaurants: ", error);
                 });
     }
 

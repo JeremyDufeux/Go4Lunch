@@ -26,18 +26,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 @HiltViewModel
 public class RestaurantDetailsViewModel extends ViewModel {
+    private static final String TAG = "RestaurantDetailsViewMo";
+
     private final RestaurantRepository mRestaurantRepository;
     private final WorkmatesRepository mWorkmatesRepository;
     private final Executor mExecutor;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
-    // TODO Cast snackbar event only to Main activity
     private final SingleLiveEvent<LiveEvent> mSingleLiveEvent = new SingleLiveEvent<>();
     private final MutableLiveData<Restaurant> mRestaurantLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Workmate>> mWorkmatesLiveData = new MutableLiveData<>();
@@ -56,97 +58,44 @@ public class RestaurantDetailsViewModel extends ViewModel {
         mDisposable.add(mWorkmatesRepository.observeTasksResults()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(getTasksResults()));
-    }
-
-    public DisposableObserver<LiveEvent> getTasksResults(){
-        return new DisposableObserver<LiveEvent>() {
-            @Override
-            public void onNext(@NonNull LiveEvent event) {
-                if(event instanceof ErrorLiveEvent) {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+                .subscribe(
+                        liveEvent ->
+                                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error)),
+                        throwable -> {
+                            Log.e(TAG, "mWorkmatesRepository.observeTasksResults: ", throwable);
+                            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }));
     }
 
     public void getRestaurantWithId(String placeId) {
         mDisposable.add(mRestaurantRepository.getRestaurantWithId(placeId)
                 .subscribeOn(Schedulers.computation())
-                .subscribeWith(getRestaurantResult()));
+                .subscribe(mRestaurantLiveData::postValue,
+                        throwable -> {
+                            Log.e(TAG, "mRestaurantRepository.getRestaurantWithId: ", throwable);
+                            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                }));
 
         mDisposable.add(mWorkmatesRepository.getInterestedWorkmatesForRestaurants(placeId)
                 .subscribeOn(Schedulers.computation())
-                .subscribeWith(getWorkmatesResult()));
+                .subscribe(mWorkmatesLiveData::postValue,
+                        throwable -> {
+                            Log.e(TAG, "mWorkmatesRepository.getInterestedWorkmatesForRestaurants: ", throwable);
+                            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }));
 
         mDisposable.add(mWorkmatesRepository.observeCurrentUser()
                 .subscribeOn(Schedulers.computation())
                 .map(new WorkmateToDetailsMapper(placeId))
-                .subscribeWith(getCurrentUserResult()));
+                .subscribe(mCurrentUserLiveData::postValue,
+                        throwable -> {
+                            Log.e(TAG, "mWorkmatesRepository.observeCurrentUser: ", throwable);
+                            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }));
     }
 
-    public DisposableObserver<Restaurant> getRestaurantResult(){
-        return new DisposableObserver<Restaurant>() {
-            @Override
-            public void onNext(@NonNull Restaurant restaurant) {
-                mRestaurantLiveData.postValue(restaurant);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-    }
-
-    public DisposableObserver<List<Workmate>> getWorkmatesResult(){
-        return new DisposableObserver<List<Workmate>>() {
-            @Override
-            public void onNext(@NonNull List<Workmate> workmateList) {
-                mWorkmatesLiveData.postValue(workmateList);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-    }
-
-    public DisposableObserver<Workmate> getCurrentUserResult(){
-        return new DisposableObserver<Workmate>() {
-            @Override
-            public void onNext(@NonNull Workmate workmate) {
-                mCurrentUserLiveData.postValue(workmate);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
-                Log.d("Debug", "onError " + e.toString());
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+    public LiveData<LiveEvent> observeEvents(){
+        return mSingleLiveEvent;
     }
 
     public LiveData<Restaurant> observeRestaurant(){
@@ -174,15 +123,10 @@ public class RestaurantDetailsViewModel extends ViewModel {
     public void likeRestaurant(Restaurant restaurant, Workmate workmate) {
         if(workmate.getLikedRestaurants().contains(restaurant.getUId())) {
             workmate.getLikedRestaurants().remove(restaurant.getUId());
-            mExecutor.execute(() -> mWorkmatesRepository.setLikedRestaurants(workmate.getLikedRestaurants()));
         } else {
             workmate.getLikedRestaurants().add(restaurant.getUId());
-            mExecutor.execute(() -> mWorkmatesRepository.setLikedRestaurants(workmate.getLikedRestaurants()));
         }
-    }
-
-    public LiveData<LiveEvent> observeEvents(){
-        return mSingleLiveEvent;
+        mExecutor.execute(() -> mWorkmatesRepository.setLikedRestaurants(workmate.getLikedRestaurants()));
     }
 
     @Override

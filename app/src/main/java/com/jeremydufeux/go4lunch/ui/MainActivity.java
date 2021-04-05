@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,11 +22,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         mViewModel.startObservers();
+        mViewModel.observeEvents().observe(this, onEventReceived());
         mViewModel.observeCurrentUser().observe(this, this::onUserDataChange);
     }
 
@@ -180,5 +185,25 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mViewModel.clearDisposables();
+    }
+
+    // ---------------
+    // Live Events
+    // ---------------
+
+    private Observer<LiveEvent> onEventReceived() {
+        return event -> {
+            if(event instanceof ShowSnackbarLiveEvent){
+                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            }
+        };
+    }
+
+    // ---------------
+    // Utils
+    // ---------------
+
+    private void showSnackBar(int stringId){
+        Snackbar.make(mBinding.mainActivityCoordinator, getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 }

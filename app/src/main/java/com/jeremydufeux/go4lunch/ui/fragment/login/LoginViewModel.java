@@ -1,5 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment.login;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -14,10 +16,12 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -25,11 +29,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 @HiltViewModel
 public class LoginViewModel extends ViewModel {
+    private static final String TAG = "LoginViewModel";
 
     private final WorkmatesRepository mWorkmatesRepository;
     private final Executor mExecutor;
@@ -48,29 +54,29 @@ public class LoginViewModel extends ViewModel {
         mDisposable.add(mWorkmatesRepository.observeTasksResults()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(getTasksResults()));
+                .subscribe(
+                        this::getTasksResults,
+                        this::getErrors));
     }
 
-    public DisposableObserver<LiveEvent> getTasksResults(){
-        return new DisposableObserver<LiveEvent>() {
-            @Override
-            public void onNext(@NonNull LiveEvent event) {
-                if(event instanceof SignInSuccessLiveEvent){
-                    mSingleLiveEvent.setValue(new NavigateToMapFragmentLiveEvent());
-                } else if(event instanceof ErrorLiveEvent) {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-                }
-            }
+    public void getTasksResults(LiveEvent event){
+        if(event instanceof SignInSuccessLiveEvent){
+            mSingleLiveEvent.setValue(new NavigateToMapFragmentLiveEvent());
+        } else if(event instanceof ErrorLiveEvent) {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+        }
+    }
 
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+    public void getErrors(Throwable throwable){
+        if(throwable instanceof TimeoutException){
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
+        }
+        else if(throwable instanceof UnknownHostException) {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
+        }
+        else {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+        }
     }
 
     public void authWorkmate(FirebaseUser firebaseUser) {

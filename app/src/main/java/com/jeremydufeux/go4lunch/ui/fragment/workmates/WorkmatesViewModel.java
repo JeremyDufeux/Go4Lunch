@@ -1,5 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment.workmates;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,11 +24,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 @HiltViewModel
 public class WorkmatesViewModel extends ViewModel {
+    private static final String TAG = "WorkmatesViewModel";
 
     private final WorkmatesRepository mWorkmatesRepository;
 
@@ -40,55 +44,14 @@ public class WorkmatesViewModel extends ViewModel {
     }
 
     public void startObservers(){
-        mDisposable.add(mWorkmatesRepository.observeTasksResults()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(getTasksResults()));
-
         mDisposable.add(mWorkmatesRepository.observeWorkmates()
                 .subscribeOn(Schedulers.computation())
                 .map(new WorkmateToWorkmateListViewMapper())
-                .subscribeWith(getWorkmateList()));
-    }
-
-    private DisposableObserver<List<Workmate>> getWorkmateList() {
-        return new DisposableObserver<List<Workmate>>() {
-            @Override
-            public void onNext(@NonNull List<Workmate> workmates) {
-                mWorkmateListLiveData.postValue(workmates);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-    }
-
-    public DisposableObserver<LiveEvent> getTasksResults(){
-        return new DisposableObserver<LiveEvent>() {
-            @Override
-            public void onNext(@NonNull LiveEvent event) {
-                if(event instanceof SuccessLiveEvent){
-                    mSingleLiveEvent.setValue(new NavigateToMapFragmentLiveEvent());
-                } else {
-                    mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+                .subscribe(mWorkmateListLiveData::postValue,
+                        throwable -> {
+                            Log.e(TAG, "mWorkmatesRepository.observeWorkmates: ", throwable);
+                            mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }));
     }
 
     public LiveData<List<Workmate>> observeWorkmateList(){
