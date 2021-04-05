@@ -74,6 +74,13 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
         return restaurantList -> {
             mRestaurantList = restaurantList;
             mAdapter.updateList(mRestaurantList);
+            if(restaurantList.size()==0){
+                mBinding.listViewFragmentRecyclerView.setVisibility(View.INVISIBLE);
+                mBinding.listViewFragmentNoRestaurantTv.setVisibility(View.VISIBLE);
+            } else {
+                mBinding.listViewFragmentRecyclerView.setVisibility(View.VISIBLE);
+                mBinding.listViewFragmentNoRestaurantTv.setVisibility(View.INVISIBLE);
+            }
         };
     }
 

@@ -11,7 +11,17 @@
         android:id="@+id/list_view_fragment_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible"
         tools:listitem="@layout/fragment_list_view_place_item"
         />
 
+    <TextView
+        android:id="@+id/list_view_fragment_no_restaurant_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/no_restaurant_found_list_view"
+        android:textSize="18sp"
+        android:textAlignment="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

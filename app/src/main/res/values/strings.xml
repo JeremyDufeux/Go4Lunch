@@ -75,5 +75,6 @@
     <string name="workmate_is_joining">"%1$s is joining!"</string>
     <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
     <string name="liked">LIKED</string>
+    <string name="no_restaurant_found_list_view">No restaurants were found here \nTry to search somewhere else on Map View</string>
 
 </resources>
