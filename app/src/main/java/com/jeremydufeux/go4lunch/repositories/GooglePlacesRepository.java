@@ -42,6 +42,10 @@ public class GooglePlacesRepository {
 
         return placesService.fetchNextPageNearbyPlaces(BuildConfig.MAPS_API_KEY, mNextPageToken)
                 .subscribeOn(Schedulers.io())
+                .map(results -> {
+                    mNextPageToken = results.getNextPageToken();
+                    return results;
+                })
                 .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }
 
@@ -62,5 +66,9 @@ public class GooglePlacesRepository {
         return placesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, placeId, fields)
                 .subscribeOn(Schedulers.io())
                 .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
+    }
+
+    public boolean haveNextPageToken() {
+        return mNextPageToken != null && !mNextPageToken.isEmpty();
     }
 }

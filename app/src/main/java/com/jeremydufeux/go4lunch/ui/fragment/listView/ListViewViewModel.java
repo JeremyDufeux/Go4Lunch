@@ -9,17 +9,22 @@ import androidx.lifecycle.ViewModel;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
+import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.StopRefreshLiveEvent;
+import com.jeremydufeux.go4lunch.utils.NoMorePageException;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ListViewViewModel extends ViewModel {
     private static final String TAG = "ListViewViewModel";
 
-    private final RestaurantRepository mRestaurantRepository;
+    private final RestaurantUseCase mRestaurantUseCase;
     private final UserDataRepository mUserDataRepository;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
@@ -35,13 +40,25 @@ public class ListViewViewModel extends ViewModel {
     private final SingleLiveEvent<LiveEvent> mSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
-    public ListViewViewModel(RestaurantRepository restaurantRepository, UserDataRepository userDataRepository) {
-        mRestaurantRepository = restaurantRepository;
+    public ListViewViewModel(RestaurantUseCase restaurantUseCase,
+                             UserDataRepository userDataRepository) {
+        mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
     }
 
     public void startObservers(){
-        mDisposable.add(mRestaurantRepository.observeRestaurantList()
+        mDisposable.add(mRestaurantUseCase.observeErrors()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::getErrorLiveEvents,
+                        throwable -> {
+                            Log.e(TAG, "mRestaurantUseCase.observeErrors: ", throwable);
+                            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }
+                ));
+
+        mDisposable.add(mRestaurantUseCase.observeRestaurantDetailsList()
                 .subscribeOn(Schedulers.computation())
                 .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation()))
                 .subscribe(mRestaurantListLiveData::postValue,
@@ -59,6 +76,21 @@ public class ListViewViewModel extends ViewModel {
         return mSingleLiveEvent;
     }
 
+    public void getErrorLiveEvents(Throwable throwable){
+        if(throwable instanceof TimeoutException){
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
+        }
+        else if(throwable instanceof UnknownHostException) {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
+        }
+        else if(throwable instanceof NoMorePageException) {
+            mSingleLiveEvent.setValue(new StopRefreshLiveEvent());
+        }
+        else {
+            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+        }
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();
@@ -67,5 +99,9 @@ public class ListViewViewModel extends ViewModel {
 
     public void clearDisposables(){
         mDisposable.clear();
+    }
+
+    public void loadNextPage() {
+        mRestaurantUseCase.loadNextPage();
     }
 }

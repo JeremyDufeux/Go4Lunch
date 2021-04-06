@@ -1,6 +1,5 @@
 package com.jeremydufeux.go4lunch.ui.fragment.listView;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
@@ -21,6 +20,7 @@ import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.StopRefreshLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -72,14 +72,19 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
 
     private Observer<List<Restaurant>> onRestaurantListChanged() {
         return restaurantList -> {
+            mBinding.listViewFragmentSrl.setRefreshing(false);
+
             mRestaurantList = restaurantList;
             mAdapter.updateList(mRestaurantList);
+
             if(restaurantList.size()==0){
                 mBinding.listViewFragmentRecyclerView.setVisibility(View.INVISIBLE);
                 mBinding.listViewFragmentNoRestaurantTv.setVisibility(View.VISIBLE);
+                mBinding.listViewFragmentSrl.setEnabled(false);
             } else {
                 mBinding.listViewFragmentRecyclerView.setVisibility(View.VISIBLE);
                 mBinding.listViewFragmentNoRestaurantTv.setVisibility(View.INVISIBLE);
+                mBinding.listViewFragmentSrl.setEnabled(true);
             }
         };
     }
@@ -88,18 +93,23 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
         return event -> {
             if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            } else if(event instanceof StopRefreshLiveEvent){
+                mBinding.listViewFragmentSrl.setRefreshing(false);
+                showSnackBar(R.string.no_more_restaurants_found);
             }
         };
     }
 
     private void configureRecyclerView() {
         mAdapter = new ListViewPlacesAdapter(this);
-        mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
-        mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        RecyclerView recyclerView = mBinding.listViewFragmentRecyclerView;
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
-        itemDecoration.setDrawable(new ColorDrawable(getResources().getColor(R.color.very_light_grey)));
-        mBinding.listViewFragmentRecyclerView.addItemDecoration(itemDecoration);
+        recyclerView.addItemDecoration(itemDecoration);
+
+        mBinding.listViewFragmentSrl.setOnRefreshListener(() -> mViewModel.loadNextPage());
     }
 
     @Override
@@ -111,7 +121,7 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
     }
 
     private void showSnackBar(int stringId){
-        Snackbar.make(mBinding.listViewFragmentCl, getString(stringId), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mBinding.getRoot(), getString(stringId), Snackbar.LENGTH_LONG).show();
     }
 
     @Override

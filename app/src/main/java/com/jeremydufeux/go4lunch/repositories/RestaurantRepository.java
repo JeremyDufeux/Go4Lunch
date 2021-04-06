@@ -16,12 +16,14 @@ public class RestaurantRepository {
     private final HashMap<String,Restaurant> mRestaurantHashMap;
     private int newListSize;
     private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantListObservable;
+    private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantDetailsListObservable;
 
     @Inject
     RestaurantRepository() {
         mRestaurantHashMap = new HashMap<>();
 
         mRestaurantListObservable = BehaviorSubject.create();
+        mRestaurantDetailsListObservable = BehaviorSubject.create();
     }
 
     public void addNewRestaurant(Restaurant restaurant) {
@@ -33,6 +35,10 @@ public class RestaurantRepository {
     }
     public void updateRestaurant(Restaurant restaurant) {
         mRestaurantHashMap.put(restaurant.getUId(), restaurant);
+
+        if(mRestaurantHashMap.size() == newListSize) {
+            mRestaurantDetailsListObservable.onNext(mRestaurantHashMap);
+        }
     }
 
     public void clearRestaurantList(){
@@ -41,6 +47,10 @@ public class RestaurantRepository {
 
     public Observable<HashMap<String, Restaurant>> observeRestaurantList() {
         return mRestaurantListObservable;
+    }
+
+    public Observable<HashMap<String, Restaurant>> observeRestaurantDetailList() {
+        return mRestaurantDetailsListObservable;
     }
 
     public Observable<Restaurant> getRestaurantWithId(String placeId) {
@@ -56,5 +66,9 @@ public class RestaurantRepository {
             mRestaurantHashMap.clear();
             mRestaurantListObservable.onNext(new HashMap<>(mRestaurantHashMap));
         }
+    }
+
+    public void setAddListSize(int size) {
+        newListSize += size;
     }
 }

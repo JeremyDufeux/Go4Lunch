@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -14,17 +16,16 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
     private final OnPlaceListener mPlaceListener;
-    private final List<Restaurant> mRestaurantList;
+    private final AsyncListDiffer<Restaurant> mRestaurantList;
 
     public ListViewPlacesAdapter(OnPlaceListener placeListener) {
         mPlaceListener = placeListener;
-        mRestaurantList = new ArrayList<>();
+        mRestaurantList = new AsyncListDiffer<>(this, new DifferCallback());
     }
 
     @NonNull
@@ -36,18 +37,16 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        holder.updateViewHolder(mRestaurantList.get(position));
+        holder.updateViewHolder(mRestaurantList.getCurrentList().get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mRestaurantList.size();
+        return mRestaurantList.getCurrentList().size();
     }
 
     public void updateList(List<Restaurant> restaurants) {
-        mRestaurantList.clear();
-        mRestaurantList.addAll(restaurants);
-        notifyDataSetChanged();
+        mRestaurantList.submitList(restaurants);
     }
 
     static class PlacesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -98,5 +97,16 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
     public interface OnPlaceListener{
         void onPlaceClick(int position);
+    }
+
+    public static class DifferCallback extends DiffUtil.ItemCallback<Restaurant> {
+        public boolean areItemsTheSame(Restaurant oldItem, Restaurant newItem) {
+            return oldItem.getUId().equals(newItem.getUId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Restaurant oldItem, @NonNull Restaurant newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
     }
 }
