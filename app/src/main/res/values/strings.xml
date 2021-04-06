@@ -58,6 +58,7 @@
     <string name="open_until">Open until %1$s</string>
     <string name="no_open_hours" translatable="false" />
     <string name="restaurant_photo">Restaurant photo</string>
+    <string name="user_distance">%1$dm</string>
 
     <!-- New strings to sort -->
     <string name="website">WEBSITE</string>

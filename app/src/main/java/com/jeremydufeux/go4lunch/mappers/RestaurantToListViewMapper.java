@@ -1,7 +1,6 @@
 package com.jeremydufeux.go4lunch.mappers;
 
 import android.location.Location;
-import android.util.Log;
 import android.view.View;
 
 import com.jeremydufeux.go4lunch.R;
@@ -10,6 +9,7 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -34,13 +34,14 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
             determineWorkmatesViewVisibility(restaurant);
             restaurantList.add(restaurant);
         }
+        Collections.sort(restaurantList);
 
         return restaurantList;
     }
 
     public void calculateDistanceFromUser(Restaurant restaurant) {
         if(mLocation != null) {
-            restaurant.setMeterDistanceFromUser((int)mLocation.distanceTo(restaurant.getLocation()) + "m");
+            restaurant.setDistanceFromUser((int)mLocation.distanceTo(restaurant.getLocation()));
             restaurant.setDistanceTvVisibility(View.VISIBLE);
         } else {
             restaurant.setDistanceTvVisibility(View.INVISIBLE);

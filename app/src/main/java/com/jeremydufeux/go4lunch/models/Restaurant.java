@@ -2,17 +2,13 @@ package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.jeremydufeux.go4lunch.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant>{
     private final String mUId;
     private String mName;
     private String mAddress;
@@ -32,7 +28,7 @@ public class Restaurant {
     private int mUtcOffset;
 
     private Location mLocation;
-    private String mMeterDistanceFromUser;
+    private int mDistanceFromUser;
 
     // For Google Maps
     private Marker mMarker;
@@ -96,10 +92,6 @@ public class Restaurant {
         return mInterestedWorkmates;
     }
 
-    public void setInterestedWorkmates(List<String> interestedWorkmates) {
-        mInterestedWorkmates = interestedWorkmates;
-    }
-
     public void setOpenNow(boolean openNow) {
         mOpenNow = openNow;
     }
@@ -150,10 +142,6 @@ public class Restaurant {
 
     public void setLocation(Location location) {
         mLocation = location;
-    }
-
-    public String getMeterDistanceFromUser() {
-        return mMeterDistanceFromUser;
     }
 
     public Marker getMarker() {
@@ -216,11 +204,13 @@ public class Restaurant {
         return mOpeningHoursAvailable;
     }
 
-    public void setMeterDistanceFromUser(String meterDistanceFromUser) {
-        mMeterDistanceFromUser = meterDistanceFromUser;
+    public int getDistanceFromUser() {
+        return mDistanceFromUser;
     }
 
-
+    public void setDistanceFromUser(int distanceFromUser) {
+        mDistanceFromUser = distanceFromUser;
+    }
 
     public void setDistanceTvVisibility(int distanceTvVisibility) {
         mDistanceTvVisibility = distanceTvVisibility;
@@ -284,6 +274,10 @@ public class Restaurant {
 
     public int getMarkerOptionIconResource() {
         return mMarkerOptionIconResource;
+    }
+
+    public int compareTo(Restaurant restaurant) {
+        return mDistanceFromUser - restaurant.getDistanceFromUser();
     }
 
     public static class OpenPeriod{

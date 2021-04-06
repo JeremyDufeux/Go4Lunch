@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewPlaceItemBinding;
@@ -77,7 +76,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             mBinding.placeItemOpenTv.setVisibility(restaurant.getOpenTvVisibility());
 
             mBinding.placeItemDistanceTv.setVisibility(restaurant.getDistanceTvVisibility());
-            mBinding.placeItemDistanceTv.setText(restaurant.getMeterDistanceFromUser());
+            mBinding.placeItemDistanceTv.setText(context.getResources().getString(R.string.user_distance, restaurant.getDistanceFromUser()));
 
             mBinding.placeItemWorkmateIv.setVisibility(restaurant.getWorkmateIvVisibility());
             mBinding.placeItemWorkmateAmountTv.setVisibility(restaurant.getWorkmateTvVisibility());
