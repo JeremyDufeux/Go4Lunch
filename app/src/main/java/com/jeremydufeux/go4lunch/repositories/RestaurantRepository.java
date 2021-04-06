@@ -46,7 +46,9 @@ public class RestaurantRepository {
     public Observable<Restaurant> getRestaurantWithId(String placeId) {
         return Observable.just(Objects.requireNonNull(mRestaurantHashMap.get(placeId)));
     }
-
+    public Observable<Boolean> isRestaurantPresent(String placeId) {
+        return Observable.just(mRestaurantHashMap.containsKey(placeId));
+    }
 
     public void setNewListSize(int size) {
         newListSize = size;

@@ -12,6 +12,7 @@ import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
+import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
@@ -31,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RestaurantDetailsViewModel extends ViewModel {
     private static final String TAG = "RestaurantDetailsViewMo";
 
-    private final RestaurantRepository mRestaurantRepository;
+    private final RestaurantUseCase mRestaurantUseCase;
     private final WorkmatesRepository mWorkmatesRepository;
     private final Executor mExecutor;
 
@@ -45,10 +46,10 @@ public class RestaurantDetailsViewModel extends ViewModel {
     private String mLastRestaurantId = "";
 
     @Inject
-    public RestaurantDetailsViewModel(RestaurantRepository restaurantRepository,
+    public RestaurantDetailsViewModel(RestaurantUseCase restaurantUseCase,
                                       WorkmatesRepository workmatesRepository,
                                       Executor executor) {
-        mRestaurantRepository = restaurantRepository;
+        mRestaurantUseCase = restaurantUseCase;
         mWorkmatesRepository = workmatesRepository;
         mExecutor = executor;
     }
@@ -75,7 +76,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
     }
 
     public void getRestaurantWithId(String placeId) {
-        mDisposable.add(mRestaurantRepository.getRestaurantWithId(placeId)
+        mDisposable.add(mRestaurantUseCase.getRestaurantWithId(placeId)
                 .subscribeOn(Schedulers.computation())
                 .subscribe(mRestaurantLiveData::postValue,
                         throwable -> {

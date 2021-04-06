@@ -23,6 +23,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
+import static io.reactivex.Observable.just;
+
 @Singleton
 public class RestaurantUseCase{
     private final GooglePlacesRepository mGooglePlacesRepository;
@@ -66,7 +68,7 @@ public class RestaurantUseCase{
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
                         this::getInterestedWorkmates)
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getDetailsForPlaceId)
+                        this::getDetailsForPlaceRestaurant)
                 ;
     }
 
@@ -83,10 +85,22 @@ public class RestaurantUseCase{
                 });
     }
 
-    private Observable<Restaurant> getDetailsForPlaceId(Restaurant restaurant){
+    private Observable<Restaurant> getDetailsForPlaceRestaurant(Restaurant restaurant){
         return mGooglePlacesRepository.getDetailsForPlaceId(restaurant.getUId())
                 .subscribeOn(Schedulers.io())
                 .map(new PlaceDetailsResultToRestaurantMapper(restaurant));
+    }
+
+    public Observable<Restaurant> getRestaurantWithId(String restaurantId){
+        return mRestaurantRepository.isRestaurantPresent(restaurantId)
+                .flatMap((Function<Boolean, ObservableSource<Restaurant>>) restaurantPresent -> {
+                    if(restaurantPresent){
+                        return mRestaurantRepository.getRestaurantWithId(restaurantId);
+                    }else {
+                        return getDetailsForPlaceRestaurant(new Restaurant(restaurantId));
+                    }
+                })
+                .subscribeOn(Schedulers.io());
     }
 
     public Observable<HashMap<String, Restaurant>> observeRestaurantList(){

@@ -52,13 +52,8 @@ public class Restaurant {
     private int mDetailsWebsiteLlVisibility;
     private int mMarkerOptionIconResource;
 
-    public Restaurant(String placeId, String name, Double lat, Double lng) {
+    public Restaurant(String placeId) {
         mUId = placeId;
-        mName = name;
-
-        mLocation = new Location("");
-        mLocation.setLatitude(lat);
-        mLocation.setLongitude(lng);
     }
 
     public void setAlwaysOpen(boolean alwaysOpen) {

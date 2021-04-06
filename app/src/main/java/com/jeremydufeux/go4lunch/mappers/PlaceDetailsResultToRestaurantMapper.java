@@ -1,5 +1,6 @@
 package com.jeremydufeux.go4lunch.mappers;
 
+import android.location.Location;
 import android.view.View;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
@@ -22,7 +23,7 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     private static final String MAP_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=%s&maxwidth=800";
     private static final String GEOAPIFY_PHOTO_URL = "https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:%s,%s&zoom=17&marker=lonlat:%s,%s;color:%%23ff5721;size:xx-large&apiKey=%s";
 
-    private Restaurant mRestaurant;
+    private final Restaurant mRestaurant;
 
     public PlaceDetailsResultToRestaurantMapper(Restaurant restaurant) {
         mRestaurant = restaurant;
@@ -32,12 +33,15 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     public Restaurant apply(@NonNull PlaceDetailsResults results) {
         PlaceDetails placeDetail = results.getPlaceDetails();
 
-        setAddress(placeDetail);
-        setOpeningData(placeDetail);
-        setRating(placeDetail);
+        mRestaurant.setName(placeDetail.getName());
         mRestaurant.setPhotoUrl(getPhotoUrl(placeDetail));
         mRestaurant.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
         mRestaurant.setWebsite(placeDetail.getWebsite());
+
+        setLocation(placeDetail);
+        setAddress(placeDetail);
+        setOpeningData(placeDetail);
+        setRating(placeDetail);
 
         if(mRestaurant.getPhoneNumber() != null && !mRestaurant.getPhoneNumber().isEmpty()) {
             mRestaurant.setDetailsCallLlVisibility(View.VISIBLE);
@@ -52,6 +56,14 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
         }
 
         return mRestaurant;
+    }
+
+    private void setLocation(PlaceDetails placeDetail){
+        Location location = new Location("");
+        location.setLatitude(placeDetail.getGeometry().getLocation().getLat());
+        location.setLongitude(placeDetail.getGeometry().getLocation().getLng());
+
+        mRestaurant.setLocation(location);
     }
 
     private void setAddress(PlaceDetails placeDetail) {

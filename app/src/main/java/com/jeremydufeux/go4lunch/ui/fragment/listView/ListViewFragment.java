@@ -93,7 +93,7 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
     }
 
     private void configureRecyclerView() {
-        mAdapter = new ListViewPlacesAdapter(Glide.with(this), this);
+        mAdapter = new ListViewPlacesAdapter(this);
         mBinding.listViewFragmentRecyclerView.setAdapter(mAdapter);
         mBinding.listViewFragmentRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 

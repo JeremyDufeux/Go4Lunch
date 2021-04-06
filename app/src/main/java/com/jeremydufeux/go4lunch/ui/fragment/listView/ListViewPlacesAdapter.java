@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
@@ -19,12 +20,10 @@ import java.util.List;
 
 public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAdapter.PlacesViewHolder> {
 
-    private final RequestManager mGlide;
     private final OnPlaceListener mPlaceListener;
     private final List<Restaurant> mRestaurantList;
 
-    public ListViewPlacesAdapter(RequestManager glide, OnPlaceListener placeListener) {
-        mGlide = glide;
+    public ListViewPlacesAdapter(OnPlaceListener placeListener) {
         mPlaceListener = placeListener;
         mRestaurantList = new ArrayList<>();
     }
@@ -33,13 +32,12 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
     @Override
     public PlacesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentListViewPlaceItemBinding binding = FragmentListViewPlaceItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new PlacesViewHolder(binding);
+        return new PlacesViewHolder(binding, mPlaceListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PlacesViewHolder holder, int position) {
-        holder.updateViewHolder(mGlide, mRestaurantList.get(position), mPlaceListener);
-
+        holder.updateViewHolder(mRestaurantList.get(position));
     }
 
     @Override
@@ -57,18 +55,18 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
         private final FragmentListViewPlaceItemBinding mBinding;
         OnPlaceListener mPlaceListener;
 
-        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding) {
+        public PlacesViewHolder(@NonNull FragmentListViewPlaceItemBinding itemBinding, OnPlaceListener placeListener) {
             super(itemBinding.getRoot());
             mBinding = itemBinding;
+            mPlaceListener = placeListener;
         }
 
-        public void updateViewHolder(RequestManager glide, Restaurant restaurant, OnPlaceListener placeListener){
+        public void updateViewHolder(Restaurant restaurant){
             Context context = mBinding.getRoot().getContext();
-            mPlaceListener = placeListener;
             mBinding.placeItemNameTv.setText(restaurant.getName());
             mBinding.placeItemTypeAndAddressTv.setText(restaurant.getAddress());
 
-            glide.load(restaurant.getPhotoUrl())
+            Glide.with(context).load(restaurant.getPhotoUrl())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.placeItemPictureIv);

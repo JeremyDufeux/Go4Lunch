@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.mappers;
 
 
+import android.location.Location;
 import android.util.Log;
 
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -15,20 +16,22 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
 public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearchResults, List<Restaurant>>  {
+    public static final String OPERATIONAL_BUSINESS_STATUS = "OPERATIONAL";
 
     @Override
     public List<Restaurant> apply(@NonNull PlaceSearchResults results) {
         List<Restaurant> restaurantList = new ArrayList<>();
 
         for(PlaceSearch placeSearch : results.getPlaceSearches()){
-            if(placeSearch.getBusinessStatus()!= null && placeSearch.getBusinessStatus().equals("OPERATIONAL")) {
+            if(placeSearch.getBusinessStatus()!= null && placeSearch.getBusinessStatus().equals(OPERATIONAL_BUSINESS_STATUS)) {
 
-                String uId = placeSearch.getPlaceId();
+                Restaurant restaurant = new Restaurant(placeSearch.getPlaceId());
+                restaurant.setName(placeSearch.getName());
 
-                double lat = placeSearch.getGeometry().getLocation().getLat();
-                double lng = placeSearch.getGeometry().getLocation().getLng();
-
-                Restaurant restaurant = new Restaurant(uId, placeSearch.getName(), lat, lng);
+                Location location = new Location("");
+                location.setLatitude(placeSearch.getGeometry().getLocation().getLat());
+                location.setLongitude(placeSearch.getGeometry().getLocation().getLng());
+                restaurant.setLocation(location);
 
                 restaurantList.add(restaurant);
             }
