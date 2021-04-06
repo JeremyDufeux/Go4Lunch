@@ -28,6 +28,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
+
 @HiltViewModel
 public class RestaurantDetailsViewModel extends ViewModel {
     private static final String TAG = "RestaurantDetailsViewMo";
@@ -120,7 +122,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
     public void choseRestaurant(Restaurant restaurant, Workmate workmate) {
         mExecutor.execute(() -> {
-            if(workmate.getChosenRestaurantId() != null && workmate.getChosenRestaurantId().equals(restaurant.getUId())) {
+            if(workmate.getChosenRestaurantId().equals(restaurant.getUId()) && isToday(workmate.getChosenRestaurantDate())) {
                 mWorkmatesRepository.removeChosenRestaurantForUserId();
             } else {
                 mWorkmatesRepository.setChosenRestaurantForUserId(restaurant.getUId(), restaurant.getName());

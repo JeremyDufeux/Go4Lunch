@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.models;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,8 +19,8 @@ public class Workmate {
     @Nullable
     private String mPictureUrl;
 
-    private String mChosenRestaurantId;
-    private String mChosenRestaurantName;
+    private String mChosenRestaurantId = "";
+    private String mChosenRestaurantName = "";
     private Date mChosenRestaurantDate;
 
     private List<String> mLikedRestaurants = new ArrayList<>();

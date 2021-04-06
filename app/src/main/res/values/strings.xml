@@ -76,5 +76,7 @@
     <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
     <string name="liked">LIKED</string>
     <string name="no_restaurant_found_list_view">No restaurants were found here \nTry to search somewhere else on Map View</string>
+    <string name="you_didnt_chose_restaurant">You didn\'t chose a restaurant for today yet…</string>
+    <string name="workmate_didnt_chose_restaurant">%1$s didn\'t chose a restaurant for today yet…</string>
 
 </resources>

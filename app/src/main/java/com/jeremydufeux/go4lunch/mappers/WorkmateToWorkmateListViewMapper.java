@@ -4,23 +4,19 @@ import android.view.View;
 
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
-import static com.jeremydufeux.go4lunch.utils.Utils.isSameDay;
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 public class WorkmateToWorkmateListViewMapper implements Function<List<Workmate>, List<Workmate>> {
     @Override
     public List<Workmate> apply(@NonNull List<Workmate> workmateList) {
         for (Workmate workmate : workmateList){
             if(workmate.getChosenRestaurantDate() != null){
-                Calendar now = Calendar.getInstance();
-                Calendar workmateDate = Calendar.getInstance();
-                workmateDate.setTime(workmate.getChosenRestaurantDate());
-                if(isSameDay(now, workmateDate)){
+                if(isToday(workmate.getChosenRestaurantDate())){
                     workmate.setWorkmateChosenTvVisibility(View.VISIBLE);
                     workmate.setWorkmateNotChosenTvVisibility(View.INVISIBLE);
                 } else {

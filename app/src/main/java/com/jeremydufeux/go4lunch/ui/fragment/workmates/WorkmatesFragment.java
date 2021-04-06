@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.MainNavDirections;
+import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentWorkmatesBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 @AndroidEntryPoint
 public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWorkmateListener {
@@ -81,10 +83,16 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWo
 
     @Override
     public void onWorkmateClick(int position) {
-        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setRestaurantId(mWorkmateList.get(position).getChosenRestaurantId());
+        Workmate workmate = mWorkmateList.get(position);
 
-        Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+        if(!workmate.getChosenRestaurantId().isEmpty() && isToday(workmate.getChosenRestaurantDate())) {
+            MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
+            directions.setRestaurantId(workmate.getChosenRestaurantId());
+
+            Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+        } else {
+            showSnackBar(getString(R.string.workmate_didnt_chose_restaurant, workmate.getFirstName()));
+        }
     }
 
     @Override
@@ -109,6 +117,10 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWo
     // ---------------
     // Utils
     // ---------------
+
+    private void showSnackBar(String message){
+        Snackbar.make(mBinding.fragmentWorkmatesRv, message, Snackbar.LENGTH_LONG).show();
+    }
 
     private void showSnackBar(int stringId){
         Snackbar.make(mBinding.fragmentWorkmatesRv, getString(stringId), Snackbar.LENGTH_LONG).show();

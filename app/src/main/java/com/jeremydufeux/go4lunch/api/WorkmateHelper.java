@@ -53,9 +53,8 @@ public class WorkmateHelper {
 
     public static Task<Void> removeChosenRestaurantForUserId(String uId) {
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("chosenRestaurantId", FieldValue.delete());
-        hashMap.put("chosenRestaurantName", FieldValue.delete());
-        hashMap.put("chosenRestaurantDate", FieldValue.delete());
+        hashMap.put("chosenRestaurantId", "");
+        hashMap.put("chosenRestaurantName", "");
         return WorkmateHelper.getWorkmatesCollection().document(uId).update(hashMap);
     }
 

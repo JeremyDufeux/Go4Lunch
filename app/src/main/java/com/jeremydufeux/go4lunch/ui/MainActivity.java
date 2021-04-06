@@ -24,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
@@ -32,6 +33,8 @@ import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements
     private BottomNavigationView mBottomNavigationView;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
+    private Workmate mWorkmate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void configureBottomNavigation() {
-        mBottomNavigationView = mBinding.bottomNavigationView;
+        mBottomNavigationView = mBinding.mainActivityBottomNavView;
         NavigationUI.setupWithNavController(mBottomNavigationView, mNavController);
     }
 
@@ -138,11 +142,12 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------
 
     private void onUserDataChange(Workmate workmate) {
-        Glide.with(this).load(workmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
+        mWorkmate = workmate;
+        Glide.with(this).load(mWorkmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
         mHeaderBinding.drawerProfilePicIv.setVisibility(View.VISIBLE);
-        mHeaderBinding.drawerNameTv.setText(workmate.getDisplayName());
+        mHeaderBinding.drawerNameTv.setText(mWorkmate.getDisplayName());
         mHeaderBinding.drawerNameTv.setVisibility(View.VISIBLE);
-        mHeaderBinding.drawerEmailTv.setText(workmate.getEmail());
+        mHeaderBinding.drawerEmailTv.setText(mWorkmate.getEmail());
         mHeaderBinding.drawerEmailTv.setVisibility(View.VISIBLE);
     }
 
@@ -168,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.restaurant_details_fragment){
-            mNavController.navigate(R.id.action_global_restaurant_details_fragment);
+            navigateToRestaurantDetails();
         }
         else if(item.getItemId() == R.id.settings_fragment){
             mNavController.navigate(R.id.action_global_settings_fragment);
@@ -179,6 +184,18 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         return true;
+    }
+
+    private void navigateToRestaurantDetails(){
+        if(!mWorkmate.getChosenRestaurantId().isEmpty() && isToday(mWorkmate.getChosenRestaurantDate())) {
+            MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
+            directions.setRestaurantId(mWorkmate.getChosenRestaurantId());
+
+            mNavController.navigate(directions);
+        } else {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            showSnackBar(R.string.you_didnt_chose_restaurant);
+        }
     }
 
     @Override

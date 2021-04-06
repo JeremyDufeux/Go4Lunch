@@ -30,7 +30,7 @@
                 android:id="@+id/main_activity_coordinator"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+                app:layout_constraintBottom_toTopOf="@+id/main_activity_bottom_nav_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_activity_toolbar">
@@ -46,7 +46,7 @@
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
+                android:id="@+id/main_activity_bottom_nav_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
