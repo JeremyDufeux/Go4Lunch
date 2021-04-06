@@ -31,6 +31,7 @@ import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.SignOutLiveEvent;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -212,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements
         return event -> {
             if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            } else if(event instanceof SignOutLiveEvent){
+                logout();
             }
         };
     }

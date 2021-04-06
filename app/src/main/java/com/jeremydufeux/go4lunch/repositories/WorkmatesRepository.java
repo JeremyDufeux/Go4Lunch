@@ -7,6 +7,7 @@ import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.LiveEvent.SignOutLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +67,11 @@ public class WorkmatesRepository{
                         Log.e(TAG, "startCurrentUserObserver: error.toString() : ", error);
                         return;
                     }
-                    if(value != null) {
+                    if(value != null && value.exists()) {
                         mCurrentUser = Objects.requireNonNull(value.toObject(Workmate.class));
                         mCurrentUserObservable.onNext(mCurrentUser);
+                    } else {
+                        mTaskResultObservable.onNext(new SignOutLiveEvent());
                     }
                 });
     }

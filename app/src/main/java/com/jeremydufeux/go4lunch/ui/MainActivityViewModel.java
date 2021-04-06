@@ -50,6 +50,15 @@ public class MainActivityViewModel extends ViewModel {
                             Log.e(TAG, "mWorkmatesRepository.observeCurrentUser: ", throwable);
                             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
                         }));
+
+        mDisposable.add(mWorkmatesRepository.observeTasksResults()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mSingleLiveEvent::setValue,
+                        throwable -> {
+                            Log.e(TAG, "mWorkmatesRepository.observeTasksResults: ", throwable);
+                            mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error));
+                        }));
     }
 
     public LiveData<Workmate> observeCurrentUser(){
