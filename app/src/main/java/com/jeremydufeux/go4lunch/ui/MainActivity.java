@@ -1,11 +1,17 @@
 package com.jeremydufeux.go4lunch.ui;
 
+import android.animation.Animator;
+import android.app.SearchManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -40,7 +46,8 @@ import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        SearchView.OnQueryTextListener{
 
     private MainActivityViewModel mViewModel;
     private ActivityMainBinding mBinding;
@@ -50,7 +57,10 @@ public class MainActivity extends AppCompatActivity implements
     private BottomNavigationView mBottomNavigationView;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
+    private MenuItem mSearchItem;
+
     private Workmate mWorkmate;
+    private Boolean mSearchVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements
         configureToolbar();
         configureDrawer();
         configureNavControllerListener();
+        configureSearchView();
     }
 
     // ---------------
@@ -95,10 +106,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void configureToolbar() {
-        setSupportActionBar(mToolbar);
-
         mToolbar = mBinding.mainActivityToolbar;
         mToolbar.setTitle(getString(R.string.i_m_hungry));
+
+        setSupportActionBar(mToolbar);
 
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(R.id.map_view_fragment, R.id.list_view_fragment, R.id.workmates_fragment)
@@ -134,8 +145,27 @@ public class MainActivity extends AppCompatActivity implements
                 mToolbar.setVisibility(View.VISIBLE);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 mBottomNavigationView.setVisibility(View.VISIBLE);
+                if(mSearchItem != null) {
+                    mSearchItem.setVisible(destination.getId() != R.id.workmates_fragment);
+                }
             }
         });
+    }
+
+    private void configureSearchView(){
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+
+        SearchView searchView = mBinding.mainActivitySearchView;
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
+                showInputMethod(view.findFocus());
+            }
+        });
+
+        mBinding.mainActivityCloseSearchButton.setOnClickListener(v -> hideSearch());
     }
 
     // ---------------
@@ -160,13 +190,30 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     // ---------------
+    // Search queries
+    // ---------------
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.d("Debug", "onQueryTextSubmit " + query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d("Debug", "onQueryTextChange " + newText);
+        return false;
+    }
+
+    // ---------------
     // Activity Overrides
     // ---------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //2 - Inflate the menu and add it to the Toolbar
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        mSearchItem = menu.findItem(R.id.search);
         return true;
     }
 
@@ -200,6 +247,25 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.search && !mSearchVisible){
+            showSearch();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mSearchVisible){
+            hideSearch();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mViewModel.clearDisposables();
@@ -220,8 +286,66 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     // ---------------
+    // View animations
+    // ---------------
+
+    private void showSearch() {
+        int duration = 500;
+        mBinding.mainActivitySearchCard.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mSearchVisible = true;
+                mBinding.mainActivitySearchCard.setVisibility(View.VISIBLE);
+                mBinding.mainActivityCloseSearchButton.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBinding.mainActivitySearchView.requestFocus();
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        }).alpha(1).setDuration(duration).start();
+
+        mBinding.mainActivityCloseSearchButton.animate().alpha(1).setDuration(duration).start();
+    }
+
+    private void hideSearch() {
+        int duration = 500;
+        mBinding.mainActivitySearchCard.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBinding.mainActivitySearchCard.setVisibility(View.GONE);
+                mBinding.mainActivityCloseSearchButton.setVisibility(View.GONE);
+                mSearchVisible = false;
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        }).alpha(0).setDuration(duration).start();
+
+        mBinding.mainActivityCloseSearchButton.animate().alpha(0).setDuration(duration).start();
+    }
+
+    // ---------------
     // Utils
     // ---------------
+
+    private void showInputMethod(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(view, 0);
+        }
+    }
 
     private void showSnackBar(int stringId){
         Snackbar.make(mBinding.mainActivityCoordinator, getString(stringId), Snackbar.LENGTH_LONG).show();
