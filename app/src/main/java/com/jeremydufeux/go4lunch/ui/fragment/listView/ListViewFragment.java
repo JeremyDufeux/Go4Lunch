@@ -18,9 +18,9 @@ import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.StopRefreshLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.StopRefreshLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 

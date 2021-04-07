@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,8 +18,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +37,6 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private Restaurant mRestaurant;
     private Workmate mCurrentUser;
-    private List<Workmate> mWorkmateList = new ArrayList<>();
 
     public RestaurantDetailsFragment() {}
 

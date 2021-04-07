@@ -36,14 +36,14 @@ import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.AddMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.FocusCameraLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.HideSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.OpenSystemSettingsLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.RemoveMarkersLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSearchButtonLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.AddMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.FocusCameraLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.HideSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.OpenSystemSettingsLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveMarkersLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSearchButtonLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 

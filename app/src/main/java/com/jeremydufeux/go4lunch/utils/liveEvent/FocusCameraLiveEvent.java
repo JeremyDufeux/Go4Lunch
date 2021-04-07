@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.utils.LiveEvent;
+package com.jeremydufeux.go4lunch.utils.liveEvent;
 
 import com.google.android.gms.maps.model.LatLng;
 

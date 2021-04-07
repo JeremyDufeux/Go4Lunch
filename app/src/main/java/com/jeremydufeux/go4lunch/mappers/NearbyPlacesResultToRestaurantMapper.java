@@ -2,14 +2,12 @@ package com.jeremydufeux.go4lunch.mappers;
 
 
 import android.location.Location;
-import android.util.Log;
 
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearch;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;

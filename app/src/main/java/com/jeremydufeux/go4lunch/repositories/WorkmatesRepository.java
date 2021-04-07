@@ -5,9 +5,9 @@ import android.util.Log;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.SignOutLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ErrorLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.SignOutLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;

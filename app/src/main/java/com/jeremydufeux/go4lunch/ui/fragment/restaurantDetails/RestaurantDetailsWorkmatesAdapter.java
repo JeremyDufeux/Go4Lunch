@@ -15,7 +15,6 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsWorkmateItemBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<RestaurantDetailsWorkmatesAdapter.WorkmateViewHolder> {

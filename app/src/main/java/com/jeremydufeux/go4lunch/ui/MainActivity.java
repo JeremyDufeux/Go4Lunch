@@ -35,9 +35,9 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.SignOutLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.SignOutLiveEvent;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

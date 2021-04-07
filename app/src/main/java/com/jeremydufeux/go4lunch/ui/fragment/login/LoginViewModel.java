@@ -1,7 +1,5 @@
 package com.jeremydufeux.go4lunch.ui.fragment.login;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -9,11 +7,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.SignInSuccessLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ErrorLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.NavigateToMapFragmentLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ErrorLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.NavigateToMapFragmentLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.SignInSuccessLiveEvent;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.net.UnknownHostException;
@@ -27,10 +25,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 @HiltViewModel

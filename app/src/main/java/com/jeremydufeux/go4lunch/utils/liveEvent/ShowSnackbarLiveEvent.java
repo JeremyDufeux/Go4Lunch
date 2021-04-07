@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.utils.LiveEvent;
+package com.jeremydufeux.go4lunch.utils.liveEvent;
 
 public class ShowSnackbarLiveEvent implements LiveEvent {
     private final int  mStingId;

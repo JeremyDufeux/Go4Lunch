@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- For Login -->
     <string name="google_request_id_token" translatable="false">756975640716-dj1nr8j5eolg48ctv8onulo0nj2jv7aa.apps.googleusercontent.com</string>
     <string name="facebook_app_id" translatable="false">800460790566654</string>
@@ -25,8 +25,8 @@
     <string name="bottom_navigation_menu_Workmates">Workmates</string>
 
     <!-- Used in NavigationDrawer -->
-    <string name="navigation_drawer_open" tools.ignore="UnusedResources">Open navigation drawer</string>
-    <string name="navigation_drawer_close" tools.ignore="UnusedResources">Close navigation drawer</string>
+    <string name="navigation_drawer_open" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_close">Close navigation drawer</string>
 
     <!-- Toolbar -->
     <string name="i_m_hungry">I\'m Hungry!</string>
@@ -44,9 +44,6 @@
 
     <!-- Map View -->
     <string name="locate_me">Locate me</string>
-
-    <!-- Location permissions    -->
-    <string name="permission_rationale_location">Access to the location service is required to show restaurants around.</string>
 
     <!-- List View -->
     <string name="rating">Rating</string>

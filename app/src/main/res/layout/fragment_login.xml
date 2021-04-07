@@ -62,14 +62,14 @@
             layout="@layout/frame_layout_facebook_button"
             app:layout_constraintBottom_toTopOf="@+id/login_fragment_firebase_auth_google_btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
             android:id="@+id/login_fragment_firebase_auth_google_btn"
             android:layout_width="280dp"
             android:layout_height="60dp"
             android:layout_marginBottom="80dp"
-            android:backgroundTint="@color/google_button"
+            app:backgroundTint="@color/google_button"
             android:fontFamily="sans-serif"
             android:text="@string/sign_in_with_google"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"

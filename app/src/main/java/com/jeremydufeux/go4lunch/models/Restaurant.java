@@ -16,7 +16,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private String mWebsite;
     private String mPhotoUrl;
     private float mRating;
-    private List<String> mInterestedWorkmates = new ArrayList<>();
+    private final List<String> mInterestedWorkmates = new ArrayList<>();
 
     // For Opening
     /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,

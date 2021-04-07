@@ -11,9 +11,9 @@ import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.ShowSnackbarLiveEvent;
-import com.jeremydufeux.go4lunch.utils.LiveEvent.StopRefreshLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.StopRefreshLiveEvent;
 import com.jeremydufeux.go4lunch.utils.NoMorePageException;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
