@@ -109,6 +109,7 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
         DividerItemDecoration itemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
 
+        mBinding.listViewFragmentSrl.setColorSchemeResources(R.color.orange);
         mBinding.listViewFragmentSrl.setOnRefreshListener(() -> mViewModel.loadNextPage());
     }
 
