@@ -121,17 +121,17 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
         if(mRestaurant.getRating() > 0) {
             mRestaurant.setStar1IvVisibility(View.VISIBLE);
         } else {
-            mRestaurant.setStar1IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar1IvVisibility(View.GONE);
         }
         if(mRestaurant.getRating() > 1.66) {
             mRestaurant.setStar2IvVisibility(View.VISIBLE);
         } else {
-            mRestaurant.setStar2IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar2IvVisibility(View.GONE);
         }
         if(mRestaurant.getRating() > 3.33) {
             mRestaurant.setStar3IvVisibility(View.VISIBLE);
         } else {
-            mRestaurant.setStar3IvVisibility(View.INVISIBLE);
+            mRestaurant.setStar3IvVisibility(View.GONE);
         }
     }
 
