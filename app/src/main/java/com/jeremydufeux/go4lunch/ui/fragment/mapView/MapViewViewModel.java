@@ -13,6 +13,7 @@ import com.jeremydufeux.go4lunch.mappers.RestaurantToMapViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.AddMarkersLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.FocusCameraLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.HideSearchButtonLiveEvent;
@@ -21,7 +22,6 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.OpenSystemSettingsLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveMarkersLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSearchButtonLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
-import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -131,6 +131,8 @@ public class MapViewViewModel extends ViewModel {
     }
 
     public void onCameraIdle(double latitude, double longitude, float zoom, double radius) {
+        saveCameraData(latitude, longitude, zoom, radius);
+
         if(mFetchNearbyPlacesAfterCameraIdle){
             getNearbyPlaces(latitude, longitude, radius);
             mFetchNearbyPlacesAfterCameraIdle = false;
@@ -210,11 +212,8 @@ public class MapViewViewModel extends ViewModel {
     // Map saved data
     // -------------
 
-    public void saveCameraData(double latitude, double longitude, float zoom) {
-        mUserDataRepository.setMapViewCameraLatitude(latitude);
-        mUserDataRepository.setMapViewCameraLongitude(longitude);
-        mUserDataRepository.setMapViewCameraZoom(zoom);
-        mUserDataRepository.setMapViewDataSet(true);
+    private void saveCameraData(double latitude, double longitude, float zoom, double radius) {
+        mUserDataRepository.setMapViewData(latitude, longitude, zoom, radius);
     }
     
     // ---------------

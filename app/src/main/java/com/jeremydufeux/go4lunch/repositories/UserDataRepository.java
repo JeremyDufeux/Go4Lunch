@@ -14,6 +14,7 @@ public class UserDataRepository {
     private double mapViewCameraLatitude;
     private double mapViewCameraLongitude;
     private float mapViewCameraZoom;
+    private double mapViewCameraRadius;
     private boolean mapViewDataSet;
 
     @Inject
@@ -44,31 +45,27 @@ public class UserDataRepository {
         return mapViewCameraLatitude;
     }
 
-    public void setMapViewCameraLatitude(double mapViewCameraLatitude) {
-        this.mapViewCameraLatitude = mapViewCameraLatitude;
-    }
-
     public double getMapViewCameraLongitude() {
         return mapViewCameraLongitude;
-    }
-
-    public void setMapViewCameraLongitude(double mapViewCameraLongitude) {
-        this.mapViewCameraLongitude = mapViewCameraLongitude;
     }
 
     public float getMapViewCameraZoom() {
         return mapViewCameraZoom;
     }
 
-    public void setMapViewCameraZoom(float mapViewCameraZoom) {
-        this.mapViewCameraZoom = mapViewCameraZoom;
+    public double getMapViewCameraRadius() {
+        return mapViewCameraRadius;
     }
 
     public boolean isMapViewDataSet() {
         return mapViewDataSet;
     }
 
-    public void setMapViewDataSet(boolean mapViewDataSet) {
-        this.mapViewDataSet = mapViewDataSet;
+    public void setMapViewData(double latitude, double longitude, float zoom, double radius) {
+        mapViewCameraLatitude = latitude;
+        mapViewCameraLongitude = longitude;
+        mapViewCameraZoom = zoom;
+        mapViewCameraRadius = radius;
+        mapViewDataSet = true;
     }
 }

@@ -2,8 +2,9 @@ package com.jeremydufeux.go4lunch.ui;
 
 import android.animation.Animator;
 import android.app.SearchManager;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
+import androidx.cursoradapter.widget.CursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback,
         SearchView.OnQueryTextListener{
 
+    public static final String CURSOR_MATRIX_NAME = "name";
+    public static final String CURSOR_MATRIX_ID = "id";
+
     private MainActivityViewModel mViewModel;
     private ActivityMainBinding mBinding;
     private ActivityMainDrawerHeaderBinding mHeaderBinding;
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private MenuItem mSearchItem;
+    private SimpleCursorAdapter mAdapter;
 
     private Workmate mWorkmate;
     private Boolean mSearchVisible = false;
@@ -92,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements
         mViewModel.startObservers();
         mViewModel.observeEvents().observe(this, onEventReceived());
         mViewModel.observeCurrentUser().observe(this, this::onUserDataChange);
+        mViewModel.observeAutocomplete().observe(this, this::onAutocompleteChange);
     }
 
     private void configureNavController() {
@@ -146,7 +154,12 @@ public class MainActivity extends AppCompatActivity implements
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 mBottomNavigationView.setVisibility(View.VISIBLE);
                 if(mSearchItem != null) {
-                    mSearchItem.setVisible(destination.getId() != R.id.workmates_fragment);
+                    if(destination.getId() != R.id.workmates_fragment) {
+                        mSearchItem.setVisible(true);
+                    } else {
+                        mSearchItem.setVisible(false);
+                        hideSearch();
+                    }
                 }
             }
         });
@@ -165,7 +178,57 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        final String[] from = new String[] {CURSOR_MATRIX_NAME, CURSOR_MATRIX_ID};
+        final int[] to = new int[] {android.R.id.text1};
+
+        mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_dropdown_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        searchView.setSuggestionsAdapter(mAdapter);
+
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                onAutocompleteSelection(position);
+                return false;
+            }
+        });
+
         mBinding.mainActivityCloseSearchButton.setOnClickListener(v -> hideSearch());
+    }
+
+    // ---------------
+    // Search queries
+    // ---------------
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        onAutocompleteSelection(0);
+        return false;
+    }
+
+    private void onAutocompleteSelection(int position){
+        if(mAdapter.getCount() != 0) {
+            Cursor cursor = (Cursor) mAdapter.getItem(position);
+            String restaurantId = cursor.getString(cursor.getColumnIndex(CURSOR_MATRIX_ID));
+            navigateToRestaurantDetails(restaurantId);
+            hideSearch();
+        } else {
+            showSnackBar(R.string.no_restaurants_found);
+        }
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mViewModel.onQueryTextChange(newText);
+        return false;
+    }
+
+    private void onAutocompleteChange(MatrixCursor matrixCursor) {
+        mAdapter.changeCursor(matrixCursor);
     }
 
     // ---------------
@@ -190,19 +253,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     // ---------------
-    // Search queries
+    // Navigation
     // ---------------
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Log.d("Debug", "onQueryTextSubmit " + query);
-        return false;
-    }
+    private void navigateToRestaurantDetails(String restaurantId){
+        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
+        directions.setRestaurantId(restaurantId);
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Log.d("Debug", "onQueryTextChange " + newText);
-        return false;
+        mNavController.navigate(directions);
     }
 
     // ---------------
@@ -221,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.restaurant_details_fragment){
-            navigateToRestaurantDetails();
+            openCurrentUserTodayRestaurantDetails();
         }
         else if(item.getItemId() == R.id.settings_fragment){
             mNavController.navigate(R.id.action_global_settings_fragment);
@@ -234,12 +292,9 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    private void navigateToRestaurantDetails(){
+    private void openCurrentUserTodayRestaurantDetails(){
         if(!mWorkmate.getChosenRestaurantId().isEmpty() && isToday(mWorkmate.getChosenRestaurantDate())) {
-            MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-            directions.setRestaurantId(mWorkmate.getChosenRestaurantId());
-
-            mNavController.navigate(directions);
+            navigateToRestaurantDetails(mWorkmate.getChosenRestaurantId());
         } else {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             showSnackBar(R.string.you_didnt_chose_restaurant);
@@ -300,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             @Override
             public void onAnimationEnd(Animator animation) {
-                mBinding.mainActivitySearchView.requestFocus();
+                mBinding.mainActivitySearchCard.requestFocus();
             }
             @Override
             public void onAnimationCancel(Animator animation) {

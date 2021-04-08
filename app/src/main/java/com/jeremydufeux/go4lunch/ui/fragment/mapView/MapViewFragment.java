@@ -351,9 +351,6 @@ public class MapViewFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
         mViewModel.clearDisposables();
-        mViewModel.saveCameraData(mMap.getCameraPosition().target.latitude,
-                mMap.getCameraPosition().target.longitude,
-                mMap.getCameraPosition().zoom);
         mBinding = null;
         mMap = null;
     }

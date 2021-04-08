@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -24,7 +23,6 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-@Singleton
 public class RestaurantUseCase{
     private final GooglePlacesRepository mGooglePlacesRepository;
     private final RestaurantRepository mRestaurantRepository;
@@ -37,7 +35,7 @@ public class RestaurantUseCase{
     @Inject
     public RestaurantUseCase(GooglePlacesRepository googlePlacesRepository,
                              RestaurantRepository restaurantRepository,
-                             WorkmatesRepository workmatesRepository) {
+                             WorkmatesRepository workmatesRepository){
         mGooglePlacesRepository = googlePlacesRepository;
         mRestaurantRepository = restaurantRepository;
         mWorkmatesRepository = workmatesRepository;
@@ -67,7 +65,7 @@ public class RestaurantUseCase{
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
                         this::getInterestedWorkmates)
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getDetailsForPlaceRestaurant)
+                        this::getDetailsForPlace)
                 ;
     }
 
@@ -84,7 +82,7 @@ public class RestaurantUseCase{
                 });
     }
 
-    private Observable<Restaurant> getDetailsForPlaceRestaurant(Restaurant restaurant){
+    private Observable<Restaurant> getDetailsForPlace(Restaurant restaurant){
         return mGooglePlacesRepository.getDetailsForPlaceId(restaurant.getUId())
                 .subscribeOn(Schedulers.io())
                 .map(new PlaceDetailsResultToRestaurantMapper(restaurant));
@@ -118,7 +116,7 @@ public class RestaurantUseCase{
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
                         this::getInterestedWorkmates)
                 .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getDetailsForPlaceRestaurant)
+                        this::getDetailsForPlace)
                 ;
     }
 
@@ -128,7 +126,7 @@ public class RestaurantUseCase{
                     if(restaurantPresent){
                         return mRestaurantRepository.getRestaurantWithId(restaurantId);
                     }else {
-                        return getDetailsForPlaceRestaurant(new Restaurant(restaurantId));
+                        return getDetailsForPlace(new Restaurant(restaurantId));
                     }
                 })
                 .subscribeOn(Schedulers.io());
