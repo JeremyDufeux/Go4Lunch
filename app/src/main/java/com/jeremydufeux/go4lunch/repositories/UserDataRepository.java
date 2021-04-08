@@ -1,12 +1,24 @@
 package com.jeremydufeux.go4lunch.repositories;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
 @Singleton
 public class UserDataRepository {
+    private static final String FILENAME = "UserData";
+    public static final String PREF_DATA_SET = "PREF_DATA_SET";
+    public static final String PREF_CAMERA_LAT = "PREF_CAMERA_LAT";
+    public static final String PREF_CAMERA_LNG = "PREF_CAMERA_LNG";
+    public static final String PREF_CAMERA_ZOOM = "PREF_CAMERA_ZOOM";
+
+    private static SharedPreferences mPreferences;
+
     private Location mLocation;
     private boolean mPermissionGranted;
 
@@ -15,11 +27,35 @@ public class UserDataRepository {
     private double mapViewCameraLongitude;
     private float mapViewCameraZoom;
     private double mapViewCameraRadius;
-    private boolean mapViewDataSet;
+    private boolean mapViewAlreadyStarted;
 
     @Inject
-    UserDataRepository() {
+    UserDataRepository(@ApplicationContext Context context) {
+        mPreferences = context.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        readPref();
     }
+
+    // -------------
+    // SharedPreferences
+    // -------------
+
+    public void savePreferences(){
+        mPreferences.edit().putLong(PREF_CAMERA_LAT, Double.doubleToRawLongBits(mapViewCameraLatitude)).apply();
+        mPreferences.edit().putLong(PREF_CAMERA_LNG, Double.doubleToRawLongBits(mapViewCameraLongitude)).apply();
+        mPreferences.edit().putFloat(PREF_CAMERA_ZOOM, mapViewCameraZoom).apply();
+    }
+
+    void readPref(){
+        if(mPreferences.contains(PREF_DATA_SET)) {
+            mapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
+            mapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
+            mapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
+        }
+    }
+
+    // -------------
+    // For Location
+    // -------------
 
     public void setLocation(Location location){
         mLocation = location;
@@ -57,8 +93,8 @@ public class UserDataRepository {
         return mapViewCameraRadius;
     }
 
-    public boolean isMapViewDataSet() {
-        return mapViewDataSet;
+    public boolean isMapViewAlreadyStarted() {
+        return mapViewAlreadyStarted;
     }
 
     public void setMapViewData(double latitude, double longitude, float zoom, double radius) {
@@ -66,6 +102,6 @@ public class UserDataRepository {
         mapViewCameraLongitude = longitude;
         mapViewCameraZoom = zoom;
         mapViewCameraRadius = radius;
-        mapViewDataSet = true;
+        mapViewAlreadyStarted = true;
     }
 }

@@ -122,7 +122,7 @@ public class MapViewViewModel extends ViewModel {
     }
 
     public void checkForSavedData() {
-        if(mUserDataRepository.isMapViewDataSet()){
+        if(mUserDataRepository.isMapViewAlreadyStarted()){
             LatLng latLng = new LatLng( mUserDataRepository.getMapViewCameraLatitude(),
                                         mUserDataRepository.getMapViewCameraLongitude());
             mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, mUserDataRepository.getMapViewCameraZoom(), false));
