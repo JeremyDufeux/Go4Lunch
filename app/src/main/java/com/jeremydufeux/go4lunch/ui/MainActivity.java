@@ -358,11 +358,9 @@ public class MainActivity extends AppCompatActivity implements
                 mBinding.mainActivitySearchCard.requestFocus();
             }
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
+            public void onAnimationRepeat(Animator animation) {}
         }).alpha(1).setDuration(duration).start();
 
         mBinding.mainActivityCloseSearchButton.animate().alpha(1).setDuration(duration).start();
@@ -372,8 +370,7 @@ public class MainActivity extends AppCompatActivity implements
         int duration = 500;
         mBinding.mainActivitySearchCard.animate().setListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-            }
+            public void onAnimationStart(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
                 mBinding.mainActivitySearchCard.setVisibility(View.GONE);
@@ -381,11 +378,9 @@ public class MainActivity extends AppCompatActivity implements
                 mSearchVisible = false;
             }
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
+            public void onAnimationRepeat(Animator animation) {}
         }).alpha(0).setDuration(duration).start();
 
         mBinding.mainActivityCloseSearchButton.animate().alpha(0).setDuration(duration).start();

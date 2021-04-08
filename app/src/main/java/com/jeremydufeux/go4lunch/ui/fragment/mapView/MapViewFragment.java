@@ -1,5 +1,6 @@
 package com.jeremydufeux.go4lunch.ui.fragment.mapView;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
@@ -168,6 +169,7 @@ public class MapViewFragment extends Fragment implements
 
     private void searchThisAreaAction() {
         hideSearchButton();
+        showProgressBar();
         mViewModel.getNearbyPlaces(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, getVisibleRegionRadius());
     }
 
@@ -184,12 +186,13 @@ public class MapViewFragment extends Fragment implements
 
     private Observer<HashMap<String, Restaurant>> onRestaurantListChanged(){
         return restaurantList -> {
-                removeUnusedMarkers(restaurantList);
-                mRestaurantList = restaurantList;
-                if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
-                    addMarkers();
-                }
-            };
+            hideProgressBar();
+            removeUnusedMarkers(restaurantList);
+            mRestaurantList = restaurantList;
+            if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
+                addMarkers();
+            }
+        };
     }
 
     private void removeUnusedMarkers(HashMap<String, Restaurant> restaurantList) {
@@ -369,10 +372,62 @@ public class MapViewFragment extends Fragment implements
     }
 
     private void showSearchButton(){
-        mBinding.mapViewFragmentSearchButton.animate().alpha(1).setDuration(1000);
+        mBinding.mapViewFragmentSearchButton.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mBinding.mapViewFragmentSearchButton.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {}
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        }).alpha(1).setDuration(1000);
     }
 
     private void hideSearchButton(){
-        mBinding.mapViewFragmentSearchButton.animate().alpha(0).setDuration(200);
+        mBinding.mapViewFragmentSearchButton.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBinding.mapViewFragmentSearchButton.setVisibility(View.GONE);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        }).alpha(0).setDuration(200);
+    }
+
+    private void showProgressBar(){
+        mBinding.mapViewFragmentProgressBar.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mBinding.mapViewFragmentProgressBar.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {}
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        }).alpha(1).setDuration(1000);
+    }
+
+    private void hideProgressBar(){
+        mBinding.mapViewFragmentProgressBar.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mBinding.mapViewFragmentProgressBar.setVisibility(View.GONE);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        }).alpha(0).setDuration(200);
     }
 }

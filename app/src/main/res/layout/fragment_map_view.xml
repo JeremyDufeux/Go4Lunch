@@ -17,6 +17,7 @@
         android:minHeight="15dp"
         android:layout_marginTop="10dp"
         android:alpha="0.0"
+        android:visibility="gone"
         android:background="@drawable/rounded_button"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/search_this_area"
@@ -26,7 +27,17 @@
         android:id="@+id/map_view_fragment_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <ProgressBar
+        android:id="@+id/map_view_fragment_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:alpha="0"
+        style="?android:attr/progressBarStyle"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/map_view_fragment_location_btn"
