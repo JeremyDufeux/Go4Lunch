@@ -2,6 +2,7 @@ package com.jeremydufeux.go4lunch.ui;
 
 import android.animation.Animator;
 import android.app.SearchManager;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
@@ -309,6 +310,15 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         } else {
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            mBinding.mainActivitySearchView.setQuery(query, false);
         }
     }
 
