@@ -122,10 +122,11 @@ public class MapViewViewModel extends ViewModel {
     }
 
     public void checkForSavedData() {
-        if(mUserDataRepository.isMapViewAlreadyStarted()){
+        if(mUserDataRepository.isMapViewDataSet()){
             LatLng latLng = new LatLng( mUserDataRepository.getMapViewCameraLatitude(),
                                         mUserDataRepository.getMapViewCameraLongitude());
             mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, mUserDataRepository.getMapViewCameraZoom(), false));
+            mFetchNearbyPlacesAfterCameraIdle = true;
             mEnableFirstMoveToLocation = false;
         }
     }

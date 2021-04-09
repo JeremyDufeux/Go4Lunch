@@ -12,7 +12,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 @Singleton
 public class UserDataRepository {
     private static final String FILENAME = "UserData";
-    public static final String PREF_DATA_SET = "PREF_DATA_SET";
     public static final String PREF_CAMERA_LAT = "PREF_CAMERA_LAT";
     public static final String PREF_CAMERA_LNG = "PREF_CAMERA_LNG";
     public static final String PREF_CAMERA_ZOOM = "PREF_CAMERA_ZOOM";
@@ -32,7 +31,7 @@ public class UserDataRepository {
     private boolean mMapViewAlreadyStarted;
 
     // For Notifications
-    private boolean mNotificationEnabled;
+    private boolean mNotificationEnabled = true;
 
     @Inject
     UserDataRepository(@ApplicationContext Context context) {
@@ -53,11 +52,12 @@ public class UserDataRepository {
     }
 
     void readPref(){
-        if(mPreferences.contains(PREF_DATA_SET)) {
+        if(mPreferences.contains(PREF_CAMERA_LAT)) {
             mMapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
             mMapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
             mMapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
             mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, false);
+            mMapViewAlreadyStarted = true;
         }
     }
 
@@ -101,7 +101,7 @@ public class UserDataRepository {
         return mMapViewCameraRadius;
     }
 
-    public boolean isMapViewAlreadyStarted() {
+    public boolean isMapViewDataSet() {
         return mMapViewAlreadyStarted;
     }
 
