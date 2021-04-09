@@ -86,7 +86,6 @@ public class SettingsFragment extends Fragment {
         mBinding.settingsFragmentEnableNotificationsSw.setChecked(mViewModel.isNotificationEnabled());
         mBinding.settingsFragmentPicFl.frameLayoutProfilePic.setOnClickListener(v -> loadPicture());
         mBinding.settingsFragmentSaveBtn.setOnClickListener(v -> saveSettings());
-        mBinding.settingsFragmentDeleteAccountBtn.setOnClickListener(v -> mViewModel.deleteAccount());
 
         unitArray = Arrays.asList(getResources().getStringArray(R.array.unit_array_short));
         mBinding.settingsFragmentUnitSp.setSelection(unitArray.indexOf(getString(mViewModel.getUserDistanceUnit())));
