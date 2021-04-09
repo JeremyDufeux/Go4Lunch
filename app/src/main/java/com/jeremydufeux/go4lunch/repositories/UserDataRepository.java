@@ -16,18 +16,23 @@ public class UserDataRepository {
     public static final String PREF_CAMERA_LAT = "PREF_CAMERA_LAT";
     public static final String PREF_CAMERA_LNG = "PREF_CAMERA_LNG";
     public static final String PREF_CAMERA_ZOOM = "PREF_CAMERA_ZOOM";
+    public static final String PREF_NOTIFICATION_ENABLED = "PREF_NOTIFICATION_ENABLED";
 
     private static SharedPreferences mPreferences;
 
+    // For Location
     private Location mLocation;
     private boolean mPermissionGranted;
 
     // For Map View
-    private double mapViewCameraLatitude;
-    private double mapViewCameraLongitude;
-    private float mapViewCameraZoom;
-    private double mapViewCameraRadius;
-    private boolean mapViewAlreadyStarted;
+    private double mMapViewCameraLatitude;
+    private double mMapViewCameraLongitude;
+    private float mMapViewCameraZoom;
+    private double mMapViewCameraRadius;
+    private boolean mMapViewAlreadyStarted;
+
+    // For Notifications
+    private boolean mNotificationEnabled;
 
     @Inject
     UserDataRepository(@ApplicationContext Context context) {
@@ -40,16 +45,19 @@ public class UserDataRepository {
     // -------------
 
     public void savePreferences(){
-        mPreferences.edit().putLong(PREF_CAMERA_LAT, Double.doubleToRawLongBits(mapViewCameraLatitude)).apply();
-        mPreferences.edit().putLong(PREF_CAMERA_LNG, Double.doubleToRawLongBits(mapViewCameraLongitude)).apply();
-        mPreferences.edit().putFloat(PREF_CAMERA_ZOOM, mapViewCameraZoom).apply();
+        mPreferences.edit()
+                .putLong(PREF_CAMERA_LAT, Double.doubleToRawLongBits(mMapViewCameraLatitude))
+                .putLong(PREF_CAMERA_LNG, Double.doubleToRawLongBits(mMapViewCameraLongitude))
+                .putFloat(PREF_CAMERA_ZOOM, mMapViewCameraZoom)
+                .apply();
     }
 
     void readPref(){
         if(mPreferences.contains(PREF_DATA_SET)) {
-            mapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
-            mapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
-            mapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
+            mMapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
+            mMapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
+            mMapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
+            mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, false);
         }
     }
 
@@ -78,30 +86,43 @@ public class UserDataRepository {
     // -------------
 
     public double getMapViewCameraLatitude() {
-        return mapViewCameraLatitude;
+        return mMapViewCameraLatitude;
     }
 
     public double getMapViewCameraLongitude() {
-        return mapViewCameraLongitude;
+        return mMapViewCameraLongitude;
     }
 
     public float getMapViewCameraZoom() {
-        return mapViewCameraZoom;
+        return mMapViewCameraZoom;
     }
 
     public double getMapViewCameraRadius() {
-        return mapViewCameraRadius;
+        return mMapViewCameraRadius;
     }
 
     public boolean isMapViewAlreadyStarted() {
-        return mapViewAlreadyStarted;
+        return mMapViewAlreadyStarted;
     }
 
     public void setMapViewData(double latitude, double longitude, float zoom, double radius) {
-        mapViewCameraLatitude = latitude;
-        mapViewCameraLongitude = longitude;
-        mapViewCameraZoom = zoom;
-        mapViewCameraRadius = radius;
-        mapViewAlreadyStarted = true;
+        mMapViewCameraLatitude = latitude;
+        mMapViewCameraLongitude = longitude;
+        mMapViewCameraZoom = zoom;
+        mMapViewCameraRadius = radius;
+        mMapViewAlreadyStarted = true;
+    }
+
+    // -------------
+    // For Notification
+    // -------------
+
+    public boolean isNotificationEnabled() {
+        return mNotificationEnabled;
+    }
+
+    public void setNotificationEnabled(boolean notificationEnabled) {
+        mNotificationEnabled = notificationEnabled;
+        mPreferences.edit().putBoolean(PREF_NOTIFICATION_ENABLED, mNotificationEnabled).apply();
     }
 }

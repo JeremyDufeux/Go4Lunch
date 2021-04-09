@@ -79,5 +79,10 @@
     <string name="workmate_didnt_chose_restaurant">%1$s didn\'t chose a restaurant for today yet…</string>
     <string name="search_restaurants_hint">Search restaurant</string>
     <string name="close_search">Close search</string>
+    <string name="nickname_field">Nickname :</string>
+    <string name="notifications_field">Notifications :</string>
+    <string name="save">Save</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="nickname">Nickname</string>
 
 </resources>

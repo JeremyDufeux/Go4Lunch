@@ -59,7 +59,7 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
         public void updateViewHolder(RequestManager glide, Workmate workmate){
             Context context = mBinding.getRoot().getContext();
 
-            mBinding.workmateItemNameTv.setText(context.getResources().getString(R.string.workmate_is_joining, workmate.getFirstName()));
+            mBinding.workmateItemNameTv.setText(context.getResources().getString(R.string.workmate_is_joining, workmate.getNickname()));
 
             glide.load(workmate.getPictureUrl())
                     .circleCrop()

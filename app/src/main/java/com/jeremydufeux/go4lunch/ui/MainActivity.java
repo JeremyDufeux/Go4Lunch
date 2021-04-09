@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements
         mWorkmate = workmate;
         Glide.with(this).load(mWorkmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
         mHeaderBinding.drawerProfilePicIv.setVisibility(View.VISIBLE);
-        mHeaderBinding.drawerNameTv.setText(mWorkmate.getDisplayName());
+        mHeaderBinding.drawerNameTv.setText(mWorkmate.getFullName());
         mHeaderBinding.drawerNameTv.setVisibility(View.VISIBLE);
         mHeaderBinding.drawerEmailTv.setText(mWorkmate.getEmail());
         mHeaderBinding.drawerEmailTv.setVisibility(View.VISIBLE);

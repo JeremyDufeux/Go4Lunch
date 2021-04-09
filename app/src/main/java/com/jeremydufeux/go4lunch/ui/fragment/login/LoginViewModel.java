@@ -82,22 +82,21 @@ public class LoginViewModel extends ViewModel {
 
     private Workmate convertFirebaseUserToWorkmate(FirebaseUser firebaseUser){
         String uId = firebaseUser.getUid();
-        String displayName = firebaseUser.getProviderData().get(1).getDisplayName();
+        String fullName = firebaseUser.getProviderData().get(1).getDisplayName();
 
-        assert displayName != null;
-        List<String> parts = Arrays.asList(displayName.split(" "));
+        assert fullName != null;
+        List<String> parts = Arrays.asList(fullName.split(" "));
         String firstName = parts.get(0);
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < parts.size(); i++) {
             sb.append(parts.get(i));
             if(i != parts.size()-1) sb.append(" ");
         }
-        String lastName = sb.toString();
 
         String email = firebaseUser.getProviderData().get(1).getEmail();
         String pictureUrl = Objects.requireNonNull(firebaseUser.getProviderData().get(1).getPhotoUrl()).toString();
 
-        return new Workmate(uId, displayName, firstName, lastName, email, pictureUrl);
+        return new Workmate(uId, fullName, firstName, email, pictureUrl);
     }
 
     public LiveData<LiveEvent> observeEvents(){

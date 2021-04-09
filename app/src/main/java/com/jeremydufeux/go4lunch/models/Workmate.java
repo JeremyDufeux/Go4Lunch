@@ -10,9 +10,8 @@ import javax.annotation.Nullable;
 
 public class Workmate {
     private String mUId;
-    private String mDisplayName;
-    private String mFirstName;
-    private String mLastName;
+    private String mFullName;
+    private String mNickname;
     @Nullable
     private String mEmail;
     @Nullable
@@ -34,11 +33,10 @@ public class Workmate {
     public Workmate() {
     }
 
-    public Workmate(String uId, String displayName, String firstName, @Nullable String lastName, @Nullable String email, @Nullable String pictureUrl) {
+    public Workmate(String uId, String fullName, String nickname, @Nullable String email, @Nullable String pictureUrl) {
         mUId = uId;
-        mDisplayName = displayName;
-        mFirstName = firstName;
-        mLastName = lastName;
+        mFullName = fullName;
+        mNickname = nickname;
         mEmail = email;
         mPictureUrl = pictureUrl;
     }
@@ -51,28 +49,20 @@ public class Workmate {
         mUId = uId;
     }
 
-    public String getDisplayName() {
-        return mDisplayName;
+    public String getFullName() {
+        return mFullName;
     }
 
-    public void setDisplayName(String displayName) {
-        mDisplayName = displayName;
+    public void setFullName(String fullName) {
+        mFullName = fullName;
     }
 
-    public String getFirstName() {
-        return mFirstName;
+    public String getNickname() {
+        return mNickname;
     }
 
-    public void setFirstName(String firstName) {
-        mFirstName = firstName;
-    }
-
-    public String getLastName() {
-        return mLastName;
-    }
-
-    public void setLastName(@Nullable String lastName) {
-        mLastName = lastName;
+    public void setNickname(String nickname) {
+        mNickname = nickname;
     }
 
     @Nullable

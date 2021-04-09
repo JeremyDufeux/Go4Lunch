@@ -91,7 +91,7 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWo
 
             Navigation.findNavController(mBinding.getRoot()).navigate(directions);
         } else {
-            showSnackBar(getString(R.string.workmate_didnt_chose_restaurant, workmate.getFirstName()));
+            showSnackBar(getString(R.string.workmate_didnt_chose_restaurant, workmate.getNickname()));
         }
     }
 

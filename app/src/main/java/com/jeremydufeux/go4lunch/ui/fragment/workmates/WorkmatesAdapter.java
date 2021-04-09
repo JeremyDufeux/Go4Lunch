@@ -65,12 +65,12 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.Work
 
             String workmateChosen = context.getResources().getString(
                     R.string.workmate_is_eating_at_restaurant,
-                    workmate.getFirstName(),
+                    workmate.getNickname(),
                     workmate.getChosenRestaurantName());
 
             String workmateNotChosen = context.getResources().getString(
                     R.string.workmate_has_not_decided_yet,
-                    workmate.getFirstName());
+                    workmate.getNickname());
 
             mBinding.workmateItemChosenTv.setText(workmateChosen);
             mBinding.workmateItemChosenTv.setVisibility(workmate.getWorkmateChosenTvVisibility());

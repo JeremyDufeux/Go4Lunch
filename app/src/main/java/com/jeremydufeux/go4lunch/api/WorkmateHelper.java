@@ -38,10 +38,19 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
+    public static Query getTodayWorkmateInterestedForRestaurantId(String restaurantId){
+        return WorkmateHelper.getWorkmatesCollection()
+                .whereEqualTo("chosenRestaurantId", restaurantId)
+                .whereGreaterThan("chosenRestaurantDate", getTodayStartTimestamp())
+                .whereLessThan("chosenRestaurantDate", getTodayEndTimestamp());
+    }
+
     // --- Create ---
     public static Task<Void> setWorkmate(Workmate workmate) {
         return WorkmateHelper.getWorkmatesCollection().document(workmate.getUId()).set(workmate);
     }
+
+    // --- Update ---
 
     public static Task<Void> setChosenRestaurantForUserId(String workmateUId, String restaurantUId, String restaurantName) {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -64,11 +73,7 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(workmateUId).update(hashMap);
     }
 
-    public static Query getTodayWorkmateInterestedForRestaurantId(String restaurantId){
-        return WorkmateHelper.getWorkmatesCollection()
-                .whereEqualTo("chosenRestaurantId", restaurantId)
-                .whereGreaterThan("chosenRestaurantDate", getTodayStartTimestamp())
-                .whereLessThan("chosenRestaurantDate", getTodayEndTimestamp());
+    public static void updateWorkmateNickname(String workmateUId, String nickname) {
+        WorkmateHelper.getWorkmatesCollection().document(workmateUId).update("nickname", nickname);
     }
-
 }

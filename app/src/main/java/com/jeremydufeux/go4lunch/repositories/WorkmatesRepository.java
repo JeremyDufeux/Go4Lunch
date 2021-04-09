@@ -145,6 +145,10 @@ public class WorkmatesRepository{
     public Observable<LiveEvent> observeTasksResults(){
         return mTaskResultObservable;
     }
+
+    public void updateCurrentUserNickname(String nickname) {
+        WorkmateHelper.updateWorkmateNickname(mCurrentUser.getUId(), nickname);
+    }
 }
 
 

@@ -1,14 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".ui.fragment.settings.SettingsFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Settings" />
+    <ImageView
+        android:id="@+id/settings_fragment_name_pic_iv"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/profile_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@sample/workmates" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/settings_fragment_camera_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/profile_picture"
+        android:src="@drawable/camera_drawable"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_name_pic_iv"
+        app:layout_constraintEnd_toEndOf="@+id/settings_fragment_name_pic_iv" />
+
+    <TextView
+        android:id="@+id/settings_fragment_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_medium"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_name_pic_iv"
+        tools:text="@sample/workmates.json/names/name/value" />
+
+    <TextView
+        android:id="@+id/settings_fragment_nickname_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/nickname_field"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_name_tv" />
+
+    <EditText
+        android:id="@+id/settings_fragment_nickname_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_nickname_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/settings_fragment_barrier1"
+        app:layout_constraintTop_toTopOf="@+id/settings_fragment_nickname_tv"
+        tools:text="@sample/workmates.json/names/name/value"
+        android:hint="@string/nickname"
+        android:autofillHints="@string/nickname"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/settings_fragment_enable_notifications_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/notifications_field"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_nickname_tv" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/settings_fragment_enable_notifications_sw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_enable_notifications_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_fragment_enable_notifications_tv" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/settings_fragment_barrier1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="settings_fragment_nickname_tv,settings_fragment_enable_notifications_tv" />
+
+    <Button
+        android:id="@+id/settings_fragment_save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:enabled="false"
+        android:text="@string/save"
+        app:layout_constrainedWidth="@+id/settings_fragment_delete_account_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_enable_notifications_tv" />
+
+    <Button
+        android:id="@+id/settings_fragment_delete_account_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/delete_account"
+        app:backgroundTint="@color/red_2"
+        app:layout_constrainedWidth="@+id/settings_fragment_save_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/settings_fragment_profile_pic_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="settings_fragment_camera_iv,settings_fragment_name_pic_iv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
