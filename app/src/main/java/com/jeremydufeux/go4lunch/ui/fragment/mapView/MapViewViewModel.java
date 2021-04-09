@@ -12,7 +12,7 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToMapViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
-import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.AddMarkersLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.FocusCameraLiveEvent;

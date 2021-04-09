@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch.useCases;
+package com.jeremydufeux.go4lunch.repositories;
 
 import android.util.Log;
 

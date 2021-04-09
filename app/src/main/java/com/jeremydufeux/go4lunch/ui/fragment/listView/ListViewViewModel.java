@@ -10,7 +10,7 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
-import com.jeremydufeux.go4lunch.useCases.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.StopRefreshLiveEvent;
