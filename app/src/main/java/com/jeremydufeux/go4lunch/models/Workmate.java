@@ -3,12 +3,13 @@ package com.jeremydufeux.go4lunch.models;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class Workmate {
+public class Workmate implements Comparable<Workmate>{
     private String mUId;
     private String mFullName;
     private String mNickname;
@@ -163,5 +164,19 @@ public class Workmate {
     @Exclude
     public void setWorkmateLikedRestaurantTvColor(int workmateLikedRestaurantTvColor) {
         mWorkmateLikedRestaurantTvColor = workmateLikedRestaurantTvColor;
+    }
+
+    public int compareTo(Workmate workmate) {
+        if(mChosenRestaurantName.isEmpty()){
+            if (workmate.getChosenRestaurantName().isEmpty()){
+                return 0;
+            } else {
+                return 1;
+            }
+        } else if(workmate.getChosenRestaurantName().isEmpty()){
+            return -1;
+        } else {
+            return mChosenRestaurantName.toLowerCase().compareTo(workmate.getChosenRestaurantName().toLowerCase());
+        }
     }
 }
