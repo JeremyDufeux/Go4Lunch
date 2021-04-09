@@ -24,6 +24,7 @@ public class RestaurantRepository {
 
         mRestaurantListObservable = BehaviorSubject.create();
         mRestaurantDetailsListObservable = BehaviorSubject.create();
+        mRestaurantDetailsListObservable.onNext(mRestaurantHashMap);
     }
 
     public void addNewRestaurant(Restaurant restaurant) {
