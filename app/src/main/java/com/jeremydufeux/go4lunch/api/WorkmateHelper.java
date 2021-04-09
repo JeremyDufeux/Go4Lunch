@@ -76,4 +76,8 @@ public class WorkmateHelper {
     public static void updateWorkmateNickname(String workmateUId, String nickname) {
         WorkmateHelper.getWorkmatesCollection().document(workmateUId).update("nickname", nickname);
     }
+
+    public static void updateCurrentUserProfileUrl(String workmateUId, String url) {
+        WorkmateHelper.getWorkmatesCollection().document(workmateUId).update("pictureUrl", url);
+    }
 }

@@ -1,8 +1,11 @@
 package com.jeremydufeux.go4lunch.repositories;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jeremydufeux.go4lunch.api.WorkmateHelper;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ErrorLiveEvent;
@@ -12,6 +15,7 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.SignOutLiveEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -148,6 +152,25 @@ public class WorkmatesRepository{
 
     public void updateCurrentUserNickname(String nickname) {
         WorkmateHelper.updateWorkmateNickname(mCurrentUser.getUId(), nickname);
+    }
+
+    public void updateCurrentUserProfileUrl(String url) {
+        WorkmateHelper.updateCurrentUserProfileUrl(mCurrentUser.getUId(), url);
+    }
+
+    public void updateCurrentUserProfilePic(Uri uriNewProfilePic) {
+        String uuid = UUID.randomUUID().toString();
+
+        StorageReference profilePicRef = FirebaseStorage.getInstance().getReference(uuid);
+        profilePicRef.putFile(uriNewProfilePic)
+                .addOnSuccessListener(taskSnapshot ->
+                        profilePicRef.getDownloadUrl()
+                                .addOnSuccessListener(uri ->
+                                        updateCurrentUserProfileUrl(uri.toString())))
+                .addOnFailureListener(error -> {
+                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                    Log.e(TAG, "setLikedRestaurants: ", error);
+                });
     }
 }
 

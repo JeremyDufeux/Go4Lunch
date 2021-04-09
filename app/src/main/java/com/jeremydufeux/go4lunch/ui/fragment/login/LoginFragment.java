@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -72,7 +71,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         mViewModel.startObservers();
-        mViewModel.observeEvents().observe(this, onEventReceived());
+        mViewModel.observeEvents().observe(this, this::onEventReceived);
     }
 
     @Override
@@ -253,12 +252,10 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         navigateToMapFragment();
     }
 
-    private Observer<LiveEvent> onEventReceived(){
-        return event -> {
-            if(event instanceof ShowSnackbarLiveEvent){
-                showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
-            }
-        };
+    private void onEventReceived(LiveEvent event){
+        if(event instanceof ShowSnackbarLiveEvent){
+            showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+        }
     }
 
     // ---------------

@@ -7,25 +7,15 @@
     android:background="@color/white"
     tools:context=".ui.fragment.settings.SettingsFragment">
 
-    <ImageView
-        android:id="@+id/settings_fragment_name_pic_iv"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+    <include
+        android:id="@+id/settings_fragment_pic_fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:contentDescription="@string/profile_picture"
+        layout="@layout/frame_layout_profile_pic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@sample/workmates" />
-
-    <ImageView
-        android:id="@+id/settings_fragment_camera_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:contentDescription="@string/profile_picture"
-        android:src="@drawable/camera_drawable"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_name_pic_iv"
-        app:layout_constraintEnd_toEndOf="@+id/settings_fragment_name_pic_iv" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/settings_fragment_name_tv"
@@ -38,7 +28,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_name_pic_iv"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_pic_fl"
         tools:text="@sample/workmates.json/names/name/value" />
 
     <TextView
@@ -87,12 +77,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/settings_fragment_enable_notifications_tv" />
 
+    <TextView
+        android:id="@+id/settings_fragment_unit_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/distance_unit"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_enable_notifications_tv" />
+
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_unit_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_fragment_unit_tv" />
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/settings_fragment_barrier1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="right"
-        app:constraint_referenced_ids="settings_fragment_nickname_tv,settings_fragment_enable_notifications_tv" />
+        app:constraint_referenced_ids="settings_fragment_nickname_tv,
+        settings_fragment_enable_notifications_tv,
+        settings_fragment_unit_tv" />
 
     <Button
         android:id="@+id/settings_fragment_save_btn"
@@ -105,7 +117,7 @@
         app:layout_constrainedWidth="@+id/settings_fragment_delete_account_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_enable_notifications_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_unit_tv" />
 
     <Button
         android:id="@+id/settings_fragment_delete_account_btn"
@@ -119,10 +131,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/settings_fragment_profile_pic_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="settings_fragment_camera_iv,settings_fragment_name_pic_iv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

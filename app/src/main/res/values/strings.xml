@@ -84,5 +84,8 @@
     <string name="save">Save</string>
     <string name="delete_account">Delete Account</string>
     <string name="nickname">Nickname</string>
+    <string name="profile_pic">Profile pic</string>
+    <string name="distance_unit">Distance unit :</string>
+    <string name="nickname_empty">Your nick name can\'t be empty</string>
 
 </resources>
