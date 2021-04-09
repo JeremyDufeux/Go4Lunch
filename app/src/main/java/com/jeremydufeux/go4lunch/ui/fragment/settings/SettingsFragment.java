@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,9 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -41,6 +42,7 @@ public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding mBinding;
 
     private Uri mUriNewProfilePic;
+    private List<String> unitArray;
 
     // ---------------
     // Setup
@@ -83,21 +85,11 @@ public class SettingsFragment extends Fragment {
     private void updateUi() {
         mBinding.settingsFragmentEnableNotificationsSw.setChecked(mViewModel.isNotificationEnabled());
         mBinding.settingsFragmentPicFl.frameLayoutProfilePic.setOnClickListener(v -> loadPicture());
-        mBinding.settingsFragmentEnableNotificationsSw.setOnCheckedChangeListener((buttonView, isChecked) -> enableSaveButton());
         mBinding.settingsFragmentSaveBtn.setOnClickListener(v -> saveSettings());
         mBinding.settingsFragmentDeleteAccountBtn.setOnClickListener(v -> mViewModel.deleteAccount());
-        mBinding.settingsFragmentNicknameEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                enableSaveButton();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
+        unitArray = Arrays.asList(getResources().getStringArray(R.array.unit_array_short));
+        mBinding.settingsFragmentUnitSp.setSelection(unitArray.indexOf(getString(mViewModel.getUserDistanceUnit())));
     }
 
     private void onUserDataChange(Workmate workmate) {
@@ -114,9 +106,6 @@ public class SettingsFragment extends Fragment {
             showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
         }
     }
-    private void enableSaveButton() {
-        mBinding.settingsFragmentSaveBtn.setEnabled(true);
-    }
 
     private void showSnackBar(int stringId){
         Snackbar.make(mBinding.getRoot(), getString(stringId), Snackbar.LENGTH_LONG).show();
@@ -128,11 +117,21 @@ public class SettingsFragment extends Fragment {
 
     private void saveSettings(){
         String newNickName = mBinding.settingsFragmentNicknameEt.getText().toString();
-        if(!newNickName.isEmpty()) {
-            boolean newEnableNotification = mBinding.settingsFragmentEnableNotificationsSw.isChecked();
-            mViewModel.saveSettings(newNickName, newEnableNotification, mUriNewProfilePic);
-        } else {
+        if(newNickName.isEmpty()) {
             showSnackBar(R.string.nickname_empty);
+        } else {
+            boolean newEnableNotification = mBinding.settingsFragmentEnableNotificationsSw.isChecked();
+
+            int spinnerPosition = mBinding.settingsFragmentUnitSp.getSelectedItemPosition();
+            String newUserUnit = unitArray.get(spinnerPosition);
+            int newUnitResource;
+            if(newUserUnit.equals(getString(R.string.unit_feet_short))){
+                newUnitResource = R.string.unit_feet_short;
+            } else {
+                newUnitResource = R.string.unit_meter_short;
+            }
+
+            mViewModel.saveSettings(newNickName, newEnableNotification, mUriNewProfilePic, newUnitResource);
         }
     }
 

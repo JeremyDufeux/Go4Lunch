@@ -55,7 +55,11 @@
     <string name="open_until">Open until %1$s</string>
     <string name="no_open_hours" translatable="false" />
     <string name="restaurant_photo">Restaurant photo</string>
-    <string name="user_distance">%1$dm</string>
+    <string name="user_distance">%1$d%2$s</string>
+    <string name="unit_meter">Meter</string>
+    <string name="unit_feet">Feet</string>
+    <string name="unit_meter_short">m</string>
+    <string name="unit_feet_short">ft</string>
 
     <!-- New strings to sort -->
     <string name="website">WEBSITE</string>

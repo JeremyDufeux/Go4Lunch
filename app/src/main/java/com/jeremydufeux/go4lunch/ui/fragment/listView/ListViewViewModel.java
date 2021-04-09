@@ -60,7 +60,7 @@ public class ListViewViewModel extends ViewModel {
 
         mDisposable.add(mRestaurantUseCase.observeRestaurantDetailsList()
                 .subscribeOn(Schedulers.computation())
-                .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation()))
+                .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation(), mUserDataRepository.getDistanceUnit()))
                 .subscribe(mRestaurantListLiveData::postValue,
                         throwable -> {
                     Log.e(TAG, "mRestaurantRepository.observeRestaurantList: ", throwable);

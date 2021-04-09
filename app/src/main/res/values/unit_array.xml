@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unit_array">
+        <item>@string/unit_meter</item>
+        <item>@string/unit_feet</item>
+    </string-array>
+    <string-array name="unit_array_short">
+        <item>@string/unit_meter_short</item>
+        <item>@string/unit_feet_short</item>
+    </string-array>
+</resources>

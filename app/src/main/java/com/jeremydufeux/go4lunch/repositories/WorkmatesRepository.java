@@ -151,7 +151,9 @@ public class WorkmatesRepository{
     }
 
     public void updateCurrentUserNickname(String nickname) {
-        WorkmateHelper.updateWorkmateNickname(mCurrentUser.getUId(), nickname);
+        if(!nickname.isEmpty() && !nickname.equals(mCurrentUser.getNickname())) {
+            WorkmateHelper.updateWorkmateNickname(mCurrentUser.getUId(), nickname);
+        }
     }
 
     public void updateCurrentUserProfileUrl(String url) {
@@ -159,18 +161,20 @@ public class WorkmatesRepository{
     }
 
     public void updateCurrentUserProfilePic(Uri uriNewProfilePic) {
-        String uuid = UUID.randomUUID().toString();
+        if(uriNewProfilePic != null) {
+            String uuid = UUID.randomUUID().toString();
 
-        StorageReference profilePicRef = FirebaseStorage.getInstance().getReference(uuid);
-        profilePicRef.putFile(uriNewProfilePic)
-                .addOnSuccessListener(taskSnapshot ->
-                        profilePicRef.getDownloadUrl()
-                                .addOnSuccessListener(uri ->
-                                        updateCurrentUserProfileUrl(uri.toString())))
-                .addOnFailureListener(error -> {
-                    mTaskResultObservable.onNext(new ErrorLiveEvent(error));
-                    Log.e(TAG, "setLikedRestaurants: ", error);
-                });
+            StorageReference profilePicRef = FirebaseStorage.getInstance().getReference(uuid);
+            profilePicRef.putFile(uriNewProfilePic)
+                    .addOnSuccessListener(taskSnapshot ->
+                            profilePicRef.getDownloadUrl()
+                                    .addOnSuccessListener(uri ->
+                                            updateCurrentUserProfileUrl(uri.toString())))
+                    .addOnFailureListener(error -> {
+                        mTaskResultObservable.onNext(new ErrorLiveEvent(error));
+                        Log.e(TAG, "setLikedRestaurants: ", error);
+                    });
+        }
     }
 }
 

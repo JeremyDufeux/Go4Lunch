@@ -84,14 +84,11 @@ public class SettingsViewModel extends ViewModel {
     public void deleteAccount() {
     }
 
-    public void saveSettings(String nickname, boolean notificationEnabled, Uri uriNewProfilePic) {
+    public void saveSettings(String nickname, boolean notificationEnabled, Uri uriNewProfilePic, int distanceUnit) {
         mUserDataRepository.setNotificationEnabled(notificationEnabled);
-        if(!nickname.isEmpty()) {
-            mWorkmatesRepository.updateCurrentUserNickname(nickname);
-        }
-        if(uriNewProfilePic != null) {
-            mWorkmatesRepository.updateCurrentUserProfilePic(uriNewProfilePic);
-        }
+        mUserDataRepository.setDistanceUnit(distanceUnit);
+        mWorkmatesRepository.updateCurrentUserNickname(nickname);
+        mWorkmatesRepository.updateCurrentUserProfilePic(uriNewProfilePic);
     }
 
     @Override
@@ -102,5 +99,9 @@ public class SettingsViewModel extends ViewModel {
 
     public void clearDisposables() {
         mDisposable.clear();
+    }
+
+    public int getUserDistanceUnit() {
+        return mUserDataRepository.getDistanceUnit();
     }
 }

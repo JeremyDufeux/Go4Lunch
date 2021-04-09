@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 
+import com.jeremydufeux.go4lunch.R;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -16,12 +18,14 @@ public class UserDataRepository {
     public static final String PREF_CAMERA_LNG = "PREF_CAMERA_LNG";
     public static final String PREF_CAMERA_ZOOM = "PREF_CAMERA_ZOOM";
     public static final String PREF_NOTIFICATION_ENABLED = "PREF_NOTIFICATION_ENABLED";
+    public static final String PREF_DISTANCE_UNIT = "PREF_DISTANCE_UNIT";
 
     private static SharedPreferences mPreferences;
 
     // For Location
     private Location mLocation;
     private boolean mPermissionGranted;
+    private int mDistanceUnit = R.string.unit_meter_short;
 
     // For Map View
     private double mMapViewCameraLatitude;
@@ -57,6 +61,7 @@ public class UserDataRepository {
             mMapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
             mMapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
             mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, false);
+            mDistanceUnit = mPreferences.getInt(PREF_DISTANCE_UNIT, mDistanceUnit);
             mMapViewAlreadyStarted = true;
         }
     }
@@ -79,6 +84,15 @@ public class UserDataRepository {
 
     public boolean isPermissionGranted() {
         return mPermissionGranted;
+    }
+
+    public int getDistanceUnit() {
+        return mDistanceUnit;
+    }
+
+    public void setDistanceUnit(int distanceUnit) {
+        mDistanceUnit = distanceUnit;
+        mPreferences.edit().putInt(PREF_DISTANCE_UNIT, mDistanceUnit).apply();
     }
 
     // -------------

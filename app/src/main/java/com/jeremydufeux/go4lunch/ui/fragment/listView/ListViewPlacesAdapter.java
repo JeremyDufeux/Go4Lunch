@@ -75,7 +75,9 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             mBinding.placeItemOpenTv.setVisibility(restaurant.getOpenTvVisibility());
 
             mBinding.placeItemDistanceTv.setVisibility(restaurant.getDistanceTvVisibility());
-            mBinding.placeItemDistanceTv.setText(context.getResources().getString(R.string.user_distance, restaurant.getDistanceFromUser()));
+            mBinding.placeItemDistanceTv.setText(context.getResources().getString(R.string.user_distance,
+                    restaurant.getDistanceFromUser(),
+                    context.getResources().getString(restaurant.getDistanceUnitString())));
 
             mBinding.placeItemWorkmateIv.setVisibility(restaurant.getWorkmateIvVisibility());
             mBinding.placeItemWorkmateAmountTv.setVisibility(restaurant.getWorkmateTvVisibility());

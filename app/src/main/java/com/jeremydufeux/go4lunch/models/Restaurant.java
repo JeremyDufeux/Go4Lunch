@@ -47,6 +47,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private int mDetailsCallLlVisibility;
     private int mDetailsWebsiteLlVisibility;
     private int mMarkerOptionIconResource;
+    private int mDistanceUnitString;
 
     public Restaurant(String placeId) {
         mUId = placeId;
@@ -274,6 +275,14 @@ public class Restaurant implements Comparable<Restaurant>{
 
     public int getMarkerOptionIconResource() {
         return mMarkerOptionIconResource;
+    }
+
+    public int getDistanceUnitString() {
+        return mDistanceUnitString;
+    }
+
+    public void setDistanceUnitString(int distanceUnitString) {
+        mDistanceUnitString = distanceUnitString;
     }
 
     public int compareTo(Restaurant restaurant) {

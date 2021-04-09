@@ -19,9 +19,11 @@ import io.reactivex.functions.Function;
 
 public class RestaurantToListViewMapper implements Function<HashMap<String, Restaurant>, List<Restaurant>> {
     Location mLocation;
+    int mDistanceUnit;
 
-    public RestaurantToListViewMapper(Location location) {
+    public RestaurantToListViewMapper(Location location, int distanceUnit) {
         mLocation = location;
+        mDistanceUnit = distanceUnit;
     }
 
     @Override
@@ -41,7 +43,13 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
 
     public void calculateDistanceFromUser(Restaurant restaurant) {
         if(mLocation != null) {
-            restaurant.setDistanceFromUser((int)mLocation.distanceTo(restaurant.getLocation()));
+            if(mDistanceUnit == R.string.unit_feet_short) {
+                restaurant.setDistanceFromUser((int) (mLocation.distanceTo(restaurant.getLocation()) * 3.28084f));
+                restaurant.setDistanceUnitString(mDistanceUnit);
+            } else {
+                restaurant.setDistanceFromUser((int) mLocation.distanceTo(restaurant.getLocation()));
+                restaurant.setDistanceUnitString(mDistanceUnit);
+            }
             restaurant.setDistanceTvVisibility(View.VISIBLE);
         } else {
             restaurant.setDistanceTvVisibility(View.INVISIBLE);
