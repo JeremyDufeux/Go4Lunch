@@ -52,13 +52,13 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(RestaurantDetailsViewModel.class);
-        mViewModel.startObservers();
         mViewModel.observeEvents().observe(this, onEventReceived());
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentRestaurantDetailsBinding.inflate(getLayoutInflater());
+        mViewModel.startObservers();
 
         assert getArguments() != null;
         String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();

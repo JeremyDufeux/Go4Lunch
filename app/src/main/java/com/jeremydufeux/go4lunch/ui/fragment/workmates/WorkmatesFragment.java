@@ -1,6 +1,7 @@
 package com.jeremydufeux.go4lunch.ui.fragment.workmates;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +52,12 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWo
 
     private void configureViewModel() {
         mViewModel = new ViewModelProvider(requireActivity()).get(WorkmatesViewModel.class);
-        mViewModel.startObservers();
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mViewModel.startObservers();
+
         mBinding = FragmentWorkmatesBinding.inflate(getLayoutInflater());
 
         configureRecyclerView();

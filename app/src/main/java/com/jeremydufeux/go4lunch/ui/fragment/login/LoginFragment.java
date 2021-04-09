@@ -70,13 +70,13 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     private void configureViewModels() {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        mViewModel.startObservers();
         mViewModel.observeEvents().observe(this, this::onEventReceived);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mViewModel.startObservers();
 
         mBinding = FragmentLoginBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
