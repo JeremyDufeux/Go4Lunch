@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,7 +72,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             String openString = context.getResources().getString(restaurant.getOpenTvString(), restaurant.getOpenTvCloseTimeString());
             mBinding.placeItemOpenTv.setText(openString);
-            mBinding.placeItemOpenTv.setTextColor(context.getResources().getColor(restaurant.getOpenTvColor()));
+            mBinding.placeItemOpenTv.setTextColor(ContextCompat.getColor(context, restaurant.getOpenTvColor()));
             mBinding.placeItemOpenTv.setVisibility(restaurant.getOpenTvVisibility());
 
             mBinding.placeItemDistanceTv.setVisibility(restaurant.getDistanceTvVisibility());

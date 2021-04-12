@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -137,9 +138,9 @@ public class RestaurantDetailsFragment extends Fragment {
     }
 
     private void updateViewWithWorkmate() {
-        mBinding.fragmentRestaurantDetailsGoFab.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateGoFabColor()));
+        mBinding.fragmentRestaurantDetailsGoFab.setColorFilter(ContextCompat.getColor(requireContext(), mCurrentUser.getWorkmateGoFabColor()));
         mBinding.fragmentRestaurantDetailsLikeTv.setText(getString(mCurrentUser.getWorkmateLikedRestaurantTvText()));
-        mBinding.fragmentRestaurantDetailsLikeIv.setColorFilter(getResources().getColor(mCurrentUser.getWorkmateLikedRestaurantTvColor()));
+        mBinding.fragmentRestaurantDetailsLikeIv.setColorFilter(ContextCompat.getColor(requireContext(), mCurrentUser.getWorkmateLikedRestaurantTvColor()));
     }
 
     private void updateViewRestaurant() {
