@@ -3,6 +3,8 @@ package com.jeremydufeux.go4lunch.repositories;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,6 +38,10 @@ public class WorkmatesRepository{
 
     @Inject
     public WorkmatesRepository() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null){
+            startCurrentUserObserver(currentUser.getUid());
+        }
     }
 
     public void authWorkmate(Workmate workmate) {
@@ -122,7 +128,6 @@ public class WorkmatesRepository{
     }
 
     public void setChosenRestaurantForUserId(String restaurantUId, String restaurantName) {
-
         WorkmateHelper.setChosenRestaurantForUserId(mCurrentUser.getUId(), restaurantUId, restaurantName)
                 .addOnFailureListener(error -> {
                     mTaskResultObservable.onNext(new ErrorLiveEvent(error));

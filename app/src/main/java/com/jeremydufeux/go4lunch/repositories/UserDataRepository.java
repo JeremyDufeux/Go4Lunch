@@ -60,7 +60,7 @@ public class UserDataRepository {
             mMapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
             mMapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));
             mMapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
-            mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, false);
+            mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, true);
             mDistanceUnit = mPreferences.getInt(PREF_DISTANCE_UNIT, mDistanceUnit);
             mMapViewAlreadyStarted = true;
         }

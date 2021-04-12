@@ -33,7 +33,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
-import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentMapViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -220,10 +219,9 @@ public class MapViewFragment extends Fragment implements
     }
 
     private boolean onMarkerClick(Marker marker) {
-        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setRestaurantId((String) Objects.requireNonNull(marker.getTag()));
-
-        Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.arg_restaurant_id), (String) Objects.requireNonNull(marker.getTag()));
+        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.restaurant_details_fragment, bundle);
         return true;
     }
 

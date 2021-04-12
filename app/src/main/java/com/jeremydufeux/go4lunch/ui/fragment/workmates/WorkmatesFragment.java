@@ -1,7 +1,6 @@
 package com.jeremydufeux.go4lunch.ui.fragment.workmates;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentWorkmatesBinding;
 import com.jeremydufeux.go4lunch.models.Workmate;
@@ -88,10 +86,9 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.OnWo
         Workmate workmate = mWorkmateList.get(position);
 
         if(!workmate.getChosenRestaurantId().isEmpty() && isToday(workmate.getChosenRestaurantDate())) {
-            MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-            directions.setRestaurantId(workmate.getChosenRestaurantId());
-
-            Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+            Bundle bundle = new Bundle();
+            bundle.putString(getString(R.string.arg_restaurant_id), workmate.getChosenRestaurantId());
+            Navigation.findNavController(mBinding.getRoot()).navigate(R.id.restaurant_details_fragment, bundle);
         } else {
             showSnackBar(getString(R.string.workmate_didnt_chose_restaurant, workmate.getNickname()));
         }

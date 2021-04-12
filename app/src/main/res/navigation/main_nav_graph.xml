@@ -40,11 +40,6 @@
         android:name="com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails.RestaurantDetailsFragment"
         android:label="@string/your_lunch"
         tools:layout="@layout/fragment_restaurant_details" >
-
-             <argument
-                  android:name="restaurantId"
-                  app:argType="string"
-                  android:defaultValue="0" />
     </fragment>
 
     <fragment
@@ -55,12 +50,7 @@
 
     <action
         android:id="@+id/action_global_restaurant_details_fragment"
-        app:destination="@id/restaurant_details_fragment">
-        <argument
-            android:name="id"
-            app:argType="string"
-            android:defaultValue="" />
-    </action>
+        app:destination="@id/restaurant_details_fragment"/>
 
     <action
         android:id="@+id/action_global_settings_fragment"

@@ -7,26 +7,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.snackbar.Snackbar;
+import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.liveEvent.CreateNotificationLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveLastNotificationWorkLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.worker.NotificationWorker;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
+import static com.jeremydufeux.go4lunch.utils.Utils.getMillisToLunchTime;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_CURRENT_USER_ID;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ADDRESS;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ID;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_NAME;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_PHOTO_URL;
 
 @AndroidEntryPoint
 public class RestaurantDetailsFragment extends Fragment {
@@ -61,7 +77,8 @@ public class RestaurantDetailsFragment extends Fragment {
         mViewModel.startObservers();
 
         assert getArguments() != null;
-        String restaurantId = RestaurantDetailsFragmentArgs.fromBundle(getArguments()).getRestaurantId();
+        String restaurantId = getArguments().getString(getString(R.string.arg_restaurant_id));
+        NotificationManagerCompat.from(requireActivity()).cancelAll();
 
         mViewModel.initViewModel(restaurantId);
         mViewModel.observeRestaurant().observe(getViewLifecycleOwner(), observeRestaurant());
@@ -96,6 +113,10 @@ public class RestaurantDetailsFragment extends Fragment {
         return event -> {
             if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+            } else if(event instanceof CreateNotificationLiveEvent){
+                createNotification(((CreateNotificationLiveEvent) event).getRestaurant());
+            }else if(event instanceof RemoveLastNotificationWorkLiveEvent){
+                removeLastNotificationWork();
             }
         };
     }
@@ -141,6 +162,28 @@ public class RestaurantDetailsFragment extends Fragment {
 
     private void choseRestaurant() {
         mViewModel.choseRestaurant(mRestaurant, mCurrentUser);
+    }
+
+    private void removeLastNotificationWork(){
+        WorkManager.getInstance(requireContext()).cancelAllWorkByTag(getString(R.string.work_notification_tag));
+    }
+
+    private void createNotification(Restaurant restaurant) {
+        removeLastNotificationWork();
+
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInitialDelay(getMillisToLunchTime(), TimeUnit.MILLISECONDS)
+                .addTag(getString(R.string.work_notification_tag))
+                .setInputData(new Data.Builder()
+                        .putString(INPUT_CURRENT_USER_ID, mCurrentUser.getUId())
+                        .putString(INPUT_RESTAURANT_ID, restaurant.getUId())
+                        .putString(INPUT_RESTAURANT_NAME, restaurant.getName())
+                        .putString(INPUT_RESTAURANT_ADDRESS, restaurant.getAddress())
+                        .putString(INPUT_RESTAURANT_PHOTO_URL, restaurant.getPhotoUrl())
+                        .build())
+                .build();
+
+        WorkManager.getInstance(requireContext()).enqueue(notificationWork);
     }
 
     private void callRestaurant() {

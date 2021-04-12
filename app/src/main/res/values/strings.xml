@@ -91,5 +91,16 @@
     <string name="profile_pic">Profile pic</string>
     <string name="distance_unit">Distance unit :</string>
     <string name="nickname_empty">Your nick name can\'t be empty</string>
+    <string name="notification_title"><strong>It\'s time to go eat!</strong></string>
+    <string name="notification_content">Today you\'re going to lunch at %1$s</string>
+    <string name="channel_name">Reminders</string>
+    <string name="channel_description">Daily lunch reminder</string>
+    <string name="arg_restaurant_id">arg_restaurant_id</string>
+    <string name="work_notification_tag">work_notification_tag</string>
+    <string name="the_address_is">The address is <b>%1$s</b></string>
+    <string name="is_joining_too">\u0020is joining too!</string>
+    <string name="are_joining_too">\u0020are joining too!</string>
+    <string name="name_separation" translatable="false">,\u0020</string>
+    <string name="name_last_separation" >\u0020and\u0020</string>
 
 </resources>

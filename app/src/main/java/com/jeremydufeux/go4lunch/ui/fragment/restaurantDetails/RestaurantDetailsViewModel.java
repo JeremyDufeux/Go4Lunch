@@ -10,11 +10,14 @@ import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.WorkmateToDetailsMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
-import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
-import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
+import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.CreateNotificationLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveLastNotificationWorkLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
     private final RestaurantUseCase mRestaurantUseCase;
     private final WorkmatesRepository mWorkmatesRepository;
+    private final UserDataRepository mUserDataRepository;
     private final Executor mExecutor;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
@@ -49,9 +53,11 @@ public class RestaurantDetailsViewModel extends ViewModel {
     @Inject
     public RestaurantDetailsViewModel(RestaurantUseCase restaurantUseCase,
                                       WorkmatesRepository workmatesRepository,
+                                      UserDataRepository userDataRepository,
                                       Executor executor) {
         mRestaurantUseCase = restaurantUseCase;
         mWorkmatesRepository = workmatesRepository;
+        mUserDataRepository = userDataRepository;
         mExecutor = executor;
     }
 
@@ -78,7 +84,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
     public void getRestaurantWithId(String placeId) {
         mDisposable.add(mRestaurantUseCase.getRestaurantWithId(placeId)
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(mRestaurantLiveData::postValue,
                         throwable -> {
                             Log.e(TAG, "mRestaurantRepository.getRestaurantWithId: ", throwable);
@@ -86,7 +92,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
                 }));
 
         mDisposable.add(mWorkmatesRepository.getInterestedWorkmatesForRestaurants(placeId)
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(mWorkmatesLiveData::postValue,
                         throwable -> {
                             Log.e(TAG, "mWorkmatesRepository.getInterestedWorkmatesForRestaurants: ", throwable);
@@ -94,7 +100,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
                         }));
 
         mDisposable.add(mWorkmatesRepository.observeCurrentUser()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .map(new WorkmateToDetailsMapper(placeId))
                 .subscribe(mCurrentUserLiveData::postValue,
                         throwable -> {
@@ -123,8 +129,12 @@ public class RestaurantDetailsViewModel extends ViewModel {
         mExecutor.execute(() -> {
             if(workmate.getChosenRestaurantId().equals(restaurant.getUId()) && isToday(workmate.getChosenRestaurantDate())) {
                 mWorkmatesRepository.removeChosenRestaurantForUserId();
+                mSingleLiveEvent.postValue(new RemoveLastNotificationWorkLiveEvent());
             } else {
                 mWorkmatesRepository.setChosenRestaurantForUserId(restaurant.getUId(), restaurant.getName());
+                if(mUserDataRepository.isNotificationEnabled()) {
+                    mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(restaurant));
+                }
             }
         });
     }

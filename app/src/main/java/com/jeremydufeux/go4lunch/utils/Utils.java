@@ -36,4 +36,15 @@ public class Utils {
         now.add(Calendar.SECOND, -1);
         return new Timestamp(now.getTime());
     }
+
+    public static long getMillisToLunchTime(){
+        Calendar lunchTime = Calendar.getInstance();
+        lunchTime.set(Calendar.HOUR_OF_DAY, 12);
+        lunchTime.set(Calendar.MINUTE, 0);
+        lunchTime.set(Calendar.SECOND, 0);
+
+        Calendar now = Calendar.getInstance();
+
+        return lunchTime.getTimeInMillis() - now.getTimeInMillis();
+    }
 }

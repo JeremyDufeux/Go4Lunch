@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentListViewBinding;
 import com.jeremydufeux.go4lunch.models.Restaurant;
@@ -115,10 +114,9 @@ public class ListViewFragment extends Fragment implements ListViewPlacesAdapter.
 
     @Override
     public void onPlaceClick(int position) {
-        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setRestaurantId(mRestaurantList.get(position).getUId());
-
-        Navigation.findNavController(mBinding.getRoot()).navigate(directions);
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.arg_restaurant_id), mRestaurantList.get(position).getUId());
+        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.restaurant_details_fragment, bundle);
     }
 
     private void showSnackBar(int stringId){

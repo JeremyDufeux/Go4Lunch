@@ -34,7 +34,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.jeremydufeux.go4lunch.MainNavDirections;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainBinding;
 import com.jeremydufeux.go4lunch.databinding.ActivityMainDrawerHeaderBinding;
@@ -258,10 +257,9 @@ public class MainActivity extends AppCompatActivity implements
     // ---------------
 
     private void navigateToRestaurantDetails(String restaurantId){
-        MainNavDirections.ActionGlobalRestaurantDetailsFragment directions = MainNavDirections.actionGlobalRestaurantDetailsFragment();
-        directions.setRestaurantId(restaurantId);
-
-        mNavController.navigate(directions);
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.arg_restaurant_id), restaurantId);
+        mNavController.navigate(R.id.restaurant_details_fragment, bundle);
     }
 
     // ---------------

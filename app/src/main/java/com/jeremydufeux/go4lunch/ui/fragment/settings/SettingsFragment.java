@@ -4,26 +4,35 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentSettingsBinding;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.utils.liveEvent.CreateNotificationLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveLastNotificationWorkLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
+import com.jeremydufeux.go4lunch.worker.NotificationWorker;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -31,6 +40,12 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
+import static com.jeremydufeux.go4lunch.utils.Utils.getMillisToLunchTime;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_CURRENT_USER_ID;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ADDRESS;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ID;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_NAME;
+import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_PHOTO_URL;
 
 @AndroidEntryPoint
 public class SettingsFragment extends Fragment {
@@ -40,6 +55,8 @@ public class SettingsFragment extends Fragment {
 
     private SettingsViewModel mViewModel;
     private FragmentSettingsBinding mBinding;
+
+    private Workmate mWorkmate;
 
     private Uri mUriNewProfilePic;
     private List<String> unitArray;
@@ -92,10 +109,12 @@ public class SettingsFragment extends Fragment {
     }
 
     private void onUserDataChange(Workmate workmate) {
-        Glide.with(this).load(workmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mBinding.settingsFragmentPicFl.picIv);
+        mWorkmate = workmate;
 
-        mBinding.settingsFragmentNameTv.setText(workmate.getFullName());
-        mBinding.settingsFragmentNicknameEt.setText(workmate.getNickname());
+        Glide.with(this).load(mWorkmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mBinding.settingsFragmentPicFl.picIv);
+
+        mBinding.settingsFragmentNameTv.setText(mWorkmate.getFullName());
+        mBinding.settingsFragmentNicknameEt.setText(mWorkmate.getNickname());
 
         mViewModel.observeCurrentUser().removeObservers(this);
     }
@@ -103,6 +122,10 @@ public class SettingsFragment extends Fragment {
     private void onEventReceived(LiveEvent event){
         if(event instanceof ShowSnackbarLiveEvent){
             showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+        } else if(event instanceof CreateNotificationLiveEvent){
+            createNotification(((CreateNotificationLiveEvent) event).getRestaurant());
+        } else if(event instanceof RemoveLastNotificationWorkLiveEvent){
+            removeLastNotificationWork();
         }
     }
 
@@ -170,5 +193,29 @@ public class SettingsFragment extends Fragment {
                         .into(mBinding.settingsFragmentPicFl.picIv);
             }
         }
+    }
+
+    // ---------------
+    // Notifications
+    // ---------------
+
+    private void removeLastNotificationWork(){
+        WorkManager.getInstance(requireContext()).cancelAllWorkByTag(getString(R.string.work_notification_tag));
+    }
+
+    private void createNotification(Restaurant restaurant) {
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInitialDelay(getMillisToLunchTime(), TimeUnit.MILLISECONDS)
+                .addTag(getString(R.string.work_notification_tag))
+                .setInputData(new Data.Builder()
+                        .putString(INPUT_CURRENT_USER_ID, mWorkmate.getUId())
+                        .putString(INPUT_RESTAURANT_ID, restaurant.getUId())
+                        .putString(INPUT_RESTAURANT_NAME, restaurant.getName())
+                        .putString(INPUT_RESTAURANT_ADDRESS, restaurant.getAddress())
+                        .putString(INPUT_RESTAURANT_PHOTO_URL, restaurant.getPhotoUrl())
+                        .build())
+                .build();
+
+        WorkManager.getInstance(requireContext()).enqueue(notificationWork);
     }
 }

@@ -8,25 +8,36 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
+import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
 import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.CreateNotificationLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
+import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveLastNotificationWorkLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 @HiltViewModel
 public class SettingsViewModel extends ViewModel {
     private static final String TAG = "SettingsViewModel";
 
+    private final RestaurantUseCase mRestaurantUseCase;
     private final WorkmatesRepository mWorkmatesRepository;
     private final UserDataRepository mUserDataRepository;
 
@@ -36,7 +47,10 @@ public class SettingsViewModel extends ViewModel {
     private final SingleLiveEvent<LiveEvent> mSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
-    public SettingsViewModel(WorkmatesRepository workmatesRepository, UserDataRepository userDataRepository) {
+    public SettingsViewModel(RestaurantUseCase restaurantUseCase,
+                             WorkmatesRepository workmatesRepository,
+                             UserDataRepository userDataRepository) {
+        mRestaurantUseCase = restaurantUseCase;
         mWorkmatesRepository = workmatesRepository;
         mUserDataRepository = userDataRepository;
     }
@@ -81,14 +95,35 @@ public class SettingsViewModel extends ViewModel {
         return mUserDataRepository.isNotificationEnabled();
     }
 
-    public void deleteAccount() {
-    }
-
     public void saveSettings(String nickname, boolean notificationEnabled, Uri uriNewProfilePic, int distanceUnit) {
+        if(notificationEnabled != mUserDataRepository.isNotificationEnabled()) {
+            if (notificationEnabled) {
+                createNotification();
+            } else {
+                mSingleLiveEvent.postValue(new RemoveLastNotificationWorkLiveEvent());
+            }
+        }
+
         mUserDataRepository.setNotificationEnabled(notificationEnabled);
         mUserDataRepository.setDistanceUnit(distanceUnit);
         mWorkmatesRepository.updateCurrentUserNickname(nickname);
         mWorkmatesRepository.updateCurrentUserProfilePic(uriNewProfilePic);
+    }
+
+    private void createNotification(){
+        mDisposable.add(mWorkmatesRepository.observeCurrentUser()
+                .subscribeOn(Schedulers.computation())
+                .flatMap((Function<Workmate, ObservableSource<Restaurant>>) workmate -> {
+                    if(workmate.getChosenRestaurantDate() != null && isToday(workmate.getChosenRestaurantDate())){
+                        return mRestaurantUseCase.getRestaurantWithId(workmate.getChosenRestaurantId());
+                    }
+                    return null;
+                })
+                .subscribe(restaurant -> {
+                    if(restaurant != null){
+                        mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(restaurant));
+                    }
+                }));
     }
 
     @Override
