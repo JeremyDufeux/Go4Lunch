@@ -2,6 +2,7 @@ package com.jeremydufeux.go4lunch.ui.fragment.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentLoginBinding;
@@ -47,6 +47,7 @@ import static com.google.android.gms.common.api.CommonStatusCodes.TIMEOUT;
 
 @AndroidEntryPoint
 public class LoginFragment extends Fragment implements FacebookCallback<LoginResult> {
+    private static final String TAG = "LoginFragment";
     private static final int RC_SIGN_IN = 1000;
 
     private LoginViewModel mViewModel;
@@ -91,9 +92,8 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     public void onStart() {
         super.onStart();
 
-        if (isCurrentUserLoggedIn()) {
-            mViewModel.authWorkmate(getCurrentUser());
-            navigateToMapFragment();
+        if (mViewModel.isCurrentUserLoggedIn()) {
+            afterSignInSuccess();
         } else {
             showLoginButtons();
         }
@@ -147,23 +147,12 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     private void firebaseAuthWithGoogle(Intent data) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
-            // Google Sign In was successful, authenticate with Firebase
             GoogleSignInAccount account = task.getResult(ApiException.class);
             if (account != null) {
                 AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                getAuth().signInWithCredential(credential)
-                        .addOnCompleteListener(requireActivity(), taskComplete -> {
-                            if (taskComplete.isSuccessful()) {
-                                // Sign in success
-                                afterSignInSuccess();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                showSnackBar(R.string.error);
-                            }
-                        });
+                signInWithCredential(credential);
             }
         } catch (ApiException e) {
-            // Google Sign In failed, display a message to the user
             switch (e.getStatusCode()){
                 case NETWORK_ERROR:
                     showSnackBar(R.string.error_no_internet);
@@ -199,7 +188,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
     @Override
     public void onSuccess(LoginResult loginResult) {
-        handleFacebookAccessToken(loginResult.getAccessToken());
+        firebaseAuthWithFacebook(loginResult.getAccessToken());
     }
 
     @Override
@@ -216,41 +205,35 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void firebaseAuthWithFacebook(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        getAuth().signInWithCredential(credential)
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success
+        signInWithCredential(credential);
+    }
+
+    // ---------------
+    // Sign in
+    // ---------------
+
+    private void signInWithCredential(AuthCredential credential){
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(requireActivity(), taskComplete -> {
+                    if (taskComplete.isSuccessful()) {
                         afterSignInSuccess();
                     } else {
-                        // If sign in fails, display a message to the user.
+                        Log.e(TAG, "signInWithCredential: ", taskComplete.getException());
                         showSnackBar(R.string.error);
                     }
                 });
     }
 
-    // ---------------
-    // FireStore
-    // ---------------
-
-    private FirebaseAuth getAuth(){
-        return FirebaseAuth.getInstance();
-    }
-
-    @Nullable
-    private FirebaseUser getCurrentUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    private Boolean isCurrentUserLoggedIn(){
-        return getCurrentUser() != null;
-    }
-
     private void afterSignInSuccess(){
-        mViewModel.authWorkmate(getCurrentUser());
+        mViewModel.authWorkmate();
         navigateToMapFragment();
     }
+
+    // ---------------
+    // Events
+    // ---------------
 
     private void onEventReceived(LiveEvent event){
         if(event instanceof ShowSnackbarLiveEvent){

@@ -74,29 +74,8 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void authWorkmate(FirebaseUser firebaseUser) {
-        mExecutor.execute(() ->
-            mWorkmatesRepository.authWorkmate(convertFirebaseUserToWorkmate(firebaseUser))
-        );
-    }
-
-    private Workmate convertFirebaseUserToWorkmate(FirebaseUser firebaseUser){
-        String uId = firebaseUser.getUid();
-        String fullName = firebaseUser.getProviderData().get(1).getDisplayName();
-
-        assert fullName != null;
-        List<String> parts = Arrays.asList(fullName.split(" "));
-        String firstName = parts.get(0);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < parts.size(); i++) {
-            sb.append(parts.get(i));
-            if(i != parts.size()-1) sb.append(" ");
-        }
-
-        String email = firebaseUser.getProviderData().get(1).getEmail();
-        String pictureUrl = Objects.requireNonNull(firebaseUser.getProviderData().get(1).getPhotoUrl()).toString();
-
-        return new Workmate(uId, fullName, firstName, email, pictureUrl);
+    public void authWorkmate() {
+        mExecutor.execute(mWorkmatesRepository::authWorkmate);
     }
 
     public LiveData<LiveEvent> observeEvents(){
@@ -111,5 +90,9 @@ public class LoginViewModel extends ViewModel {
 
     public void clearDisposables() {
         mDisposable.clear();
+    }
+
+    public boolean isCurrentUserLoggedIn() {
+        return mWorkmatesRepository.isCurrentUserLoggedIn();
     }
 }
