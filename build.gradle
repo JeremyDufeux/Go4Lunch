@@ -4,7 +4,7 @@ buildscript {
         google()
         jcenter()
     }
-    ext.hilt_version = '2.33-beta'
+    ext.hilt_version = '2.34-beta'
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.3"
 
