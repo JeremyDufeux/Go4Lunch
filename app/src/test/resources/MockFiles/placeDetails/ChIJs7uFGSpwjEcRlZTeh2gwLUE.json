@@ -1,0 +1,282 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "13",
+            "short_name" : "13",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.19225120000001,
+            "lng" : 6.223234999999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.19368988029149,
+               "lng" : 6.224511780291501
+            },
+            "southwest" : {
+               "lat" : 46.19099191970849,
+               "lng" : 6.221813819708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 50 37 80 76",
+      "name" : "Angkor Restaurant",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1900"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: Closed",
+            "Tuesday: 12:00 – 1:30 PM, 7:00 – 10:30 PM",
+            "Wednesday: 12:00 – 1:30 PM, 7:00 – 10:30 PM",
+            "Thursday: 12:00 – 1:30 PM, 7:00 – 10:30 PM",
+            "Friday: 12:00 – 1:30 PM, 7:00 – 10:30 PM",
+            "Saturday: 12:00 – 1:30 PM, 7:00 – 10:30 PM",
+            "Sunday: 12:00 – 1:30 PM, 7:00 – 10:30 PM"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/116447588466933073327\"\u003eKevin Eisenberg\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJuFbtsbcW8zNiPOLryMYahcRGS9NUkdQFlXyK4jr0xXxU_yormKFm-RvM9mWEuUYvmmxoMJF_Nj4rYivWmMxYQB_-PL8JSFvZSn0ijyS0KGihnZFKW-tUPPku1ReZt5-oi52ksDBKuvdO-EUdf3bjsg4sJJ3wWf0TCuhkL7P7vzpsw",
+            "width" : 4032
+         },
+         {
+            "height" : 750,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/115655696035519863952\"\u003ekévin\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKQN0W2iDUGRQZazzAw0frEsodWEXyGjpUhQbknNOOQdgynu7k7Sd7AblsOKZE_aZA561-_l3qRyeQLcZvawLgKyvXrkC_JKzHL4QSBHUbJUelAanzSw347g5nxDoMqKFSIhzd8pjA8IrFuxmZHh94r14J1V7qsXL9QNc6nkGo3qQMO",
+            "width" : 1334
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIYB02UWzqGMay0PZs9pJh0kdptL-JiekrIis5_pAOMpELd9e47CUMlJD_UwCAzwzRhxfP9rQ3M8pcwZ7JKQ4LRktPPbNPE8-YoupBmtTwyjK4HznyKTCTxR07vGatk2x6J7aFZ2Ew3feD1ksBw7ng6k7WoE-HfwKkKBvWAAfEcxiG3",
+            "width" : 4032
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLoofBCxh3oKD05ZnGWryNir1Cfh1pidBinRx-U7YLb3PWGeOu7R21WL06-ssugisXj1vgyBKPVKSz34gNMjUNXlRkRDSGC5nEd74KEqWBxwU1Xn1QWPou1U94pIEiQcyv5m008IfpTlg00nVK8CNJrpgvt9ZJIs5aj9h3DDvZ4H5Q3",
+            "width" : 4032
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwL-k1qIp_nihjLup2JPze7tHbjdUpweOdzCKsuasCVg8XPBT4Ti_bWFCeiwk6W3Ql7ojUYNe2eacFSmijTpdCUvWr8g3jNU2Ld62gkViFs6ZqsB_ik3X-HxV7BTBvjJ23MBZ1oOdI3Awilc2-RE4RM19inCkm59SA4DSc8iDznUHGPl",
+            "width" : 4032
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJmPrWvoSqj8GCIIQmo2zajBlvW7lmVp8_64wJzA5JEbLjDykXSZM9nL014J61nfHv8b7y0Aa7rGoihYNbkyQc7OwrZE-kkeUMCNl8VaJYOFMzVlgIexejmGuTWI-o5F-aqKWt39-vCq9dL_pHwLBd503eXDVKn8oW_N25bEAutwW2g",
+            "width" : 4032
+         },
+         {
+            "height" : 3456,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117045799505480704306\"\u003eAndré Cattin\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKsec70DNP8Xcvso5Y4CbjH9tzzD4UoftJCKcXJpjekEDxZcK9usTq38I85bXbTr5fR5JWQVCXw0U-KoxmeCyv5vMN69A6UTKwGFrbaIQfwkid2ObiSg1FAU8iHgxuK_CxzbAsQ-_5kq9WaYrPaJ41mUem06WwvZfkKdK3dymwe4xCw",
+            "width" : 4608
+         },
+         {
+            "height" : 1908,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/110349750786791261588\"\u003eLaurent OCTOBON\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKGmaIYk9SRprPIdC0dfzdIaJXVKDrF63TXysKbYBP5xpWRdL5vZ6SaW0dhHO_qJHqUrtE2CArbKtmPD4egtnOqlUVbV16nMSMJqunuA4P-JBIlvqMmqVC0I8R3KEP3eGbfpSAsEYvi3K4SQIV4alKergxbZHGReLc2M2CQ2jRzy2lb",
+            "width" : 4032
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKiXSahr3H_CqQ1zQeFS7kP7GvV_mGih9vjOTHAKl6wmwV5rFDoAaLTDbSDR4djdOOHjE4FwPpSMWJFXTDTZQJQrbMSsc6Nr9eB1P1-aZ6UI1_LYpgX2FVCkWDsFaljn7g1GnVtq0HQLmU1VVS8EPJTSJQKKFJ8bR9TZgkcOwoC0B6u",
+            "width" : 4032
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/106238212467833100767\"\u003eJacky Zufferey\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJuqg7lwcPuXElY091WzDBbb6XUuh3jhx-HDzZ9uPMw8S41grL9kHyb-NNabSHOmQcYQow2elIBGnbBSc5SyZJnOA5UmnJ0KSZZvBIszNfMoIgEpIdj1G5Cye2eTdQNfnVGowvedsXpuEJFKeJhzk0C_DecGDpkZJOWCiqgTlTqNfEP",
+            "width" : 4032
+         }
+      ],
+      "place_id" : "ChIJs7uFGSpwjEcRlZTeh2gwLUE",
+      "rating" : 4.5,
+      "utc_offset" : 120,
+      "vicinity" : "13 Rue de Genève, Ambilly",
+      "website" : "http://angkor-ambilly.paqe.io/"
+   },
+   "status" : "OK"
+}

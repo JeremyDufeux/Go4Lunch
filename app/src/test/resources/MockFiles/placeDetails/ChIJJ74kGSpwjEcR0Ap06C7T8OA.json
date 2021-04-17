@@ -1,0 +1,149 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "15",
+            "short_name" : "15",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.19227629999999,
+            "lng" : 6.222910499999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.19367098029149,
+               "lng" : 6.224233530291501
+            },
+            "southwest" : {
+               "lat" : 46.19097301970849,
+               "lng" : 6.221535569708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 57 43 68 55",
+      "name" : "Receitas Bom Gosto Chez Maria",
+      "opening_hours" : {
+         "open_now" : true,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "0630"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "0630"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "0630"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "0630"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "0630"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "0630"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: Closed",
+            "Tuesday: 6:30 AM – 10:30 PM",
+            "Wednesday: 6:30 AM – 10:30 PM",
+            "Thursday: 6:30 AM – 10:30 PM",
+            "Friday: 6:30 AM – 10:30 PM",
+            "Saturday: 6:30 AM – 10:30 PM",
+            "Sunday: 6:30 AM – 10:30 PM"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 2160,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/107641721214706667146\"\u003ePhilippe Campas\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLpifHBvF_De-Dma99GouewQ8QgdIHZ-pGA_UuO_G4jwV9zIwtNRjeM9N1PEtIZ1_4BruADKKGGSLxSKuQH7afCY5A00inlD0_BBvi4bSP8QlPoefx-TfWeyJPAANkKTSJgQvBoR8Ywzx6AnIXfpfAyrtBOqFYrmc-HE_Yt7LDfDtXn",
+            "width" : 3840
+         }
+      ],
+      "place_id" : "ChIJJ74kGSpwjEcR0Ap06C7T8OA",
+      "rating" : 4.3,
+      "utc_offset" : 120,
+      "vicinity" : "15 Rue de Genève, Ambilly"
+   },
+   "status" : "OK"
+}

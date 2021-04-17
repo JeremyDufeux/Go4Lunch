@@ -1,0 +1,271 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "117",
+            "short_name" : "117",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Gaillard",
+            "short_name" : "Gaillard",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74240",
+            "short_name" : "74240",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1913483,
+            "lng" : 6.2128001
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.1927704302915,
+               "lng" : 6.214162980291502
+            },
+            "southwest" : {
+               "lat" : 46.1900724697085,
+               "lng" : 6.211465019708498
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 50 92 31 83",
+      "name" : "Mama Rosa",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "0000"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1900"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1200"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1900"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: Open 24 hours",
+            "Tuesday: 12:00 – 2:00 PM, 7:00 – 10:00 PM",
+            "Wednesday: 12:00 – 2:00 PM, 7:00 – 10:00 PM",
+            "Thursday: 12:00 – 2:00 PM, 7:00 – 10:00 PM",
+            "Friday: 12:00 – 2:00 PM, 7:00 – 10:00 PM",
+            "Saturday: 12:00 – 2:00 PM, 7:00 – 10:00 PM",
+            "Sunday: Closed"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 4008,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/111374001587508000124\"\u003eKristian Naydenov\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLXw68K_5vJBv33DwwxcZwS6n3sQRn0gdk-qVYmzzXKmnY49namqZmVyk0vLhsvH66c0FjN1xoyZxiD87rbKDTaT99L5EvjiWMBg2dYZ3kSCSHwdxMNkUb1tNNaccbEHrSy5EovwBXNpd20_HJMc336WiI0iljtZgLt1Fg7iceT_Awd",
+            "width" : 5344
+         },
+         {
+            "height" : 2268,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/110033355735762925616\"\u003eMaxime Renard\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLOvVPERwqS-RBWguEjW8SRf0bsSXXHBTfrvTYZAQkwKtX7whBAeHUf-yhoA1k9YpxZaw-UmI2GPaLhvUQZIlpTHTD82T4WKg1g6rO-gQCCk40EHUypMxxMGbGVk5Yq_X1476G6JCN6XPGh4lV25mjaQ4CXH00o6KNsUkJ_7upW2ab7",
+            "width" : 4032
+         },
+         {
+            "height" : 2240,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109655062323884574097\"\u003eMarie Louise Vallet\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLozx7__CPonppm-Zdu_GpkXZEF9XukZpJZQXZ0G3u7EiuFg81fwijadsk4hVrCnk-JqBgDcmxVsjODUGHUEQi8mDsZENrULUT8luVhJ_VyLsjNM3a4hMzy506JQgU8KH6h1pNTRmaTpieS5Ury3DybeRcoM0ZLlwlx5t4MyJolz6Pn",
+            "width" : 4000
+         },
+         {
+            "height" : 800,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/107203347463462747222\"\u003eMarie Claude Suchet\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIBwH59pictPDO1FPKhAqzOmvcITiHIO0uTHu4aBbq8EZSYIZveLHZ-2tHnzREbIuMrkovsLUJkrVHybYssZm6ZEGB9OGQc1gl4vsHcfZtm1vYB2mWiFYLlmhNL_g9Uf-q_ZB8Wa_BUOVqx-8bE51IHshxMm_FBgk5dXG8Js9sYZ7cw",
+            "width" : 600
+         },
+         {
+            "height" : 3264,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/118027474687230871013\"\u003eChef Martelli\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIGKpHOg_AmXmUrpZxG4mpEmVcaBve52jIdFqdSqFkbJBa1UXA4d_u3KL23Lhn8IoSPAz7dkvfiRAgWPaBCAD28QvDdyJQzeR3PhLaprp0Fq3_PlM8oDAU4EJCRw5nOk7r9dHq6Sr-3l_fZQ36lflG7AeJYvgX7rgE8Exgd3J4eFfhG",
+            "width" : 2448
+         },
+         {
+            "height" : 2268,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/110033355735762925616\"\u003eMaxime Renard\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKWth1QeFaotHl34pm3kptPMrphofvIWCe4yL0T_x1fnAH7LWYcRXUQT9DhqvfDN0MGOvuc4C4NBkeNXL6-4lX1YLwds1Mmr2jO1vLaKb98aL2PGa53yKm57KLHTEkyR2yIrOhPMrL7_Km_D5HVNpZTfDRVip1yHX0kUxfIsW5Pojgf",
+            "width" : 4032
+         },
+         {
+            "height" : 2445,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/118027474687230871013\"\u003eChef Martelli\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJMX7hjd11KhkdtrtWxHW8EdkL1Vqn1LlRuisf2maexagsJ8mOeNDI5gixcIAdnBZZ-ar7oYg2VtQRh0jSYrdw06IKNyF72GOlwyqotGj9YmyQKmqiCCZUJumLkuxuCUfcDlw58DlEiN_O0tRe37yDNQPvg2e6h4CK4YS59BEpQNza3",
+            "width" : 2819
+         },
+         {
+            "height" : 4032,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/103730593055023646064\"\u003eMaïté PATOIS\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJD8yaXb--TPLL-4JCbtXwiFt_CKMkh6uVzJYdy_ZYRb2MErbhwuyvbmRBO40mfsN0ks5UuWI9UoGQZ2ybmJ3Yg25_SL76x6L48T3FcyyXP0FdIcY6_nGhjT8OhIVYAVL07L8AW-drZzy5KYosq2hi4gIPai73C12pjfavWk53AwkAm",
+            "width" : 3024
+         },
+         {
+            "height" : 4000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109655062323884574097\"\u003eMarie Louise Vallet\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJ8FIsf1CXXQQbHnIAtZ-bLvaE4R8RBmnoBC68XPLHCMxWjuGBMgu9rP1re2bf-5ccBT41-baxkruu2wdnbbHaQHBta9kYsaxymydpBo013KC-HnNQqXl0PfisROe6bpWWB9VO9J-4mE27iYQfXPyFoKXd5mn4tZk6zigIxNXLKWoyS",
+            "width" : 2240
+         },
+         {
+            "height" : 3968,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/115265149181136176679\"\u003eAngela Tancredi\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIOhDTkgAjzxf0nQbQ4gqsKodjeuJQknt7RUeTo3jfAPOhm9aas1uZU5tOvkDsFC5aSG_vSmO8qVCF0sLvG6S3SDz_Ew66dikTTOlyFKh9s4t7kEfcBm9isXGRjOESes-8HcDM1HfWKCtE8jGUcZQ5gOGtCj2I3WtG6qZDSwA3V3Aal",
+            "width" : 2976
+         }
+      ],
+      "place_id" : "ChIJW3Mq4CZwjEcRJ2fVnJw-oNM",
+      "rating" : 4.4,
+      "utc_offset" : 120,
+      "vicinity" : "117 Rue de Genève, Gaillard"
+   },
+   "status" : "OK"
+}

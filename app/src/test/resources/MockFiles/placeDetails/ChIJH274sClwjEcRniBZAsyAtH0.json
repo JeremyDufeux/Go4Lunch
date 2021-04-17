@@ -1,0 +1,262 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "56",
+            "short_name" : "56",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.19184599999999,
+            "lng" : 6.220219999999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.19315528029149,
+               "lng" : 6.221578230291501
+            },
+            "southwest" : {
+               "lat" : 46.19045731970849,
+               "lng" : 6.218880269708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 50 92 80 69",
+      "name" : "Le viand'art",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "1100"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "2300"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "1830"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1100"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2300"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1830"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1100"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2300"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1830"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1100"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2300"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1830"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "2330"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1100"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "2330"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1830"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: 11:00 AM – 2:00 PM, 6:30 – 11:00 PM",
+            "Tuesday: 11:00 AM – 2:00 PM, 6:30 – 11:00 PM",
+            "Wednesday: 11:00 AM – 2:00 PM, 6:30 – 11:00 PM",
+            "Thursday: 11:00 AM – 2:00 PM, 6:30 – 11:00 PM",
+            "Friday: 11:00 AM – 11:30 PM",
+            "Saturday: 6:30 – 11:30 PM",
+            "Sunday: Closed"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 667,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/101116469719254184075\"\u003eLe viand&#39;art\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJo7zHiJORkGmRCpOD8ig6tRng0akzKblJtuxoQth0O2-DQXmp-EPynI1qGkpz8PEjDpKOufkty-kt9jEH4i-5_xD0v-GpVmbLoesD9OqFEb-Bj_NQa0MAJRZIoiYxP4C0j64MWMRcDECscR2KMHV0zl6TRqumQAi0AnjzwVVmCepIp",
+            "width" : 1004
+         },
+         {
+            "height" : 667,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/101116469719254184075\"\u003eLe viand&#39;art\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLICaPHGQRAc02OYPXNscu2WWGItS5VKIwaoyLxMcPk6dTrBq7D3MY-J2JrEmf_r3xmOzfvKCs5yIHH9U6XmI4c3Z7mWx1aa9o9x0Dq41Bkj5eZfxrSRmGgPX4hKlpK-yS_2678PyVj3qt4q4w7G0Dr6Zdvhgn4hG8kxvWvnZtIxCNc",
+            "width" : 996
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/109015455129166865848\"\u003eMacle Steph\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJ1b4ULwkOybJ3gSH0tPTaMDE9DNzIdoOvywjqzELCWIOA8XWfew_qVPbtB9lffblp3VgHm2YTEVWJ3PHoUEPfu6LSobGsjcuTPKIJUG2dKEWxGBXcOONOM_lYlrMKGoq6TpgLmNZXRcY7FD6EmTntELFz_F9Y-i3T9ptcoV1-yCTZG",
+            "width" : 4032
+         },
+         {
+            "height" : 3648,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/107291024809427620452\"\u003eLaetitia scinocca\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIbhaFVIWHqvL_IGQTW9bGlZG3po7Q8-K-BLZCQu7OSlDpDSKcebjEYOn1U8aGfSCM5GcyTAAwcQlQDdZRhsEnJTHf4A2YJrWHP0hTTTj-vFPUziQcLeHR6eapek9yQSif2ZexG-9-mpee9eTPWeeS-YFG4Lt1wjaVBn4MsulGQTEbi",
+            "width" : 2736
+         },
+         {
+            "height" : 2736,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/104086414560522186481\"\u003eHagiu Daniela Monica\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIKD0FIGRcRcT8Z6sOKmRlxec3mojW4yXTT9QOwS56KvAD40GbES0qp3v4wcxJerND7vT_Pru9n9IcS-nZI9vc6N739PIJyKxypkfkbFdGj_S62wFsE-UzVV9iVJNo_VJn1pJKmRoR-RcqrMNHCTqDbN1AAJnHq43RDNsHRDxxU_SYn",
+            "width" : 3648
+         },
+         {
+            "height" : 4160,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117017637364622759368\"\u003eDávid Faragó\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwI6ecdZRvr_5sqMk_EEJGi6DlwsK8sl59MUHT_8oUUBKizoVmEfQDw1ZWTwnvAUMceN1TGmv12AEvxrA3YEOPc481iAB3bIGqbJB6pFu3XbvxIbZhkFy1dvfUVLcX8hO2w-AyPM-Kx8Z7Q2W79PcmrdInbPcglA2Mpc3HYFbTXFmK_R",
+            "width" : 3120
+         },
+         {
+            "height" : 4032,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117960225126529139987\"\u003eFrancois LICATESI\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJhE-jBFrVy49JwxMoTMb3f6KPZYJhZiGPnUGaj-0le-vuL9fjRadLQZV4nWBh2UeBFronSp7c8YQfuXmIHcwbXf7SsjtGGHQxuxFIk86HvZCSFG8wvnaKagtEfoZ1jdyeUqIjOFAKZ8PFkk1qyyyl9UdMX37BLL145GqUeypqS-uGx",
+            "width" : 3024
+         },
+         {
+            "height" : 3264,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/103422951436002824510\"\u003eKira von Burg\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLaCiZXS5eq8z02_oXLo0HlQMiC0GPphD9H51WeC0z4-W7Ew1ch5uonwQ0nBY4iJajhOQDK3zGh-OBtI-uOaUAgc8zWlBk8THqix5Dp1otqZI4dMlm1QJjBCA4fVT-L9RU7mIpfC8LpwZ0tNKWZqO93Jd1y95PNj6cHkAnICRHw0dcM",
+            "width" : 2448
+         },
+         {
+            "height" : 667,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/101116469719254184075\"\u003eLe viand&#39;art\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIDnWqJhAP75AHFD_m0heNHhSZph65p7IdnR3ZFW5IPN1X9LFYr5MEL7_iYtYTsokJiz3HRSBNTZ29BWN3IZVwQvcoW-EZBF1ueTX5gD01lqA1qD1Z4fv5-jqF9GETm5omQvHA6E0Bosdb_EXtgzus2f2u_Rdz0q2s5Z79KjWpbCP_H",
+            "width" : 996
+         },
+         {
+            "height" : 667,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/101116469719254184075\"\u003eLe viand&#39;art\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLcSLtiWOC3yoopkiEt3q5Vn-lhZq4XXZS5BkUkYay-CwyUZs0pskVqbXJXLBqIoWBypj_uEolE1HFIeSsIA55UsU4yeFyWQuMUBlziRceaiOafd9f1C6AcQdSBjx3POM824I5mR5RZA2KcMSIL8X-weGVnV8iWQHYtvs5rWUtuwG1n",
+            "width" : 997
+         }
+      ],
+      "place_id" : "ChIJH274sClwjEcRniBZAsyAtH0",
+      "rating" : 4.2,
+      "utc_offset" : 120,
+      "vicinity" : "56 Rue de Genève, Ambilly",
+      "website" : "https://le-viandart.business.site/"
+   },
+   "status" : "OK"
+}

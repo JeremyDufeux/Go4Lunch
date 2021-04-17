@@ -1,0 +1,159 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "3",
+            "short_name" : "3",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue des Bellosses",
+            "short_name" : "Rue des Bellosses",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Gaillard",
+            "short_name" : "Gaillard",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74240",
+            "short_name" : "74240",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1914568,
+            "lng" : 6.2192014
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.19282063029149,
+               "lng" : 6.220496030291502
+            },
+            "southwest" : {
+               "lat" : 46.1901226697085,
+               "lng" : 6.217798069708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 50 74 31 48",
+      "name" : "Le Kalao",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1600"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "0100"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1600"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: 4:00 PM – 1:00 AM",
+            "Tuesday: 4:00 PM – 1:00 AM",
+            "Wednesday: 4:00 PM – 1:00 AM",
+            "Thursday: 4:00 PM – 1:00 AM",
+            "Friday: 4:00 PM – 1:00 AM",
+            "Saturday: 4:00 PM – 1:00 AM",
+            "Sunday: 4:00 PM – 1:00 AM"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 3456,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/102412217064322087956\"\u003eShoira Shoira\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIBHWuJ1lQyXWEpxOpx9rag9HTl5m5YwJjHKWQswMWIDLyMdHZ0GdfOJFb02LKLlsNr61Ceir51kF_H9mkFDCEF8gF9zP7u7Z1nA9vTqNXX0xD1tlwFFQ_r8NPpbMtnDHOaTNV_zXVRMqc9ZNFF3wf78zI6gjU8hWI-Y8lCsoAeDHsA",
+            "width" : 4608
+         }
+      ],
+      "place_id" : "ChIJ3WFTUShwjEcRFQcEGCozg24",
+      "rating" : 3.3,
+      "utc_offset" : 120,
+      "vicinity" : "3 Rue des Bellosses, Gaillard"
+   },
+   "status" : "OK"
+}

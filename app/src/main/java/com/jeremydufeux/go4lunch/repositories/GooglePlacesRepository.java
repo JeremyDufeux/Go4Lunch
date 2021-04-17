@@ -20,20 +20,22 @@ public class GooglePlacesRepository {
     public static final int PLACE_SERVICE_TIMEOUT = 10;
     public static final String PLACE_TYPE = "restaurant";
     public static final String AUTOCOMPLETE_PLACE_TYPE = "establishment";
+
+    private final PlacesService mPlacesService;
+
     private String mNextPageToken;
     private String mSessionToken;
 
     @Inject
-    GooglePlacesRepository(){
+    public GooglePlacesRepository(PlacesService placesService){
+        mPlacesService = placesService;
         generateSessionToken();
     }
 
     public Observable<PlaceSearchResults> getNearbyPlaces(double latitude, double longitude, double radius){
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
-
         String latlng = latitude + "," + longitude;
 
-        return placesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, String.valueOf(radius), PLACE_TYPE)
+        return mPlacesService.fetchNearbyPlaces(BuildConfig.MAPS_API_KEY, latlng, String.valueOf(radius), PLACE_TYPE)
                 .subscribeOn(Schedulers.io())
                 .map(results -> {
                     mNextPageToken = results.getNextPageToken();
@@ -43,9 +45,8 @@ public class GooglePlacesRepository {
     }
 
     public Observable<PlaceSearchResults> getNextPageNearbyPlaces() {
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-        return placesService.fetchNextPageNearbyPlaces(BuildConfig.MAPS_API_KEY, mNextPageToken)
+        return mPlacesService.fetchNextPageNearbyPlaces(BuildConfig.MAPS_API_KEY, mNextPageToken)
                 .subscribeOn(Schedulers.io())
                 .map(results -> {
                     mNextPageToken = results.getNextPageToken();
@@ -55,9 +56,9 @@ public class GooglePlacesRepository {
     }
 
     public Observable<PlaceDetailsResults> getDetailsForPlaceId(String placeId) {
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
         String fields = "name,"
+                + "place_id,"
                 + "address_component,"
                 + "geometry,"
                 + "vicinity,"
@@ -68,7 +69,7 @@ public class GooglePlacesRepository {
                 + "website,"
                 + "rating";
 
-        return placesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, mSessionToken, placeId, fields)
+        return mPlacesService.fetchDetailsForPlaceId(BuildConfig.MAPS_API_KEY, mSessionToken, placeId, fields)
                 .subscribeOn(Schedulers.io())
                 .map(results -> {
                     generateSessionToken();
@@ -78,11 +79,9 @@ public class GooglePlacesRepository {
     }
 
     public Observable<PlaceAutocomplete> getAutocompletePlaces(String input, double latitude, double longitude, double radius){
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
-
         String latlng = latitude + "," + longitude;
 
-        return placesService.fetchPlaceAutocomplete(BuildConfig.MAPS_API_KEY, mSessionToken, input, latlng, String.valueOf(radius), AUTOCOMPLETE_PLACE_TYPE)
+        return mPlacesService.fetchPlaceAutocomplete(BuildConfig.MAPS_API_KEY, mSessionToken, input, latlng, String.valueOf(radius), AUTOCOMPLETE_PLACE_TYPE)
                 .subscribeOn(Schedulers.io())
                 .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }

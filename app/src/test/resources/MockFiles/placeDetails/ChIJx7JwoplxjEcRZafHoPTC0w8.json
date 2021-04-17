@@ -1,0 +1,63 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "11",
+            "short_name" : "11",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de l'Helvétie",
+            "short_name" : "Rue de l'Helvétie",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1931034,
+            "lng" : 6.224334399999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.1944578302915,
+               "lng" : 6.225717430291501
+            },
+            "southwest" : {
+               "lat" : 46.1917598697085,
+               "lng" : 6.223019469708497
+            }
+         }
+      },
+      "name" : "Patatas Yous",
+      "place_id" : "ChIJx7JwoplxjEcRZafHoPTC0w8",
+      "utc_offset" : 120,
+      "vicinity" : "11 Rue de l'Helvétie, Ambilly"
+   },
+   "status" : "OK"
+}

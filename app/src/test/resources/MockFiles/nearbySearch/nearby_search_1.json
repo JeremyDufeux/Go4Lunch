@@ -1,0 +1,863 @@
+{
+   "html_attributions" : [],
+   "next_page_token" : "ATtYBwLIgnMn9cbDqzXcDwZ5TbqPbeXG_8L7Drg-mIRcBPEYk13vu1iYx-1TeTCF_ckT04_m7tx4J4yI8FOi25W1Hztl06wNZNPunwVa28s_HeQZgGwp9Vt-6ZT-olzj7QbiepaXUX5Cio7yCRaHhQxJhwY9zhX85w1WrFR7q3u5TSt5hHFDc3s_URZLhaQwPiFdIwWQYPzjyS150-8YWqyiLrRl_Hrens4S-XCVqwixkZfbZdv7OTrO63osPfECiPq14AkYOUVLg5qlrk3CXStvepnXFt_Yca5QEgmX3mjlcA3GVmDIad0ro2wPVhC1-4c0lvGQKvKOwI4j6xa8BKgYRhEzu2oFFGEIlt7sLSCoofeXZctegHdbkkuANsqZeDl3gkpWs6XkhRovtR_Sep1G5NZeFkk7pybI57PUXayC2-Hrzq6GOlSovekROrRj",
+   "results" : [
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1919097,
+               "lng" : 6.220525299999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1932047802915,
+                  "lng" : 6.221887130291502
+               },
+               "southwest" : {
+                  "lat" : 46.1905068197085,
+                  "lng" : 6.219189169708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Perret Laurent",
+         "place_id" : "ChIJmYJmvClwjEcRMOaJF0DtrOU",
+         "plus_code" : {
+            "compound_code" : "56RC+Q6 Ambilly, France",
+            "global_code" : "8FR856RC+Q6"
+         },
+         "rating" : 4.7,
+         "reference" : "ChIJmYJmvClwjEcRMOaJF0DtrOU",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 3,
+         "vicinity" : "54 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "CLOSED_TEMPORARILY",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1918906,
+               "lng" : 6.220526500000001
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19319503029151,
+                  "lng" : 6.221886130291503
+               },
+               "southwest" : {
+                  "lat" : 46.19049706970851,
+                  "lng" : 6.219188169708499
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Ristorante-Pizzeria C'era Una Volta Restaurant italien Ambilly Annemasse",
+         "permanently_closed" : true,
+         "photos" : [
+            {
+               "height" : 1371,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/113868208858999807856\"\u003eRistorante-Pizzeria C&#39;era Una Volta Restaurant italien Ambilly Annemasse\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwL4QFLkDphO1JpfJm98tTJXc8obzHW1np94DrNxtrhmf5uWM1OHDyObDcm8SWpkm8317Fowu0ybueJiYhltGMJt-NwlM_EujF6yna0QMYThPpVtT6O7wHQ2YPlaPMyJV6mvjhjz7D_XIXMr7rssd-2-pdF5JZUXuudwJiCcezmwQKv5",
+               "width" : 2048
+            }
+         ],
+         "place_id" : "ChIJuwmyuSlwjEcRy3D2pfcXZAo",
+         "plus_code" : {
+            "compound_code" : "56RC+Q6 Ambilly, France",
+            "global_code" : "8FR856RC+Q6"
+         },
+         "price_level" : 1,
+         "rating" : 4.2,
+         "reference" : "ChIJuwmyuSlwjEcRy3D2pfcXZAo",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 237,
+         "vicinity" : "Annemasse FR, 54 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1917278,
+               "lng" : 6.220858599999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1931307802915,
+                  "lng" : 6.222190230291502
+               },
+               "southwest" : {
+                  "lat" : 46.1904328197085,
+                  "lng" : 6.219492269708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Best Fried Chicken",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 2988,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/103789309404445361297\"\u003eBest Fried Chicken\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwL9G5IbVjxZ7ufxqFH59WqTzYL1Om7B6hLKMguNMEBwv6tcidoZN4QiS1_kUHlkXsLZbXeKgZUERS0AdQSjtMjCKLu_wB9QJIvts2_EkeUKoF-R-MzrmVvaUzescdYBNX8ldAwbXIQzkXI5ga4zGoyDLDwBvb78CcZ0Zy6Q6j5j1XzN",
+               "width" : 5312
+            }
+         ],
+         "place_id" : "ChIJmUrmuilwjEcRRdZ646-9JFM",
+         "plus_code" : {
+            "compound_code" : "56RC+M8 Ambilly, France",
+            "global_code" : "8FR856RC+M8"
+         },
+         "rating" : 4.1,
+         "reference" : "ChIJmUrmuilwjEcRRdZ646-9JFM",
+         "scope" : "GOOGLE",
+         "types" : [
+            "meal_takeaway",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+         ],
+         "user_ratings_total" : 165,
+         "vicinity" : "31 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1886559,
+               "lng" : 6.2158766
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1900323802915,
+                  "lng" : 6.217171780291501
+               },
+               "southwest" : {
+                  "lat" : 46.1873344197085,
+                  "lng" : 6.214473819708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Le Temps de vivre",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 9072,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/105462658384085244899\"\u003eCyrille T\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwJ05HbrGdPeQm_oeR_s5gCq8pN_pcy4uPRMsKqsHSERiOUdSCFU-DbtgIPrlUyNpqiE-YdAzVID8yvEIJ793tbZCVePS0TzZAMt9opctf5Q0jQcaNCwgQetXBFmzji6dnKKEcZY9Z9l0cL40ipW8byJ1c_dapYKBOjnywJAHwqMaB5U",
+               "width" : 12096
+            }
+         ],
+         "place_id" : "ChIJf-L6-yVwjEcREZHbN2c4VwI",
+         "plus_code" : {
+            "compound_code" : "56Q8+F9 Ambilly, France",
+            "global_code" : "8FR856Q8+F9"
+         },
+         "price_level" : 2,
+         "rating" : 4.6,
+         "reference" : "ChIJf-L6-yVwjEcREZHbN2c4VwI",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 164,
+         "vicinity" : "47 Rue des Bellosses, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1924634,
+               "lng" : 6.223603199999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1938667802915,
+                  "lng" : 6.224966180291502
+               },
+               "southwest" : {
+                  "lat" : 46.1911688197085,
+                  "lng" : 6.222268219708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "La Barca",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 664,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/105743567023795789328\"\u003eLa Barca\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwIuO_ktxM_lEvR4BMBRlKQpR9oSLkcRJuj7emK56zoEPafjiLgCl-_fXHrKvdlmfwwyjzTjqL6d0Soik3estjb6dVjvUkAsbtgfDvlNIUi5iAPfBrHup6Vpbx2NIBnaBeqizSYFnwgw4N9nYHBkHsPRggyganw-ykifcS6ldAjO_JoV",
+               "width" : 1000
+            }
+         ],
+         "place_id" : "ChIJx9wFEypwjEcR2inX0ac-5fA",
+         "plus_code" : {
+            "compound_code" : "56RF+XC Ambilly, France",
+            "global_code" : "8FR856RF+XC"
+         },
+         "price_level" : 1,
+         "rating" : 4.3,
+         "reference" : "ChIJx9wFEypwjEcR2inX0ac-5fA",
+         "scope" : "GOOGLE",
+         "types" : [
+            "meal_delivery",
+            "meal_takeaway",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+         ],
+         "user_ratings_total" : 84,
+         "vicinity" : "7 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1918519,
+               "lng" : 6.219075699999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1932174302915,
+                  "lng" : 6.220513530291503
+               },
+               "southwest" : {
+                  "lat" : 46.1905194697085,
+                  "lng" : 6.217815569708498
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Mizuki",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 3024,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/109843993166765782924\"\u003eMatthias Fuchs\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwLdvQ_cgC4TMrJbSGD-WBMS8Iz_pDHaQAMlwv30Q-kYfTiXMfJ_3-YwGVDHQMpF70k5TPhs61azC8xaQLy7icqX-_8KB1vwFt2kBe-TXcAv9ZyQ3sLIXeqO0iHnfdzJxmJ6rFho-P6Z9LuZ31Es3fx8AFB1ryYkRsc8GnUIbrxcdGM0",
+               "width" : 4032
+            }
+         ],
+         "place_id" : "ChIJmZKgsilwjEcRKVdZd_cE-4k",
+         "plus_code" : {
+            "compound_code" : "56R9+PJ Gaillard, France",
+            "global_code" : "8FR856R9+PJ"
+         },
+         "rating" : 4.5,
+         "reference" : "ChIJmZKgsilwjEcRKVdZd_cE-4k",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 98,
+         "vicinity" : "62Bis Rue de Genève, Rue des Rosiers, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1914568,
+               "lng" : 6.2192014
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19282063029149,
+                  "lng" : 6.220496030291502
+               },
+               "southwest" : {
+                  "lat" : 46.1901226697085,
+                  "lng" : 6.217798069708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Le Kalao",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 3456,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/102412217064322087956\"\u003eShoira Shoira\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwLODeoS0Z8PMvdZp6MEcvk7TZqZi-Zq3y5K33UD4GpTiEKlzzz88J8tLKPjqiJZyLKlaWsydi5R6wCgoeHFwClGbfKWpyLZCe05PPbM48sAp4BtS7bQYfQtEN7Bg9rZz53KNsAR-Jwca5LT-z09iNfGBfmLVlMewBFe08v2QRQcs4UM",
+               "width" : 4608
+            }
+         ],
+         "place_id" : "ChIJ3WFTUShwjEcRFQcEGCozg24",
+         "plus_code" : {
+            "compound_code" : "56R9+HM Gaillard, France",
+            "global_code" : "8FR856R9+HM"
+         },
+         "rating" : 3.3,
+         "reference" : "ChIJ3WFTUShwjEcRFQcEGCozg24",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "bar", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 12,
+         "vicinity" : "3 Rue des Bellosses, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1918082,
+               "lng" : 6.219499099999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1931027802915,
+                  "lng" : 6.220861980291502
+               },
+               "southwest" : {
+                  "lat" : 46.1904048197085,
+                  "lng" : 6.218164019708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Snack grill",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 4608,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/109629588800578531508\"\u003eMohamed Koubi\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwJCB5iZPzcHrafLDv0M2FE8YCG6phatJcPAAORvziQ7Ic5lZUfU49Z-s4ykIwOaZ0HIhXcRO967Xod1ItNe5SvP9vBeXj61J3XtstVMt-vDx0NPVpFPPAd035GxcKABb4OtVw1K5dGRq8acvw889roTXt35Lou7LIP-PYC1H_ZS2e0v",
+               "width" : 3456
+            }
+         ],
+         "place_id" : "ChIJWYAe23BxjEcRLKDxwBH6pok",
+         "plus_code" : {
+            "compound_code" : "56R9+PQ Gaillard, France",
+            "global_code" : "8FR856R9+PQ"
+         },
+         "rating" : 2.3,
+         "reference" : "ChIJWYAe23BxjEcRLKDxwBH6pok",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 3,
+         "vicinity" : "62 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.19184599999999,
+               "lng" : 6.220219999999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19315528029149,
+                  "lng" : 6.221578230291501
+               },
+               "southwest" : {
+                  "lat" : 46.19045731970849,
+                  "lng" : 6.218880269708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Le viand'art",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 667,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/101116469719254184075\"\u003eLe viand&#39;art\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwJjhihWoYS_5lJY2d08MiYiqP0CuS4k4FQC_uUoIX7KG8efSUynMcRtD8OZKin_lF6WesGB8VWYJFmyckmNm37mb2zavZSQPZHWBzFTgHAZHhMZtMD0Y5mV4iJfa13x1X_acYHG6MucBl8YRUNMkjXs0Drt0KbDPZl1SgXAPm-eatV_",
+               "width" : 1004
+            }
+         ],
+         "place_id" : "ChIJH274sClwjEcRniBZAsyAtH0",
+         "plus_code" : {
+            "compound_code" : "56RC+P3 Ambilly, France",
+            "global_code" : "8FR856RC+P3"
+         },
+         "price_level" : 2,
+         "rating" : 4.2,
+         "reference" : "ChIJH274sClwjEcRniBZAsyAtH0",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 150,
+         "vicinity" : "56 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1917099,
+               "lng" : 6.2184794
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19300138029151,
+                  "lng" : 6.219840630291502
+               },
+               "southwest" : {
+                  "lat" : 46.19030341970851,
+                  "lng" : 6.217142669708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Restaurant indien CHARBON",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 575,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/106441672446979962048\"\u003eRestaurant indien CHARBON\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwJ4csqDn9KQUiex6lLkiXxOcfQ3ebGn3ny26uaHUDiknkmKreoG6FszeS_4dEkpZBNEiOsNhsUkq4jzY3kfM-F9iIkXzYa7EgDuQfLYMyl4bDMrN5PYTMYFho0QGGzEQ-xsElpKxZKD091nLz_J2aG8ZuvJ9LoMoZxqmzTUc43NKmky",
+               "width" : 1024
+            }
+         ],
+         "place_id" : "ChIJUUxfFWlxjEcRBCH4p_yXwC0",
+         "plus_code" : {
+            "compound_code" : "56R9+M9 Gaillard, France",
+            "global_code" : "8FR856R9+M9"
+         },
+         "rating" : 4.1,
+         "reference" : "ChIJUUxfFWlxjEcRBCH4p_yXwC0",
+         "scope" : "GOOGLE",
+         "types" : [
+            "meal_takeaway",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+         ],
+         "user_ratings_total" : 15,
+         "vicinity" : "66 Rue de Genève Charbon, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1917389,
+               "lng" : 6.220750999999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1931297302915,
+                  "lng" : 6.222089080291502
+               },
+               "southwest" : {
+                  "lat" : 46.1904317697085,
+                  "lng" : 6.219391119708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Bfc Tandoori",
+         "place_id" : "ChIJmUrmuilwjEcRsFPkJ2VwOuM",
+         "plus_code" : {
+            "compound_code" : "56RC+M8 Annemasse, France",
+            "global_code" : "8FR856RC+M8"
+         },
+         "reference" : "ChIJmUrmuilwjEcRsFPkJ2VwOuM",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "31 Rue de Genève, Annemasse"
+      },
+      {
+         "business_status" : "CLOSED_TEMPORARILY",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1912186,
+               "lng" : 6.2159995
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19262948029149,
+                  "lng" : 6.217344830291501
+               },
+               "southwest" : {
+                  "lat" : 46.18993151970849,
+                  "lng" : 6.214646869708496
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Kabuki Restaurant",
+         "permanently_closed" : true,
+         "photos" : [
+            {
+               "height" : 976,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/117397238457849860388\"\u003ejean-francois Betemps\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKoGexf21VFZQpLIIOd4uwqiN3ICLLYGGpsFj3J8DTRWXLBFV22-02U0yJDyQpdlikz3SfbryQwVlZ2Sc-wOdll59nhARDd9b3ueCfYAEIRv5kjoH58Dfq2MVJxpyAu3ZN5IUwcVQWyKo1-ulyVf0OEGP7oprHo3CUMiaaTOq1zQbMr",
+               "width" : 1009
+            }
+         ],
+         "place_id" : "ChIJOy67MiZwjEcRF2CFIhEQncc",
+         "plus_code" : {
+            "compound_code" : "56R8+F9 Gaillard, France",
+            "global_code" : "8FR856R8+F9"
+         },
+         "price_level" : 2,
+         "rating" : 4.4,
+         "reference" : "ChIJOy67MiZwjEcRF2CFIhEQncc",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 138,
+         "vicinity" : "91 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "CLOSED_TEMPORARILY",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1915029,
+               "lng" : 6.215992299999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19277173029149,
+                  "lng" : 6.217345980291501
+               },
+               "southwest" : {
+                  "lat" : 46.19007376970849,
+                  "lng" : 6.214648019708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Le Byblos Restaurant",
+         "permanently_closed" : true,
+         "photos" : [
+            {
+               "height" : 4032,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/108638347903460001362\"\u003ePatrick d\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKGeLWIdm33FN-rmKFOXAMQ11Ntalt-Xbf8i-Zecxx17pQGrmbGH7ir9FVIPyMCjsaWms-RJ2zIV09wZDDuD3ijxRW5mwrC753-7xvGz1VNE8ZfoCmUzCybOf1kHO8GumMy28KIg7_c43laFhc9ZP__-vdroCQG95t6E0Wg13AOWo0m",
+               "width" : 2268
+            }
+         ],
+         "place_id" : "ChIJ615e0idwjEcR6RPldb_yYks",
+         "plus_code" : {
+            "compound_code" : "56R8+J9 Gaillard, France",
+            "global_code" : "8FR856R8+J9"
+         },
+         "rating" : 5,
+         "reference" : "ChIJ615e0idwjEcR6RPldb_yYks",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 1,
+         "vicinity" : "86 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1922635,
+               "lng" : 6.2228634
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1936582302915,
+                  "lng" : 6.224186530291503
+               },
+               "southwest" : {
+                  "lat" : 46.1909602697085,
+                  "lng" : 6.221488569708498
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "L'at-home",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 810,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKV9Jx3eJGikNaK0EcVbAe7AQb-0k-G-ydcu7PGOujOy5jVmaB626Q4JAo2-Js-VfvC2KcF1KWJuo48EKfO9kTRHxUQCynPnFrPN6z6oJNcGQH7JMyawPEJw0869Rxdw_QqZHcxceJCPiLzyKJR1CH1clQG2APZ7keF0qCbBZzE3VuS",
+               "width" : 810
+            }
+         ],
+         "place_id" : "ChIJjUrzni1xjEcRlorzo2zM8fQ",
+         "plus_code" : {
+            "compound_code" : "56RF+W4 Ambilly, France",
+            "global_code" : "8FR856RF+W4"
+         },
+         "rating" : 5,
+         "reference" : "ChIJjUrzni1xjEcRlorzo2zM8fQ",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 21,
+         "vicinity" : "15 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.19227629999999,
+               "lng" : 6.222910499999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19367098029149,
+                  "lng" : 6.224233530291501
+               },
+               "southwest" : {
+                  "lat" : 46.19097301970849,
+                  "lng" : 6.221535569708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Receitas Bom Gosto Chez Maria",
+         "opening_hours" : {
+            "open_now" : true
+         },
+         "photos" : [
+            {
+               "height" : 2160,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/107641721214706667146\"\u003ePhilippe Campas\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKvYvRchuz7yjhu-t6SInGrWrvXhwO_Fik80jnmpYt2qCkrhO_pxDaeiUcBEs5MMi45u41tGwF_HdYTWv3TjSrT1uC5D1V3xwZxA_Bueer9tQ4zuLQeAOHKYVgOemETRJ04eUfieBskV4KPsQR97sSKIl_WkAHNVzXzQvjVAL0dNhTp",
+               "width" : 3840
+            }
+         ],
+         "place_id" : "ChIJJ74kGSpwjEcR0Ap06C7T8OA",
+         "plus_code" : {
+            "compound_code" : "56RF+W5 Ambilly, France",
+            "global_code" : "8FR856RF+W5"
+         },
+         "rating" : 4.3,
+         "reference" : "ChIJJ74kGSpwjEcR0Ap06C7T8OA",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 7,
+         "vicinity" : "15 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.19225120000001,
+               "lng" : 6.223234999999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19368988029149,
+                  "lng" : 6.224511780291501
+               },
+               "southwest" : {
+                  "lat" : 46.19099191970849,
+                  "lng" : 6.221813819708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Angkor Restaurant",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 3024,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/116447588466933073327\"\u003eKevin Eisenberg\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwIvBLw6mf2L7qeOvQ-OnINgUCs6qqspAps7q_lq_L5ZDmd_AS5HRRlYdSmft84R7Ig-B01zk76S_6flYB66abbUuITXBKinkYnHqckSZfW2ssaKldYcjHzpvEK7Ii-f584c9q-kxphQy7E75cAKyqDL22bfztcq0YZVp_VT-11Od4XD",
+               "width" : 4032
+            }
+         ],
+         "place_id" : "ChIJs7uFGSpwjEcRlZTeh2gwLUE",
+         "plus_code" : {
+            "compound_code" : "56RF+W7 Ambilly, France",
+            "global_code" : "8FR856RF+W7"
+         },
+         "rating" : 4.5,
+         "reference" : "ChIJs7uFGSpwjEcRlZTeh2gwLUE",
+         "scope" : "GOOGLE",
+         "types" : [ "bar", "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 52,
+         "vicinity" : "13 Rue de Genève, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.19112550000001,
+               "lng" : 6.215085699999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1925072802915,
+                  "lng" : 6.216434630291502
+               },
+               "southwest" : {
+                  "lat" : 46.1898093197085,
+                  "lng" : 6.213736669708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "La Panière - Gaillard",
+         "opening_hours" : {
+            "open_now" : true
+         },
+         "photos" : [
+            {
+               "height" : 2448,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/118310432179984004202\"\u003eAjendra Pratap\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwIRo2kFRO9cddiiSosejKNZ7sLG0pDiSSfCUDdGbYTrlsMupKMkf_vXtE_F-oBdgACHk66a5ZuGBWprUI09aqMvwJw1Dkq1T4VnTTjA1Nvr2oudIOISeJQaO1KBNhBskb5_jEpV8USBNU_5AeZgywOmCnO0p--nvdA5Q4ZQ5qixKNms",
+               "width" : 3264
+            }
+         ],
+         "place_id" : "ChIJnalkTyZwjEcRRpsKPioRDN4",
+         "plus_code" : {
+            "compound_code" : "56R8+F2 Gaillard, France",
+            "global_code" : "8FR856R8+F2"
+         },
+         "price_level" : 2,
+         "rating" : 3.4,
+         "reference" : "ChIJnalkTyZwjEcRRpsKPioRDN4",
+         "scope" : "GOOGLE",
+         "types" : [
+            "bakery",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "store",
+            "establishment"
+         ],
+         "user_ratings_total" : 74,
+         "vicinity" : "97 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.19292660000001,
+               "lng" : 6.224029300000001
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19429838029151,
+                  "lng" : 6.225545980291503
+               },
+               "southwest" : {
+                  "lat" : 46.19160041970851,
+                  "lng" : 6.222848019708498
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Les Délices Maghrébins",
+         "opening_hours" : {
+            "open_now" : true
+         },
+         "place_id" : "ChIJnepRELJxjEcRHapN4inNgc0",
+         "plus_code" : {
+            "compound_code" : "56VF+5J Ambilly, France",
+            "global_code" : "8FR856VF+5J"
+         },
+         "reference" : "ChIJnepRELJxjEcRHapN4inNgc0",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "16 Rue de l'Helvétie, Ambilly"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1893419,
+               "lng" : 6.2142082
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19067013029149,
+                  "lng" : 6.215537180291503
+               },
+               "southwest" : {
+                  "lat" : 46.18797216970849,
+                  "lng" : 6.212839219708498
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Cafẽ Des Voyageurs",
+         "place_id" : "ChIJW8G3cCZwjEcRx0bEWzCXOTA",
+         "plus_code" : {
+            "compound_code" : "56Q7+PM Gaillard, France",
+            "global_code" : "8FR856Q7+PM"
+         },
+         "reference" : "ChIJW8G3cCZwjEcRx0bEWzCXOTA",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "France"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1931034,
+               "lng" : 6.224334399999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1944578302915,
+                  "lng" : 6.225717430291501
+               },
+               "southwest" : {
+                  "lat" : 46.1917598697085,
+                  "lng" : 6.223019469708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Patatas Yous",
+         "place_id" : "ChIJx7JwoplxjEcRZafHoPTC0w8",
+         "plus_code" : {
+            "compound_code" : "56VF+6P Ambilly, France",
+            "global_code" : "8FR856VF+6P"
+         },
+         "reference" : "ChIJx7JwoplxjEcRZafHoPTC0w8",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "11 Rue de l'Helvétie, Ambilly"
+      }
+   ],
+   "status" : "OK"
+}

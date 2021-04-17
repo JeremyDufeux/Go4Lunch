@@ -1,0 +1,65 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "54",
+            "short_name" : "54",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1919097,
+            "lng" : 6.220525299999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.1932047802915,
+               "lng" : 6.221887130291502
+            },
+            "southwest" : {
+               "lat" : 46.1905068197085,
+               "lng" : 6.219189169708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 9 62 21 61 87",
+      "name" : "Perret Laurent",
+      "place_id" : "ChIJmYJmvClwjEcRMOaJF0DtrOU",
+      "rating" : 4.7,
+      "utc_offset" : 120,
+      "vicinity" : "54 Rue de Genève, Ambilly"
+   },
+   "status" : "OK"
+}

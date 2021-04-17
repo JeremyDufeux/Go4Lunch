@@ -22,7 +22,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
         
-        testInstrumentationRunner "com.jeremydufeux.go4lunch.CustomTestRunner"
+        testInstrumentationRunner "com.jeremydufeux.go4lunch.utils.CustomTestRunner"
     }
 
     buildFeatures {

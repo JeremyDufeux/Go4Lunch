@@ -1,0 +1,157 @@
+{
+   "html_attributions" : [],
+   "results" : [
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1896247,
+               "lng" : 6.213563699999999
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1909467302915,
+                  "lng" : 6.214886680291501
+               },
+               "southwest" : {
+                  "lat" : 46.1882487697085,
+                  "lng" : 6.212188719708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Café - Restaurant De L´acacia",
+         "place_id" : "ChIJRYJJfSZwjEcRvfxAnAz7ajU",
+         "plus_code" : {
+            "compound_code" : "56Q7+RC Gaillard, France",
+            "global_code" : "8FR856Q7+RC"
+         },
+         "reference" : "ChIJRYJJfSZwjEcRvfxAnAz7ajU",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "France"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1913483,
+               "lng" : 6.2128001
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.1927704302915,
+                  "lng" : 6.214162980291502
+               },
+               "southwest" : {
+                  "lat" : 46.1900724697085,
+                  "lng" : 6.211465019708498
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Mama Rosa",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 4008,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/111374001587508000124\"\u003eKristian Naydenov\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKtWvz_F6XMNcLfqG1tr2gQm2uanUfkJR_gh1il93uAkaYA111nHY_1vzBhbhqpnPhpSgGk3H-zCulImauKxuooIO-hLhzA3XQ4N7kv76FQIwJqec9EWosBbM0CMQW0tPTc1sdmZvDSYcr3Zbg8vwhDGXyQoVBmrInx0wuIsNrkf-9H",
+               "width" : 5344
+            }
+         ],
+         "place_id" : "ChIJW3Mq4CZwjEcRJ2fVnJw-oNM",
+         "plus_code" : {
+            "compound_code" : "56R7+G4 Gaillard, France",
+            "global_code" : "8FR856R7+G4"
+         },
+         "price_level" : 1,
+         "rating" : 4.4,
+         "reference" : "ChIJW3Mq4CZwjEcRJ2fVnJw-oNM",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 166,
+         "vicinity" : "117 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1913187,
+               "lng" : 6.2125187
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19276798029149,
+                  "lng" : 6.213886730291502
+               },
+               "southwest" : {
+                  "lat" : 46.1900700197085,
+                  "lng" : 6.211188769708499
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "Lunch Time",
+         "place_id" : "ChIJIaGT4CZwjEcRkrq89YvQaBA",
+         "plus_code" : {
+            "compound_code" : "56R7+G2 Gaillard, France",
+            "global_code" : "8FR856R7+G2"
+         },
+         "reference" : "ChIJIaGT4CZwjEcRkrq89YvQaBA",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "vicinity" : "117 Rue de Genève, Gaillard"
+      },
+      {
+         "business_status" : "OPERATIONAL",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.1916603,
+               "lng" : 6.2121926
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.19295698029149,
+                  "lng" : 6.213527230291501
+               },
+               "southwest" : {
+                  "lat" : 46.19025901970849,
+                  "lng" : 6.210829269708497
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+         "name" : "NOUILLES NOUILLES",
+         "opening_hours" : {
+            "open_now" : false
+         },
+         "photos" : [
+            {
+               "height" : 6000,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/112972024498657316984\"\u003eyongkai li\u003c/a\u003e"
+               ],
+               "photo_reference" : "ATtYBwKrXkbSxw6uOSE9qGCsF669M6pG62m607afvOUkEidH7TjdyJLO3JZUWvg3N5pwm3ABVVnfhIE26HRP3nGJ3uFC990wqRN3GfVzbk_BEkyu6-Gl73lDrCpUTK8t7ZHRLa0IG4ixxD64wPTex6UDyMwHgnK2LPteHC8dJEN_-8le8IQz",
+               "width" : 8000
+            }
+         ],
+         "place_id" : "ChIJR6ivL29xjEcRK-DplrqVQYQ",
+         "plus_code" : {
+            "compound_code" : "56R6+MV Gaillard, France",
+            "global_code" : "8FR856R6+MV"
+         },
+         "rating" : 4.6,
+         "reference" : "ChIJR6ivL29xjEcRK-DplrqVQYQ",
+         "scope" : "GOOGLE",
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+         "user_ratings_total" : 70,
+         "vicinity" : "110 Rue de Genève, Gaillard"
+      }
+   ],
+   "status" : "OK"
+}

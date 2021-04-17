@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch;
+package com.jeremydufeux.go4lunch.utils;
 
 import android.app.Application;
 import android.content.Context;

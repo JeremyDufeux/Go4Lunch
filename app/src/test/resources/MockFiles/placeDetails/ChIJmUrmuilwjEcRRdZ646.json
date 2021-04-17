@@ -1,0 +1,281 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "31",
+            "short_name" : "31",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1917278,
+            "lng" : 6.220858599999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.1931307802915,
+               "lng" : 6.222190230291502
+            },
+            "southwest" : {
+               "lat" : 46.1904328197085,
+               "lng" : 6.219492269708497
+            }
+         }
+      },
+      "international_phone_number" : "+33 4 50 74 35 96",
+      "name" : "Best Fried Chicken",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "2330"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1730"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1730"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1730"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1730"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1730"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "1430"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1730"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: Closed",
+            "Tuesday: 11:30 AM – 2:30 PM, 5:30 PM – 12:00 AM",
+            "Wednesday: 11:30 AM – 2:30 PM, 5:30 PM – 12:00 AM",
+            "Thursday: 11:30 AM – 2:30 PM, 5:30 PM – 12:00 AM",
+            "Friday: 11:30 AM – 2:30 PM, 5:30 PM – 12:00 AM",
+            "Saturday: 11:30 AM – 2:30 PM, 5:30 PM – 12:00 AM",
+            "Sunday: 11:30 AM – 2:30 PM, 5:30 – 11:30 PM"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/103789309404445361297\"\u003eBest Fried Chicken\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKySqUmDHiK6bIFlmDm7mIaCXVS_lcJGhon8NELYPz8HxLwRrKbblJZpIj0cyRTD3oiSjalgxpkvbU_E4gCv4H4mOP5dA-OGq2LPns-cUPEQVOQHflvZvSWPXijW7c54NJujOwlltdKiYShcjmEFU246ln4IjjJNfAVDs9NZRnj0BJ1",
+            "width" : 5312
+         },
+         {
+            "height" : 3024,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/113846993030480573037\"\u003eSufian Ahmed\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwK26lGfLX4wmleMqaGYzJLpR0cR4rInZKXOtAVjRz5K136iXmwKzBPzG-4Mne3mPwq12zfiS5nKHxt2hCY_hZucg_ext2Ao5Xll4x7vWpsUrJuqsnwSY6PYQWMXVOx8EoBOTXwcgbApJg-hvfsc1_JoFwVwcP2snNg9H8PFzPR5Cpzl",
+            "width" : 4032
+         },
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117444213804608563689\"\u003eHaider Cheema\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLnMWy1DgTPr_htaFFLCpyaY30yoM9NNCQ8zUr5AgJWTOlpMVnWJtVvypPhW4FuWohWlZd92lQlfKSP_Alu-UYZa6aS8oBnoEco_XaIKloCO8DWXtZojzN-hfvbkvDOo4cv9vvKRsaJyQH08C0-sAGqYSCO0TZuaPNcpF3v_4PU7PkX",
+            "width" : 5312
+         },
+         {
+            "height" : 3008,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/113913086833411302780\"\u003eMadison Magdeleine\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLYSf4mHMGBG54ZggnxOSKbvCET9-Uv70T-NmI6wCquWXFYWS8m2PvlO7zpbcXp-TJVu-PIzqHhPTpamS-yuvXJs80qH2yWr1JprQNXc6gHe5gIIGTEY3fS0bxzhXlTgB-aHG1eac8I5Rt5d9vFBzcN2k8lX3T4UnHujfwP0KcPWIe9",
+            "width" : 4016
+         },
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117444213804608563689\"\u003eHaider Cheema\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIZwIq0Avnj4DckJP0nXExTOPJAVSjrNQfudDk2VBCAlWgtbsmRW24sew7mjNHIpxWHBB9RrNXkiSg7ZpAISci6C4xY0rxWWXM3KzXj1wqZIn2G7JRdIehQldTfMGjaOyplN5ITjVLKtLQOgv9QCpu_DKPwtCSVnC3o1_dDhYz37vLH",
+            "width" : 5312
+         },
+         {
+            "height" : 9072,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/118407156134149747837\"\u003eSam Smith\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKKQlMiyC3R-F-aCPrNnP8imEm4CipjtOUtYjN-jsl07xMsvRsGHX9fkqbbWtQz3UluQWuyB9kEklQd-wSQD5qkMccq1b40dHtppuFaUNaRcYBQpjEn7dQnyjm0yieU3Dxubh3UmhM6OUnOHxzgpYIKDZzX4o8g4zV3xfyGFg23O2pr",
+            "width" : 12096
+         },
+         {
+            "height" : 4032,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/116009293785785133273\"\u003eSe7s Hussein\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIFHKODAjPz9mIAh9fck3ojwwKxlAfuAaPE66LLAk1h-EfjblVQVm1qI0aeTNM5iyjBv5qq4Qbh4mqc2S10Nh50WwFHZVm5v7aubvwFfGvfrH0SVju7tVsqbvK1kL7nWILtw5tzjG1Tswb-xjKKiFuvIqmQGLNcRSgdEdDdqycXeJ66",
+            "width" : 3024
+         },
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117444213804608563689\"\u003eHaider Cheema\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKFwS6xEw6A2LPkkzRsTopUPVt54U0FYLIwmqOiO3ZZe68IuaaC01PYEPAxZgNe27sKR6GZPHJpZWh45bLsGpgeuzxhOYR6nVpc3dU1_LKD-r_dzL_EQ3uLKBMjDi4HMAsAdM2txiWGQPpG6HxmkHxGrtXKsk8un_PmaiqpK7xZC00t",
+            "width" : 5312
+         },
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/103789309404445361297\"\u003eBest Fried Chicken\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLuUwSePnyFNthb1VCbccKtdsBJ4Zh7UuT0yFyOjI4Kyx1j1TSaUq53mWyx5i72xD9ROHEQ2Maaw6OlHzxXSA75s7qTlAXIDvYthEjqSBdR5KqMBmTfTndHlIO2yKEW98sT6PxnMV6ZbPZEA93_cDwXyZPBcJzpFySApYK1SHmmj481",
+            "width" : 5312
+         },
+         {
+            "height" : 2988,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/100973122139344116978\"\u003eHani Alaswadi\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJ1CBK3hXX3240-27-MJnWaT-1DPzu_hsIzml3kj-aFSWcSIRy4MAWjhF3LlO4pmtN9-W2xMTU-ilUtGIlKUgwLkDeFSZcHY7VSgguL8mppTW5FDr4IhBU1TjaW3F84E5SMcZphOBnge3u3e9Eyv5cNKgDZXb6ujHAcJ7Ko6SdVgXau",
+            "width" : 5312
+         }
+      ],
+      "place_id" : "ChIJmUrmuilwjEcRRdZ646-9JFM",
+      "rating" : 4.1,
+      "utc_offset" : 120,
+      "vicinity" : "31 Rue de Genève, Ambilly"
+   },
+   "status" : "OK"
+}

@@ -1,0 +1,262 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "15",
+            "short_name" : "15",
+            "types" : [ "street_number" ]
+         },
+         {
+            "long_name" : "Rue de Genève",
+            "short_name" : "Rue de Genève",
+            "types" : [ "route" ]
+         },
+         {
+            "long_name" : "Ambilly",
+            "short_name" : "Ambilly",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Haute-Savoie",
+            "short_name" : "Haute-Savoie",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Auvergne-Rhône-Alpes",
+            "short_name" : "Auvergne-Rhône-Alpes",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "74100",
+            "short_name" : "74100",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "geometry" : {
+         "location" : {
+            "lat" : 46.1922635,
+            "lng" : 6.2228634
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 46.1936582302915,
+               "lng" : 6.224186530291503
+            },
+            "southwest" : {
+               "lat" : 46.1909602697085,
+               "lng" : 6.221488569708498
+            }
+         }
+      },
+      "international_phone_number" : "+33 6 16 07 83 44",
+      "name" : "L'at-home",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "0800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "0800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "0800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2230"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "0800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "1400"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "0800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "0000"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1800"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "Monday: Closed",
+            "Tuesday: 8:00 AM – 2:00 PM, 6:00 – 10:30 PM",
+            "Wednesday: 8:00 AM – 2:00 PM, 6:00 – 10:30 PM",
+            "Thursday: 8:00 AM – 2:00 PM, 6:00 – 10:30 PM",
+            "Friday: 8:00 AM – 2:00 PM, 6:00 PM – 12:00 AM",
+            "Saturday: 8:00 AM – 2:00 PM, 6:00 PM – 12:00 AM",
+            "Sunday: Closed"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 810,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLrvccCjAElYEIHYr8y-7Q-D8uRBsQDZNiLntXWu5xDEtKtc0Gp0jfp7wXKQvPdLwrU7W1lXCUY8gmz9oUIpMGzXkAHal1le-eSKUIHY0HTIaLyA12WcwnYmjcqrf46s52AenrSxb0hyP8S21pw1chJJwVCN6NDO8bE09M90M4dkf25",
+            "width" : 810
+         },
+         {
+            "height" : 415,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwIeVg7fXzQ7uJvL7mSyJawy0R4aowot7JMYz28C52hU1sxBtjvvFTNy4lbQHHtmvyupMieeB4CdIX7N8K8d6K2Zi6Sc6lEy8Ue3GTS_K9G74svj2tQzusdNR0pHhf0tSfXACaaabCbjGMGSQJU3lRJA1EcSqOa66B4hkaR8dq2-YnGJ",
+            "width" : 738
+         },
+         {
+            "height" : 3000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwLIHpGgasVWoG6Y7MSGnrdlrDQlEFnH0S5J_KS5FIjdqBKixSYEClCMcK9GYJwcZRYs_r4jRB3qL09EYh5jsAyCo93WNaLUoYbd6iv_9s8DKxj4iDBm3gNAvMr1bIozprAUSEZXKcRVgSItw470ymuo5r7jPFCzgFyPa1qIW4KzKyCC",
+            "width" : 4000
+         },
+         {
+            "height" : 3000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJa-59BMeiXfiS35twel79fMOn8vTGeBt8qgVCmOmd_L9A0yNyCkVZw4jdaN8EZyA4LU76xofiDsB6X_x_MvlQh-0kz3BfXLhytIlyBoFHn0n4mMATtge5vf5h2fGHMVPaFi-QrRXbXHpCD92cV2vjgSKWmtkdk_ugWfm4Ian62KloR",
+            "width" : 4000
+         },
+         {
+            "height" : 3000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKcbiYeVhWtJhpMO3ar1RfdgwMKGHcJDIVX2f8p-cQgOCcA5GNRFdZRjAHt4CG3rEANlqcKeAtGMHooso-ra4dGtwTN8oo2mbEBzm5k4xWakANsO3KPgr4pT72QBjkGTQR39Nuy6knq4UTz5SlUttct4K8DQp16NhA8NcfGYESMJLp5",
+            "width" : 4000
+         },
+         {
+            "height" : 2736,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/117861114767953435338\"\u003eJennifer Dureuil\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKX-Nm_CzSuL6ajhkLUqX5_8U1WcO_HXraOCap90OlWvMmZ09ETBYlH2D_bshrmCryrXZ7a5r0Yv1gUPAKH95JfVBfP8tPfNn7oliB7vY7_Fy_Mkti6MuvJh5xrizlkEslLfM4jUtHzjcxOeIpTANX9BHOWUabXXBzoFqq6mSTXwVe9",
+            "width" : 3648
+         },
+         {
+            "height" : 1387,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwI2ijshl49pD_5M8TN5rPds8kjY3afJqqbukKaDxWK5LZMFb3nSeZnVzPEmV2mbM5XdvuydFUfWOb1c-LrDvRLsQsUuY5jqP3lxZaoU74MuGcMQETagcHfOT8OH2qLn0IkeUoKqMzHF-6GMEg-XMUY-t4gSSJoEEpYCDMAJNkQBa0Q-",
+            "width" : 640
+         },
+         {
+            "height" : 810,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwKvE7a3REMV8G7sshmNeNYJKlN8EreL6cqeSDs1Wmk4IJC67Aa7Iz_w6DtnCANtUw9Qb1jJgkRM3BHTHAnXcqrW356tqQmQHtyROwHYktJwBz5T3jiesn6XBz2xlRtSKsPrTWn7a_4BlPWQCjXvk_jn-7Ivc7JA1zy_BKj1qcel_gsh",
+            "width" : 810
+         },
+         {
+            "height" : 3000,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwJxRbSGbljP9u59Jz7dwAeG8HaSOssBFMsYSJeDbY_u04hueU6WkvIQRvogVMtfVJC3_NpPOO6l-fI6-iAW2KeNKN3bXuTAj1-YP2NFDFz1XLgK2nnQmUF_ed0wng0ndWg1ndqDJcByk1lb-nmEoriELBaQFPzkZfUA-kQw_RdDIxCY",
+            "width" : 4000
+         },
+         {
+            "height" : 1600,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108794737631401426478\"\u003eL&#39;at-home\u003c/a\u003e"
+            ],
+            "photo_reference" : "ATtYBwItFsB3uSimT-JrhIQ3zVVChNYKhp8rqgWIYsvQfxXWDyVynEqazpixYDg6-WGh1_gZJOoBsoJ3Bc2Gbh5C873qRDAjm4KEzTExjxTLq9p66RyrJkNJ77aXnHl537rJqbofqg_cdN1cTDhasOu7C-SvFWV1y9utIS4oIjuw9aeEtPhg",
+            "width" : 738
+         }
+      ],
+      "place_id" : "ChIJjUrzni1xjEcRlorzo2zM8fQ",
+      "rating" : 5,
+      "utc_offset" : 120,
+      "vicinity" : "15 Rue de Genève, Ambilly",
+      "website" : "https://www.facebook.com/LAt-Home-101483411528944"
+   },
+   "status" : "OK"
+}
