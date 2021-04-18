@@ -1,0 +1,212 @@
+{
+   "predictions" : [
+      {
+         "description" : "Burger King, Route de Livron, Annemasse, France",
+         "matched_substrings" : [
+            {
+               "length" : 3,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJg_g8C-BxjEcRhu3by9eChu8",
+         "reference" : "ChIJg_g8C-BxjEcRhu3by9eChu8",
+         "structured_formatting" : {
+            "main_text" : "Burger King",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 3,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Route de Livron, Annemasse, France"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Burger King"
+            },
+            {
+               "offset" : 13,
+               "value" : "Route de Livron"
+            },
+            {
+               "offset" : 30,
+               "value" : "Annemasse"
+            },
+            {
+               "offset" : 41,
+               "value" : "France"
+            }
+         ],
+         "types" : [
+            "meal_takeaway",
+            "bar",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+         ]
+      },
+      {
+         "description" : "Burger n Tacos, Rue Albert Montfort, Annemasse, France",
+         "matched_substrings" : [
+            {
+               "length" : 3,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJL6vqPCpujEcRtsbmi9vOvLM",
+         "reference" : "ChIJL6vqPCpujEcRtsbmi9vOvLM",
+         "structured_formatting" : {
+            "main_text" : "Burger n Tacos",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 3,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Rue Albert Montfort, Annemasse, France"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Burger n Tacos"
+            },
+            {
+               "offset" : 16,
+               "value" : "Rue Albert Montfort"
+            },
+            {
+               "offset" : 37,
+               "value" : "Annemasse"
+            },
+            {
+               "offset" : 48,
+               "value" : "France"
+            }
+         ],
+         "types" : [ "restaurant", "food", "point_of_interest", "establishment" ]
+      },
+      {
+         "description" : "Bureau de tabac, Place de l'Étoile, Annemasse, France",
+         "matched_substrings" : [
+            {
+               "length" : 3,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJ2XceUUVvjEcRxQ15NcJPmSA",
+         "reference" : "ChIJ2XceUUVvjEcRxQ15NcJPmSA",
+         "structured_formatting" : {
+            "main_text" : "Bureau de tabac",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 3,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Place de l'Étoile, Annemasse, France"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Bureau de tabac"
+            },
+            {
+               "offset" : 17,
+               "value" : "Place de l'Étoile"
+            },
+            {
+               "offset" : 36,
+               "value" : "Annemasse"
+            },
+            {
+               "offset" : 47,
+               "value" : "France"
+            }
+         ],
+         "types" : [ "point_of_interest", "store", "establishment" ]
+      },
+      {
+         "description" : "Bureau des Cartes grises - Conrad Automobiles, Rue du Commerce, Ville-la-Grand, France",
+         "matched_substrings" : [
+            {
+               "length" : 3,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJs68kQP1vjEcRfa9TFklORqM",
+         "reference" : "ChIJs68kQP1vjEcRfa9TFklORqM",
+         "structured_formatting" : {
+            "main_text" : "Bureau des Cartes grises - Conrad Automobiles",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 3,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Rue du Commerce, Ville-la-Grand, France"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Bureau des Cartes grises - Conrad Automobiles"
+            },
+            {
+               "offset" : 47,
+               "value" : "Rue du Commerce"
+            },
+            {
+               "offset" : 64,
+               "value" : "Ville-la-Grand"
+            },
+            {
+               "offset" : 80,
+               "value" : "France"
+            }
+         ],
+         "types" : [ "local_government_office", "point_of_interest", "establishment" ]
+      },
+      {
+         "description" : "Burton of London, Rue de la Gare, Annemasse, France",
+         "matched_substrings" : [
+            {
+               "length" : 3,
+               "offset" : 0
+            }
+         ],
+         "place_id" : "ChIJE9t-GypujEcRllqsfAkzmZM",
+         "reference" : "ChIJE9t-GypujEcRllqsfAkzmZM",
+         "structured_formatting" : {
+            "main_text" : "Burton of London",
+            "main_text_matched_substrings" : [
+               {
+                  "length" : 3,
+                  "offset" : 0
+               }
+            ],
+            "secondary_text" : "Rue de la Gare, Annemasse, France"
+         },
+         "terms" : [
+            {
+               "offset" : 0,
+               "value" : "Burton of London"
+            },
+            {
+               "offset" : 18,
+               "value" : "Rue de la Gare"
+            },
+            {
+               "offset" : 34,
+               "value" : "Annemasse"
+            },
+            {
+               "offset" : 45,
+               "value" : "France"
+            }
+         ],
+         "types" : [ "point_of_interest", "clothing_store", "store", "establishment" ]
+      }
+   ],
+   "status" : "OK"
+}

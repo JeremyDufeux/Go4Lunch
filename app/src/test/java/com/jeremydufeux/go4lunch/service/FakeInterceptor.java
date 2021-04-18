@@ -23,7 +23,6 @@ public class FakeInterceptor implements Interceptor {
 
         final URI uri = chain.request().url().uri();
         final String query = uri.getQuery();
-        final String[] parsedQuery = query.split("=");
 
         if(uri.toString().contains("nearbysearch")
                 && uri.toString().contains("location")){
@@ -36,8 +35,13 @@ public class FakeInterceptor implements Interceptor {
             responseString = new String(Files.readAllBytes(Paths.get(path)));
         }
         else if(uri.toString().contains("details")){
-            System.out.println(parsedQuery[6]);
-            String path = "src/test/resources/MockFiles/placeDetails/" + parsedQuery[6] + ".json";
+            final String[] parsedQuery = query.split("&");
+            final String id = parsedQuery[2].split("=")[1];
+
+            String path = "src/test/resources/MockFiles/placeDetails/" + id + ".json";
+            responseString = new String(Files.readAllBytes(Paths.get(path)));
+        }else if(uri.toString().contains("autocomplete")) {
+            String path = "src/test/resources/MockFiles/autocomplete/autocomplete.json";
             responseString = new String(Files.readAllBytes(Paths.get(path)));
         }
 
