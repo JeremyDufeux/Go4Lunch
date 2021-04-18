@@ -89,7 +89,7 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
                 }
 
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
-                    if(period.getOpen().getDay() == 0 && period.getOpen().getTime().equals("0000")){
+                    if(period.getOpen().getDay() == 0 && period.getClose() == null){
                         mRestaurant.setAlwaysOpen(true);
                         return;
                     } else {
