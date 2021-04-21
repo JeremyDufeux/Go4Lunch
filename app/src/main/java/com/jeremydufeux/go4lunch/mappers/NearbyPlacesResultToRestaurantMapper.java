@@ -27,8 +27,8 @@ public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearc
                 restaurant.setName(placeSearch.getName());
 
                 Location location = new Location("");
-                location.setLatitude(placeSearch.getGeometry().getLocation().getLat());
-                location.setLongitude(placeSearch.getGeometry().getLocation().getLng());
+                location.setLatitude(placeSearch.getPlaceSearchGeometry().getLocation().getLat());
+                location.setLongitude(placeSearch.getPlaceSearchGeometry().getLocation().getLng());
                 restaurant.setLocation(location);
 
                 restaurantList.add(restaurant);

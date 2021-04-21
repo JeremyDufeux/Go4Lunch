@@ -40,7 +40,7 @@ public class PlaceDetails {
     private String website;
     @SerializedName("geometry")
     @Expose
-    private Geometry geometry;
+    private PlaceDetailsGeometry mPlaceDetailsGeometry;
     @SerializedName("business_status")
     @Expose
     private String businessStatus;
@@ -125,12 +125,12 @@ public class PlaceDetails {
         return businessStatus;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
+    public PlaceDetailsGeometry getPlaceDetailsGeometry() {
+        return mPlaceDetailsGeometry;
     }
 
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
+    public void setPlaceDetailsGeometry(PlaceDetailsGeometry placeDetailsGeometry) {
+        this.mPlaceDetailsGeometry = placeDetailsGeometry;
     }
 
     public void setBusinessStatus(String businessStatus) {

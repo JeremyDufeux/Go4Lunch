@@ -19,7 +19,7 @@ public class RestaurantRepository {
     private final BehaviorSubject<HashMap<String, Restaurant>> mRestaurantDetailsListObservable;
 
     @Inject
-    RestaurantRepository() {
+    public RestaurantRepository() {
         mRestaurantHashMap = new HashMap<>();
 
         mRestaurantListObservable = BehaviorSubject.create();

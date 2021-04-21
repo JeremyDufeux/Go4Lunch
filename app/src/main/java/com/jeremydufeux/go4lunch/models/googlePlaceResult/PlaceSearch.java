@@ -12,7 +12,7 @@ public class PlaceSearch {
     private String businessStatus;
     @SerializedName("geometry")
     @Expose
-    private Geometry geometry;
+    private PlaceSearchGeometry mPlaceSearchGeometry;
     @SerializedName("icon")
     @Expose
     private String icon;
@@ -64,12 +64,12 @@ public class PlaceSearch {
         this.businessStatus = businessStatus;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
+    public PlaceSearchGeometry getPlaceSearchGeometry() {
+        return mPlaceSearchGeometry;
     }
 
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
+    public void setPlaceSearchGeometry(PlaceSearchGeometry placeSearchGeometry) {
+        this.mPlaceSearchGeometry = placeSearchGeometry;
     }
 
     public String getIcon() {

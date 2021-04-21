@@ -60,8 +60,8 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
 
     private void setLocation(PlaceDetails placeDetail){
         Location location = new Location("");
-        location.setLatitude(placeDetail.getGeometry().getLocation().getLat());
-        location.setLongitude(placeDetail.getGeometry().getLocation().getLng());
+        location.setLatitude(placeDetail.getPlaceDetailsGeometry().getLocation().getLat());
+        location.setLongitude(placeDetail.getPlaceDetailsGeometry().getLocation().getLng());
 
         mRestaurant.setLocation(location);
     }
@@ -138,11 +138,13 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     private String getAddressFromAddressComponents(List<AddressComponent> addressComponents){
         String streetNumber = "";
         String route = "";
-        for (int i = 0; i < addressComponents.size(); i++){
-            if(addressComponents.get(i).getTypes().contains("street_number")){
-                streetNumber = addressComponents.get(i).getLongName() + ", ";
-            } else if(addressComponents.get(i).getTypes().contains("route")){
-                route = addressComponents.get(i).getLongName();
+        if(addressComponents != null) {
+            for (int i = 0; i < addressComponents.size(); i++) {
+                if (addressComponents.get(i).getTypes().contains("street_number")) {
+                    streetNumber = addressComponents.get(i).getLongName() + ", ";
+                } else if (addressComponents.get(i).getTypes().contains("route")) {
+                    route = addressComponents.get(i).getLongName();
+                }
             }
         }
         return streetNumber + route;

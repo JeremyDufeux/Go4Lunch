@@ -1,4 +1,4 @@
-package com.jeremydufeux.go4lunch;
+package com.jeremydufeux.go4lunch.repositoriesTests;
 
 import com.jeremydufeux.go4lunch.api.PlacesService;
 import com.jeremydufeux.go4lunch.models.googlePlaceAutocomplete.PlaceAutocomplete;

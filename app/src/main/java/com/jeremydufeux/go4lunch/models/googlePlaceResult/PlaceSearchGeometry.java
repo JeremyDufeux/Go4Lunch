@@ -1,11 +1,9 @@
-package com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult;
+package com.jeremydufeux.go4lunch.models.googlePlaceResult;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.jeremydufeux.go4lunch.models.googlePlaceResult.Location;
-import com.jeremydufeux.go4lunch.models.googlePlaceResult.Viewport;
 
-public class Geometry {
+public class PlaceSearchGeometry {
 
     @SerializedName("location")
     @Expose
