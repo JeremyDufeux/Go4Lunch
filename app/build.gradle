@@ -45,6 +45,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -121,6 +125,9 @@ dependencies {
 
     // Work Manager
     implementation "androidx.work:work-runtime:2.5.0"
+
+    // Mockito
+    testImplementation 'org.mockito:mockito-core:2.23.0'
 
     // Canary Leaks
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
