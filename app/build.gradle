@@ -22,7 +22,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
         
-        testInstrumentationRunner "com.jeremydufeux.go4lunch.utils.CustomTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -116,12 +116,6 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
-    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
-    testAnnotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
-    androidTestAnnotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Work Manager
     implementation "androidx.work:work-runtime:2.5.0"
