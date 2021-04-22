@@ -137,10 +137,7 @@ public class RestaurantUseCaseTest {
 
         mRestaurantUseCase.observeRestaurantList()
                 .test()
-                .assertValue(restaurantHashMap -> {
-                    System.out.println(restaurantHashMap.containsKey(placeId));
-                    return restaurantHashMap.containsKey(placeId);}
-                    );
+                .assertValue(restaurantHashMap -> restaurantHashMap.containsKey(placeId));
 
         mRestaurantUseCase.observeRestaurantDetailsList()
                 .test()

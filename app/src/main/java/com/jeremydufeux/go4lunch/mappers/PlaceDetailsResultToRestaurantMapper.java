@@ -33,15 +33,15 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     public Restaurant apply(@NonNull PlaceDetailsResults results) {
         PlaceDetails placeDetail = results.getPlaceDetails();
 
-        mRestaurant.setName(placeDetail.getName());
-        mRestaurant.setPhotoUrl(getPhotoUrl(placeDetail));
-        mRestaurant.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
-        mRestaurant.setWebsite(placeDetail.getWebsite());
-
         setLocation(placeDetail);
         setAddress(placeDetail);
         setOpeningData(placeDetail);
         setRating(placeDetail);
+
+        mRestaurant.setName(placeDetail.getName());
+        mRestaurant.setPhotoUrl(getPhotoUrl(placeDetail));
+        mRestaurant.setPhoneNumber(placeDetail.getInternationalPhoneNumber());
+        mRestaurant.setWebsite(placeDetail.getWebsite());
 
         if(mRestaurant.getPhoneNumber() != null && !mRestaurant.getPhoneNumber().isEmpty()) {
             mRestaurant.setDetailsCallLlVisibility(View.VISIBLE);
@@ -89,7 +89,9 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
                 }
 
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
-                    if(period.getOpen().getDay() == 0 && period.getClose() == null){
+                    if(period.getOpen().getDay() == 0
+                            && period.getOpen().getTime().equals("0000")
+                            && period.getClose() == null){
                         mRestaurant.setAlwaysOpen(true);
                         return;
                     } else {

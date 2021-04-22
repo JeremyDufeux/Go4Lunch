@@ -12,6 +12,10 @@ public class PlaceSearchGeometry {
     @Expose
     private Viewport viewport;
 
+    public PlaceSearchGeometry() {
+        location = new Location();
+    }
+
     public Location getLocation() {
         return location;
     }

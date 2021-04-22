@@ -45,6 +45,10 @@ public class PlaceDetails {
     @Expose
     private String businessStatus;
 
+    public PlaceDetails() {
+        mPlaceDetailsGeometry = new PlaceDetailsGeometry();
+    }
+
     public List<AddressComponent> getAddressComponents() {
         return addressComponents;
     }

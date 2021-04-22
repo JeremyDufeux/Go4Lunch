@@ -14,6 +14,10 @@ public class PlaceDetailsGeometry {
     @Expose
     private Viewport viewport;
 
+    public PlaceDetailsGeometry() {
+        location = new Location();
+    }
+
     public Location getLocation() {
         return location;
     }

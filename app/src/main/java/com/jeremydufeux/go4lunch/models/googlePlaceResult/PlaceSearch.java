@@ -56,6 +56,10 @@ public class PlaceSearch {
     @Expose
     private Boolean permanentlyClosed;
 
+    public PlaceSearch() {
+        mPlaceSearchGeometry = new PlaceSearchGeometry();
+    }
+
     public String getBusinessStatus() {
         return businessStatus;
     }
