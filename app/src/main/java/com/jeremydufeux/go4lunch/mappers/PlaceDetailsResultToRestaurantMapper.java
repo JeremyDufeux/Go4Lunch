@@ -76,7 +76,6 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
 
     private void setOpeningData(PlaceDetails placeDetail) {
         if(placeDetail.getOpeningHours() != null) {
-            mRestaurant.setOpenNow(placeDetail.getOpeningHours().getOpenNow());
             mRestaurant.setOpeningHoursAvailable(true);
             mRestaurant.setUtcOffset(placeDetail.getUtcOffset()*60000);
 

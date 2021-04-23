@@ -18,6 +18,7 @@ import com.jeremydufeux.go4lunch.utils.NoMorePageException;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -60,7 +61,9 @@ public class ListViewViewModel extends ViewModel {
 
         mDisposable.add(mRestaurantUseCase.observeRestaurantDetailsList()
                 .subscribeOn(Schedulers.computation())
-                .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation(), mUserDataRepository.getDistanceUnit()))
+                .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation(),
+                        mUserDataRepository.getDistanceUnit(),
+                        Calendar.getInstance()))
                 .subscribe(mRestaurantListLiveData::postValue,
                         throwable -> {
                     Log.e(TAG, "mRestaurantRepository.observeRestaurantList: ", throwable);

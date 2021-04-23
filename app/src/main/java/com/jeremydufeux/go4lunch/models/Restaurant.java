@@ -22,7 +22,6 @@ public class Restaurant implements Comparable<Restaurant>{
     /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
      The list in value contain period of time where the place is open during the day, represented by the nested class OpenPeriod  **/
     private HashMap<Integer, List<OpenPeriod>>  mOpeningHours;
-    private boolean mOpenNow;
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
     private int mUtcOffset;
@@ -93,16 +92,8 @@ public class Restaurant implements Comparable<Restaurant>{
         return mInterestedWorkmates;
     }
 
-    public void setOpenNow(boolean openNow) {
-        mOpenNow = openNow;
-    }
-
     public void setUtcOffset(int utcOffset) {
         this.mUtcOffset = utcOffset;
-    }
-
-    public boolean isOpenNow() {
-        return mOpenNow;
     }
 
     public boolean isAlwaysOpen() {

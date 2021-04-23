@@ -20,10 +20,12 @@ import io.reactivex.functions.Function;
 public class RestaurantToListViewMapper implements Function<HashMap<String, Restaurant>, List<Restaurant>> {
     Location mLocation;
     int mDistanceUnit;
+    Calendar mNowCal;
 
-    public RestaurantToListViewMapper(Location location, int distanceUnit) {
+    public RestaurantToListViewMapper(Location location, int distanceUnit, Calendar nowCal) {
         mLocation = location;
         mDistanceUnit = distanceUnit;
+        mNowCal = nowCal;
     }
 
     @Override
@@ -60,18 +62,29 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
         restaurant.setOpenTvColor(R.color.grey);
 
         if(restaurant.isOpeningHoursAvailable()) {
-            restaurant.setOpenTvCloseTimeString(getClosingSoonTime(restaurant));
-            if (restaurant.isOpenNow()) {
-                if (!restaurant.getOpenTvCloseTimeString().isEmpty() && !restaurant.isAlwaysOpen()) {
-                    restaurant.setOpenTvString(R.string.open_until);
-                } else {
-                    restaurant.setOpenTvString(R.string.open_now);
-                }
-            } else {
-                restaurant.setOpenTvString(R.string.closed);
-                restaurant.setOpenTvColor(R.color.red);
+            if(restaurant.isAlwaysOpen()){
+                restaurant.setOpenTvString(R.string.open_now);
             }
-            restaurant.setOpenTvVisibility(View.VISIBLE);
+            else {
+                restaurant.setOpenTvCloseTimeString(getOpenStatus(restaurant));
+
+                if (!restaurant.getOpenTvCloseTimeString().isEmpty()) {
+                    if(restaurant.getOpenTvCloseTimeString().equals("open")){
+                        restaurant.setOpenTvString(R.string.open_now);
+                    }
+                    else if(restaurant.getOpenTvCloseTimeString().equals("closed")){
+                        restaurant.setOpenTvString(R.string.closed);
+                        restaurant.setOpenTvColor(R.color.red);
+                    }
+                    else {
+                        restaurant.setOpenTvString(R.string.open_until);
+                    }
+                    restaurant.setOpenTvVisibility(View.VISIBLE);
+                } else {
+                    restaurant.setOpenTvString(R.string.no_open_hours);
+                    restaurant.setOpenTvVisibility(View.INVISIBLE);
+                }
+            }
         } else {
             restaurant.setOpenTvString(R.string.no_open_hours);
             restaurant.setOpenTvVisibility(View.INVISIBLE);
@@ -79,34 +92,34 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
     }
 
     // If closing soon, return the closing time, else return an empty String
-    public String getClosingSoonTime(Restaurant restaurant){
-        Calendar nowCal = Calendar.getInstance();
+    public String getOpenStatus(Restaurant restaurant){
+        if(restaurant.getOpeningHours().containsKey(mNowCal.get(Calendar.DAY_OF_WEEK) - 1)) {
+            for (Restaurant.OpenPeriod period : Objects.requireNonNull(restaurant.getOpeningHours().get(mNowCal.get(Calendar.DAY_OF_WEEK) - 1), "Opening hours not found for this day")) {
+                Calendar openCal = (Calendar) mNowCal.clone();
+                openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
+                openCal.set(Calendar.MINUTE, period.getOpeningMinute());
 
-        for(Restaurant.OpenPeriod period : Objects.requireNonNull(restaurant.getOpeningHours().get(nowCal.get(Calendar.DAY_OF_WEEK) - 1), "Opening hours not found for this day")){
-            Calendar openCal = Calendar.getInstance();
-            openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
-            openCal.set(Calendar.MINUTE, period.getOpeningMinute());
-            openCal.set(Calendar.ZONE_OFFSET, restaurant.getUtcOffset());
+                Calendar closeCal = (Calendar) mNowCal.clone();
+                closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
+                closeCal.set(Calendar.MINUTE, period.getClosingMinute());
 
-            Calendar closeCal = Calendar.getInstance();
-            closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
-            closeCal.set(Calendar.MINUTE, period.getClosingMinute());
-            closeCal.set(Calendar.ZONE_OFFSET, restaurant.getUtcOffset());
+                if (period.getClosingHour() == 0) {
+                    closeCal.add(Calendar.DAY_OF_MONTH, 1);
+                }
 
-            if( period.getClosingHour() == 0 && period.getClosingMinute() == 0){
-                closeCal.add(Calendar.DAY_OF_MONTH, 1);
-            }
+                if (mNowCal.after(openCal) && mNowCal.before(closeCal)) {
+                    mNowCal.add(Calendar.HOUR_OF_DAY, 1);
 
-            if (nowCal.after(openCal) && nowCal.before(closeCal)) {
-                nowCal.add(Calendar.HOUR_OF_DAY, 1);
-
-                if(nowCal.after(closeCal)){
-                    closeCal.set(Calendar.ZONE_OFFSET, nowCal.getTimeZone().getRawOffset());
-                    return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());
+                    if (mNowCal.after(closeCal)) {
+                        closeCal.set(Calendar.ZONE_OFFSET, mNowCal.getTimeZone().getRawOffset());
+                        return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());
+                    } else {
+                        return "open";
+                    }
                 }
             }
         }
-        return "";
+        return "closed";
     }
 
     private void determineWorkmatesViewVisibility(Restaurant restaurant) {
