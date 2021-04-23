@@ -32,6 +32,7 @@ public class UserDataRepository {
     private double mMapViewCameraLongitude;
     private float mMapViewCameraZoom;
     private double mMapViewCameraRadius;
+    private boolean mMapViewDataSet;
     private boolean mMapViewAlreadyStarted;
 
     // For Notifications
@@ -62,7 +63,7 @@ public class UserDataRepository {
             mMapViewCameraZoom =  mPreferences.getFloat(PREF_CAMERA_ZOOM, 0);
             mNotificationEnabled = mPreferences.getBoolean(PREF_NOTIFICATION_ENABLED, true);
             mDistanceUnit = mPreferences.getInt(PREF_DISTANCE_UNIT, mDistanceUnit);
-            mMapViewAlreadyStarted = true;
+            mMapViewDataSet = true;
         }
     }
 
@@ -115,8 +116,12 @@ public class UserDataRepository {
         return mMapViewCameraRadius;
     }
 
-    public boolean isMapViewDataSet() {
+    public boolean isMapViewAlreadyStarted() {
         return mMapViewAlreadyStarted;
+    }
+
+    public boolean isMapViewDataSet() {
+        return mMapViewDataSet;
     }
 
     public void setMapViewData(double latitude, double longitude, float zoom, double radius) {
@@ -125,6 +130,7 @@ public class UserDataRepository {
         mMapViewCameraZoom = zoom;
         mMapViewCameraRadius = radius;
         mMapViewAlreadyStarted = true;
+        mMapViewDataSet = true;
     }
 
     // -------------

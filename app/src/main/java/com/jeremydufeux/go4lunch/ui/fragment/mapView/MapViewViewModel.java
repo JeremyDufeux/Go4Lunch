@@ -85,6 +85,7 @@ public class MapViewViewModel extends ViewModel {
                         }
                 ));
     }
+
     public void recipeRestaurantList(HashMap<String, Restaurant> restaurantList){
         mRestaurantListLiveData.postValue(restaurantList);
         if(restaurantList.size() == 0){
@@ -126,7 +127,8 @@ public class MapViewViewModel extends ViewModel {
             LatLng latLng = new LatLng( mUserDataRepository.getMapViewCameraLatitude(),
                                         mUserDataRepository.getMapViewCameraLongitude());
             mSingleLiveEvent.setValue(new FocusCameraLiveEvent(latLng, mUserDataRepository.getMapViewCameraZoom(), false));
-            mFetchNearbyPlacesAfterCameraIdle = true;
+
+            mFetchNearbyPlacesAfterCameraIdle = !mUserDataRepository.isMapViewAlreadyStarted();
             mEnableFirstMoveToLocation = false;
         }
     }
