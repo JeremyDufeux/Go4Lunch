@@ -79,7 +79,7 @@ public class ListViewViewModel extends ViewModel {
         return mSingleLiveEvent;
     }
 
-    public void getErrorLiveEvents(Throwable throwable){
+    private void getErrorLiveEvents(Throwable throwable){
         if(throwable instanceof TimeoutException){
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
         }
