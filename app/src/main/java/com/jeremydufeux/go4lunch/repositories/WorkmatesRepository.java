@@ -26,6 +26,8 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
+import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
+
 @Singleton
 public class WorkmatesRepository{
     private static final String TAG = "WorkmatesRepository";
@@ -100,7 +102,11 @@ public class WorkmatesRepository{
                     if(value != null) {
                         List<Workmate> workmateList = new ArrayList<>();
                         for (DocumentSnapshot document : value.getDocuments()) {
-                            workmateList.add(document.toObject(Workmate.class));
+                            Workmate workmate = document.toObject(Workmate.class);
+                            if(workmate.getChosenRestaurantDate() != null && !isToday(workmate.getChosenRestaurantDate())){
+                                workmate.setChosenRestaurantName("");
+                            }
+                            workmateList.add(workmate);
                         }
                         mWorkmateListObservable.onNext(workmateList);
                     }
