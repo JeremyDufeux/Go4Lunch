@@ -352,8 +352,6 @@ public class MapViewFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
         mViewModel.clearDisposables();
-        mBinding = null;
-        mMap = null;
     }
 
     // ---------------

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/dialog_email_email_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:autofillHints="@string/email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/dialog_email_password_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:autofillHints="@string/password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_email_email_et" />
+
+        <TextView
+            android:id="@+id/dialog_email_password_length_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password_length_tv"
+            android:visibility="gone"
+            android:alpha="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_email_password_et" />
+
+        <TextView
+            android:id="@+id/dialog_email__reset_password_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lost_password"
+            android:textColor="@color/orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_email_password_et" />
+
+        <EditText
+            android:id="@+id/dialog_email_name_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/name"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:visibility="gone"
+            android:alpha="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barrier"
+            tools:ignore="TextFields" />
+
+        <EditText
+            android:id="@+id/dialog_email_nickname_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/nickname"
+            android:autofillHints="@string/nickname"
+            android:inputType="text"
+            android:visibility="gone"
+            android:alpha="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_email_name_et"
+            tools:ignore="TextFields" />
+
+        <Button
+            android:id="@+id/dialog_email_sign_up_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/sign_in"
+            android:enabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_email_nickname_et" />
+
+        <TextView
+            android:id="@+id/dialog_email_sign_up_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/don_t_have_an_account_sign_up"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_email_sign_up_button" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="dialog_email_password_length_tv,dialog_email__reset_password_tv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

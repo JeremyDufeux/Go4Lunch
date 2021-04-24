@@ -14,7 +14,9 @@
     <string name="error_no_internet">It seem like you\'re not connected to internet…</string>
     <string name="error_timeout">Connection timeout !</string>
     <string name="error">An error append&#8230;</string>
+    <string name="sign_in_with_email">Sign in with Email</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_twitter">Sign in with Twitter</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="error_facebook_connection_failure" translatable="false">CONNECTION_FAILURE: CONNECTION_FAILURE</string>
     <string name="app_tag">Find a nice restaurant and invite your co-workers for lunch!</string>
@@ -102,5 +104,24 @@
     <string name="are_joining_too">\u0020are joining too!</string>
     <string name="name_separation" translatable="false">,\u0020</string>
     <string name="name_last_separation" >\u0020and\u0020</string>
+    <string name="email_tv">Email :</string>
+    <string name="email">Email</string>
+    <string name="password_tv">Password :</string>
+    <string name="password">Password</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="password_length_tv">6 charaters minimum</string>
+    <string name="name_tv">Name : </string>
+    <string name="name">Name</string>
+    <string name="nickname_tv">Nickname : </string>
+    <string name="sign_in">Sign in</string>
+    <string name="don_t_have_an_account_sign_up"><u>Don\'t have an account? Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="Wrong_email_or_password">Wrong email or password</string>
+    <string name="this_email_address_is_already_used">This email address is already used…</string>
+    <string name="lost_password"><u>Lost password?</u></string>
+    <string name="reset_password">Reset password</string>
+    <string name="send_reset_password_email">Send password reset email</string>
+    <string name="email_sent">Email sent</string>
 
 </resources>

@@ -15,7 +15,6 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.SignOutLiveEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,16 +44,16 @@ public class WorkmatesRepository{
         }
     }
 
-    public void authWorkmate() {
-        mCurrentUser = convertFirebaseUserToWorkmate(getCurrentUser());
+    public void attemptToCreateWorkmate(Workmate workmate) {
+        mCurrentUser = workmate;
         WorkmateHelper.getWorkmateWithId(mCurrentUser.getUId())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
+                        if (document.exists()) {                        // The workmate is already created, start observer
                             mCurrentUser = Objects.requireNonNull(document.toObject(Workmate.class));
                             startCurrentUserObserver(mCurrentUser.getUId());
-                        } else {
+                        } else {                                        // The workmate is already created, create and start observer
                             WorkmateHelper.setWorkmate(mCurrentUser)
                                     .addOnSuccessListener(aVoid -> startCurrentUserObserver(mCurrentUser.getUId()))
                                     .addOnFailureListener(error -> {
@@ -181,33 +180,6 @@ public class WorkmatesRepository{
                         Log.e(TAG, "setLikedRestaurants: ", error);
                     });
         }
-    }
-
-    public boolean isCurrentUserLoggedIn() {
-        return getCurrentUser() != null;
-    }
-
-    private FirebaseUser getCurrentUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    private Workmate convertFirebaseUserToWorkmate(FirebaseUser firebaseUser){
-        String uId = firebaseUser.getUid();
-        String fullName = firebaseUser.getProviderData().get(1).getDisplayName();
-
-        assert fullName != null;
-        List<String> parts = Arrays.asList(fullName.split(" "));
-        String firstName = parts.get(0);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < parts.size(); i++) {
-            sb.append(parts.get(i));
-            if(i != parts.size()-1) sb.append(" ");
-        }
-
-        String email = firebaseUser.getProviderData().get(1).getEmail();
-        String pictureUrl = Objects.requireNonNull(firebaseUser.getProviderData().get(1).getPhotoUrl()).toString();
-
-        return new Workmate(uId, fullName, firstName, email, pictureUrl);
     }
 }
 

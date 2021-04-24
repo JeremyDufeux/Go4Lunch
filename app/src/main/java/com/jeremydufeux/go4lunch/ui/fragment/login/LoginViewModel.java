@@ -3,21 +3,17 @@ package com.jeremydufeux.go4lunch.ui.fragment.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
+import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ErrorLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.NavigateToMapFragmentLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.SignInSuccessLiveEvent;
-import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 
@@ -74,8 +70,8 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void authWorkmate() {
-        mExecutor.execute(mWorkmatesRepository::authWorkmate);
+    public void attemptToCreateWorkmate(Workmate workmate) {
+        mExecutor.execute(() -> mWorkmatesRepository.attemptToCreateWorkmate(workmate));
     }
 
     public LiveData<LiveEvent> observeEvents(){
@@ -92,7 +88,7 @@ public class LoginViewModel extends ViewModel {
         mDisposable.clear();
     }
 
-    public boolean isCurrentUserLoggedIn() {
-        return mWorkmatesRepository.isCurrentUserLoggedIn();
+    public void startCurrentUserObserver(String uid) {
+        mWorkmatesRepository.startCurrentUserObserver(uid);
     }
 }

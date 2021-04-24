@@ -6,9 +6,6 @@ import com.jeremydufeux.go4lunch.mappers.NearbyPlacesResultToRestaurantMapper;
 import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultToRestaurantMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.repositories.GooglePlacesRepository;
-import com.jeremydufeux.go4lunch.repositories.RestaurantRepository;
-import com.jeremydufeux.go4lunch.repositories.WorkmatesRepository;
 import com.jeremydufeux.go4lunch.utils.NoMorePageException;
 
 import java.util.HashMap;
@@ -145,6 +142,8 @@ public class RestaurantUseCase{
     }
 
     public void clearDisposable(){
-        mDisposable.dispose();
+        if(mDisposable != null) {
+            mDisposable.dispose();
+        }
     }
 }
