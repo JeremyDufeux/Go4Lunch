@@ -28,7 +28,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -237,7 +237,14 @@ public class MainActivity extends AppCompatActivity implements
 
     private void onUserDataChange(Workmate workmate) {
         mWorkmate = workmate;
-        Glide.with(this).load(mWorkmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mHeaderBinding.drawerProfilePicIv);
+
+        Glide.with(this)
+                .load(mWorkmate.getPictureUrl())
+                .error(R.drawable.ic_default_workmate_picture)
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mHeaderBinding.drawerProfilePicIv);
+
         mHeaderBinding.drawerProfilePicIv.setVisibility(View.VISIBLE);
         mHeaderBinding.drawerNameTv.setText(mWorkmate.getFullName());
         mHeaderBinding.drawerNameTv.setVisibility(View.VISIBLE);

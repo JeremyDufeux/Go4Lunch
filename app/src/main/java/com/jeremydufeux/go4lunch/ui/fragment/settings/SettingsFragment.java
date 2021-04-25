@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.jeremydufeux.go4lunch.R;
@@ -111,7 +111,12 @@ public class SettingsFragment extends Fragment {
     private void onUserDataChange(Workmate workmate) {
         mWorkmate = workmate;
 
-        Glide.with(this).load(mWorkmate.getPictureUrl()).apply(RequestOptions.circleCropTransform()).into(mBinding.settingsFragmentPicFl.picIv);
+        Glide.with(this)
+                .load(mWorkmate.getPictureUrl())
+                .error(R.drawable.ic_default_workmate_picture)
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mBinding.settingsFragmentPicFl.picIv);
 
         mBinding.settingsFragmentNameTv.setText(mWorkmate.getFullName());
         mBinding.settingsFragmentNicknameEt.setText(mWorkmate.getNickname());

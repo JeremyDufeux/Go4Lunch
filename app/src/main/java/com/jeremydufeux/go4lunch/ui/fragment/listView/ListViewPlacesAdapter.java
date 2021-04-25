@@ -65,7 +65,8 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
             mBinding.placeItemNameTv.setText(restaurant.getName());
             mBinding.placeItemTypeAndAddressTv.setText(restaurant.getAddress());
 
-            Glide.with(context).load(restaurant.getPhotoUrl())
+            Glide.with(context)
+                    .load(restaurant.getPhotoUrl())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.placeItemPictureIv);

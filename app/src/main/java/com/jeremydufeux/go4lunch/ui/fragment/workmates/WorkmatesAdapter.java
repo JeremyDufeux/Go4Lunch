@@ -14,11 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentWorkmateItemBinding;
-import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.Workmate;
-import com.jeremydufeux.go4lunch.ui.fragment.listView.ListViewPlacesAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.WorkmateViewHolder>{
@@ -80,7 +77,9 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.Work
             mBinding.workmateItemNotChosenTv.setText(workmateNotChosen);
             mBinding.workmateItemNotChosenTv.setVisibility(workmate.getWorkmateNotChosenTvVisibility());
 
-            Glide.with(context).load(workmate.getPictureUrl())
+            Glide.with(context)
+                    .load(workmate.getPictureUrl())
+                    .error(R.drawable.ic_default_workmate_picture)
                     .circleCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.workmateItemPictureIv);
@@ -108,7 +107,7 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.Work
         public boolean areContentsTheSame(@NonNull Workmate oldItem, @NonNull Workmate newItem) {
             return oldItem.getNickname().equals(newItem.getNickname())
                     && oldItem.getChosenRestaurantName().equals(newItem.getChosenRestaurantName())
-                    && oldItem.getPictureUrl().equals(newItem.getPictureUrl());
+                    && oldItem.getChosenRestaurantDate().equals(newItem.getChosenRestaurantDate());
         }
     }
 }

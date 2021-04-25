@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.databinding.FragmentRestaurantDetailsWorkmateItemBinding;
@@ -19,11 +19,9 @@ import java.util.List;
 
 public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<RestaurantDetailsWorkmatesAdapter.WorkmateViewHolder> {
 
-    private final RequestManager mGlide;
     private final AsyncListDiffer<Workmate> mWorkmateList;
 
-    public RestaurantDetailsWorkmatesAdapter(RequestManager glide) {
-        mGlide = glide;
+    public RestaurantDetailsWorkmatesAdapter() {
         mWorkmateList = new AsyncListDiffer<>(this, new DifferCallback());
     }
 
@@ -36,7 +34,7 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
 
     @Override
     public void onBindViewHolder(@NonNull WorkmateViewHolder holder, int position) {
-        holder.updateViewHolder(mGlide, mWorkmateList.getCurrentList().get(position));
+        holder.updateViewHolder(mWorkmateList.getCurrentList().get(position));
     }
 
     @Override
@@ -56,16 +54,17 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
             mBinding = itemBinding;
         }
 
-        public void updateViewHolder(RequestManager glide, Workmate workmate){
+        public void updateViewHolder(Workmate workmate){
             Context context = mBinding.getRoot().getContext();
 
             mBinding.workmateItemNameTv.setText(context.getResources().getString(R.string.workmate_is_joining, workmate.getNickname()));
 
-            glide.load(workmate.getPictureUrl())
+            Glide.with(context)
+                    .load(workmate.getPictureUrl())
+                    .error(R.drawable.ic_default_workmate_picture)
                     .circleCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.workmateItemPictureIv);
-
         }
     }
 

@@ -59,7 +59,6 @@ import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailDialog.MODE_SIGN_
 @AndroidEntryPoint
 public class LoginFragment extends Fragment implements FacebookCallback<LoginResult> {
     private static final String TAG = "LoginFragment";
-    public static final String DEFAULT_PICTURE_URL = "https://firebasestorage.googleapis.com/v0/b/go4lunch-7364a.appspot.com/o/default_picture_url.png?alt=media&token=a30259e7-dcad-4cff-835e-d764bbb2f796";
     private static final int RC_SIGN_IN = 1000;
 
     private LoginViewModel mViewModel;
@@ -147,7 +146,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     private void openEmailDialog(){
         EmailDialog emailDialog = new EmailDialog();
         emailDialog.setListener(this::signUpWithEmail);
-        emailDialog.show(getActivity().getSupportFragmentManager(), null);
+        emailDialog.show(requireActivity().getSupportFragmentManager(), null);
     }
 
     private void signUpWithEmail(int mode, String email, String password, String name, String nickname) {
@@ -165,7 +164,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = getCurrentUser();
-                        Workmate workmate = new Workmate(firebaseUser.getUid(), name, nickname, email, DEFAULT_PICTURE_URL);
+                        Workmate workmate = new Workmate(firebaseUser.getUid(), name, nickname, email, "");
                         attemptToCreateWorkmateAndNavigate(workmate);
                     } else {
                         Log.e(TAG, "createUserWithEmail:failure", task.getException());
@@ -230,7 +229,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
                         showSnackBar(R.string.error);
                     });
         } else {
-            firebaseAuth.startActivityForSignInWithProvider(getActivity(), provider.build())
+            firebaseAuth.startActivityForSignInWithProvider(requireActivity(), provider.build())
                     .addOnSuccessListener(authResult -> signInWithCredential(authResult.getCredential()))
                     .addOnFailureListener(e -> {
                         Log.e(TAG, "signInWithTwitter:failure", e);
@@ -361,12 +360,7 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
 
         String email = firebaseUser.getProviderData().get(1).getEmail();
 
-        String pictureUrl;
-        if(firebaseUser.getProviderData().get(1).getPhotoUrl().toString() != null){
-            pictureUrl = firebaseUser.getProviderData().get(1).getPhotoUrl().toString();
-        } else {
-            pictureUrl = DEFAULT_PICTURE_URL;
-        }
+        String pictureUrl = Objects.requireNonNull(firebaseUser.getProviderData().get(1).getPhotoUrl()).toString();
 
         return new Workmate(uId, fullName, nickname, email, pictureUrl);
     }

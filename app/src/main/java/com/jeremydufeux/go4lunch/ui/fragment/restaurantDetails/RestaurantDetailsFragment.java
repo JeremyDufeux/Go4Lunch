@@ -123,7 +123,7 @@ public class RestaurantDetailsFragment extends Fragment {
     }
 
     private void configureRecyclerView() {
-        mAdapter = new RestaurantDetailsWorkmatesAdapter(Glide.with(this));
+        mAdapter = new RestaurantDetailsWorkmatesAdapter();
         mAdapter.updateList(new ArrayList<>());
         mBinding.fragmentRestaurantDetailsWorkmatesRv.setAdapter(mAdapter);
         mBinding.fragmentRestaurantDetailsWorkmatesRv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
