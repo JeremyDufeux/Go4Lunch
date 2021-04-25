@@ -12,7 +12,7 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_margin="10dp"
-        android:contentDescription="@string/place_picture"
+        android:contentDescription="@string/restaurant_photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

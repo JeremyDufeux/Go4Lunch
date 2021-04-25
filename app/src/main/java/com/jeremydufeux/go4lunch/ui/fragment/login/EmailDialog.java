@@ -66,7 +66,7 @@ public class EmailDialog extends DialogFragment {
         configureTextWatchers();
 
         builder.setNeutralButton(R.string.cancel, null);
-        builder.setTitle("Sign in");
+        builder.setTitle(R.string.sign_in);
         builder.setView(mBinding.getRoot());
 
         mAlertDialog = builder.create();

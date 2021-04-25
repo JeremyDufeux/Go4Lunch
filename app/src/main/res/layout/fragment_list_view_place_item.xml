@@ -110,7 +110,7 @@
         android:id="@+id/place_item_picture_iv"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:contentDescription="@string/place_picture"
+        android:contentDescription="@string/restaurant_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:srcCompat="@sample/restaurants"
         app:layout_constraintEnd_toEndOf="parent"

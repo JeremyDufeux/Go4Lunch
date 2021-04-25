@@ -2,10 +2,10 @@
     <!-- For Login -->
     <string name="google_request_id_token" translatable="false">756975640716-dj1nr8j5eolg48ctv8onulo0nj2jv7aa.apps.googleusercontent.com</string>
     <string name="facebook_app_id" translatable="false">800460790566654</string>
-    <string name="fb_login_protocol_scheme" tools.ignore="UnusedResources">fb800460790566654</string>
+    <string name="fb_login_protocol_scheme" tools.ignore="UnusedResources" translatable="false">fb800460790566654</string>
 
     <!-- App -->
-    <string name="app_name">Go4Lunch</string>
+    <string name="app_name" translatable="false">Go4Lunch</string>
 
     <!-- Login Activity -->
     <string name="background">Background</string>
@@ -20,6 +20,19 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="error_facebook_connection_failure" translatable="false">CONNECTION_FAILURE: CONNECTION_FAILURE</string>
     <string name="app_tag">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="don_t_have_an_account_sign_up"><u>Don\'t have an account? Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="Wrong_email_or_password">Wrong email or password</string>
+    <string name="this_email_address_is_already_used">This email address is already used…</string>
+    <string name="lost_password"><u>Lost password?</u></string>
+    <string name="reset_password">Reset password</string>
+    <string name="send_reset_password_email">Send password reset email</string>
+    <string name="email_sent">Email sent</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="cancel">Cancel</string>
+    <string name="password_length_tv">6 characters minimum</string>
+    <string name="name">Name</string>
 
     <!-- Bottom Navigation View -->
     <string name="bottom_navigation_menu_map_view">Map View</string>
@@ -27,8 +40,8 @@
     <string name="bottom_navigation_menu_Workmates">Workmates</string>
 
     <!-- Used in NavigationDrawer -->
-    <string name="navigation_drawer_open" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" tools.ignore="UnusedResources" tools:keep="@string/navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <!-- Toolbar -->
     <string name="i_m_hungry">I\'m Hungry!</string>
@@ -41,87 +54,75 @@
     <string name="search">Search</string>
     <string name="drawer_background">Drawer Background</string>
     <string name="profile_picture">Profile picture</string>
-    <string name="john_smith">John SMITH</string>
-    <string name="jsmith_1337_gmail_com">jsmith.1337@gmail.com</string>
+    <string name="john_smith" translatable="false">John SMITH</string>
+    <string name="jsmith_1337_gmail_com" translatable="false">jsmith.1337@gmail.com</string>
 
     <!-- Map View -->
     <string name="locate_me">Locate me</string>
+    <string name="search_this_area">Search this area</string>
+    <string name="position_unknown_for_now">Your position unknown for now</string>
+    <string name="zoom_to_see_restaurants">Zoom to see restaurants</string>
+    <string name="no_restaurants_found">No restaurants found</string>
 
-    <!-- List View -->
+    <!-- Restaurant List View -->
     <string name="rating">Rating</string>
-    <string name="place_picture">Place picture</string>
     <string name="workmates_interested">Workmates interested</string>
-    <string name="workmates_interested_amount">(%1$d)</string>
+    <string name="workmates_interested_amount" translatable="false">(%1$d)</string>
     <string name="closed">Closed</string>
     <string name="open_now">Open now</string>
     <string name="open_until">Open until %1$s</string>
     <string name="no_open_hours" translatable="false" />
     <string name="restaurant_photo">Restaurant photo</string>
-    <string name="user_distance">%1$d%2$s</string>
+    <string name="user_distance" translatable="false">%1$d%2$s</string>
     <string name="unit_meter">Meter</string>
     <string name="unit_feet">Feet</string>
-    <string name="unit_meter_short">m</string>
-    <string name="unit_feet_short">ft</string>
-
-    <!-- New strings to sort -->
-    <string name="website">WEBSITE</string>
-    <string name="like">LIKE</string>
-    <string name="call">CALL</string>
-    <string name="call_image">Call image</string>
-    <string name="like_image">Like Image</string>
-    <string name="website_image">Website image</string>
-    <string name="go_to_this_restaurant_button">Go to this restaurant button</string>
-    <string name="search_this_area">Search this area</string>
-    <string name="position_unknown_for_now">Your position unknown for now</string>
-    <string name="zoom_to_see_restaurants">Zoom to see restaurants</string>
-    <string name="no_restaurants_found">No restaurants found</string>
+    <string name="unit_meter_short" translatable="false">m</string>
+    <string name="unit_feet_short" translatable="false">ft</string>
     <string name="no_more_restaurants_found">No more restaurants found</string>
-    <string name="workmate_is_eating_at_restaurant">"%1$s is eating at %2$s"</string>
-    <string name="workmate_is_joining">"%1$s is joining!"</string>
-    <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
-    <string name="liked">LIKED</string>
-    <string name="no_restaurant_found_list_view">No restaurants were found here \nTry to search somewhere else on Map View</string>
-    <string name="you_didnt_chose_restaurant">You didn\'t chose a restaurant for today yet…</string>
-    <string name="workmate_didnt_chose_restaurant">%1$s didn\'t chose a restaurant for today yet…</string>
-    <string name="search_restaurants_hint">Search restaurant</string>
-    <string name="close_search">Close search</string>
-    <string name="nickname_field">Nickname :</string>
-    <string name="notifications_field">Notifications :</string>
-    <string name="save">Save</string>
-    <string name="delete_account">Delete Account</string>
-    <string name="nickname">Nickname</string>
-    <string name="profile_pic">Profile pic</string>
-    <string name="distance_unit">Distance unit :</string>
-    <string name="nickname_empty">Your nick name can\'t be empty</string>
+    <string name="no_restaurant_found_list_view">No restaurants were found here \nTry to search somewhere else on the map</string>
+
+    <!-- Notifications -->
     <string name="notification_title"><strong>It\'s time to go eat!</strong></string>
     <string name="notification_content">Today you\'re going to lunch at %1$s</string>
     <string name="channel_name">Reminders</string>
     <string name="channel_description">Daily lunch reminder</string>
-    <string name="arg_restaurant_id">arg_restaurant_id</string>
-    <string name="work_notification_tag">work_notification_tag</string>
+    <string name="arg_restaurant_id" translatable="false">arg_restaurant_id</string>
+    <string name="work_notification_tag" translatable="false">work_notification_tag</string>
     <string name="the_address_is">The address is <b>%1$s</b></string>
     <string name="is_joining_too">\u0020is joining too!</string>
     <string name="are_joining_too">\u0020are joining too!</string>
     <string name="name_separation" translatable="false">,\u0020</string>
     <string name="name_last_separation" >\u0020and\u0020</string>
-    <string name="email_tv">Email :</string>
-    <string name="email">Email</string>
-    <string name="password_tv">Password :</string>
-    <string name="password">Password</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="password_length_tv">6 charaters minimum</string>
-    <string name="name_tv">Name : </string>
-    <string name="name">Name</string>
-    <string name="nickname_tv">Nickname : </string>
+
+    <!-- Restaurant details view -->
+    <string name="website">WEBSITE</string>
+    <string name="like">LIKE</string>
+    <string name="liked">LIKED</string>
+    <string name="call">CALL</string>
+    <string name="call_image">Call image</string>
+    <string name="like_image">Like Image</string>
+    <string name="website_image">Website image</string>
+    <string name="go_to_this_restaurant_button">Chose this restaurant button</string>
+    <string name="workmate_is_joining">"%1$s is joining!"</string>
+    <string name="you_didnt_chose_restaurant">You didn\'t chose a restaurant for today yet…</string>
+
+    <!-- Workmates List View -->
+    <string name="workmate_is_eating_at_restaurant">"%1$s is eating at %2$s"</string>
+    <string name="workmate_has_not_decided_yet">"%1$s hasn't decided yet"</string>
+    <string name="workmate_didnt_chose_restaurant">%1$s didn\'t chose a restaurant for today yet…</string>
+
+    <!-- Search -->
+    <string name="search_restaurants_hint">Search restaurant</string>
+    <string name="close_search">Close search</string>
+
+    <!-- Settings -->
+    <string name="nickname_field">Nickname :</string>
+    <string name="notifications_field">Notifications :</string>
+    <string name="save">Save</string>
+    <string name="nickname">Nickname</string>
+    <string name="profile_pic">Profile pic</string>
+    <string name="distance_unit">Distance unit :</string>
+    <string name="nickname_empty">Your nick name can\'t be empty</string>
     <string name="sign_in">Sign in</string>
-    <string name="don_t_have_an_account_sign_up"><u>Don\'t have an account? Sign up</u></string>
-    <string name="sign_up">Sign up</string>
-    <string name="Wrong_email_or_password">Wrong email or password</string>
-    <string name="this_email_address_is_already_used">This email address is already used…</string>
-    <string name="lost_password"><u>Lost password?</u></string>
-    <string name="reset_password">Reset password</string>
-    <string name="send_reset_password_email">Send password reset email</string>
-    <string name="email_sent">Email sent</string>
 
 </resources>
