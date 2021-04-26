@@ -64,7 +64,7 @@ public class RestaurantDetailsWorkmatesAdapter extends RecyclerView.Adapter<Rest
                     .error(R.drawable.ic_default_workmate_picture)
                     .circleCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mBinding.workmateItemPictureIv);
+                    .into(mBinding.detailsWorkmateItemPictureIv);
         }
     }
 

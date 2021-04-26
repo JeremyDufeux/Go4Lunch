@@ -22,9 +22,9 @@
 
         <ImageView
             android:id="@+id/login_fragment_logo_iv"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_margin="50dp"
+            android:layout_width="@dimen/login_fragment_logo_iv_size"
+            android:layout_height="@dimen/login_fragment_logo_iv_size"
+            android:layout_margin="@dimen/login_fragment_logo_iv_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="60sp"
+            android:textSize="@dimen/login_fragment_app_name_tv_text_size"
             app:layout_constraintTop_toBottomOf="@+id/login_fragment_logo_iv" />
 
         <TextView
@@ -51,64 +51,82 @@
             android:text="@string/app_tag"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="@dimen/login_fragment_app_tag_tv_text_size"
             android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@+id/login_fragment_app_name_tv" />
 
         <Button
             android:id="@+id/login_fragment_firebase_auth_twitter_btn"
-            android:layout_width="280dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/login_fragment_firebase_btn_width"
+            android:layout_height="@dimen/login_fragment_firebase_btn_height"
             android:fontFamily="@font/roboto"
             android:text="@string/sign_in_with_twitter"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp"
+            android:textSize="@dimen/login_fragment_firebase_btn_text_size"
             app:backgroundTint="@color/twitter_button"
             app:icon="@drawable/ic_twitter_logo"
-            app:iconSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/login_fragment_frame_layout_facebook_button"
+            app:iconSize="@dimen/login_fragment_firebase_btn_icon_size"
+            android:alpha="0"
+            app:layout_constraintBottom_toTopOf="@+id/login_fragment_firebase_auth_facebook_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <include
-            android:id="@+id/login_fragment_frame_layout_facebook_button"
-            layout="@layout/frame_layout_facebook_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/login_fragment_firebase_auth_facebook_btn"
+            android:layout_width="@dimen/login_fragment_firebase_btn_width"
+            android:layout_height="@dimen/login_fragment_firebase_btn_height"
+            android:fontFamily="@font/roboto"
+            android:text="@string/sign_in_with_facebook"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="@dimen/login_fragment_firebase_btn_text_size"
+            app:backgroundTint="@color/facebook_button"
+            app:icon="@drawable/ic_facebook_logo"
+            app:iconSize="@dimen/login_fragment_firebase_btn_icon_size"
+            android:alpha="0"
             app:layout_constraintBottom_toTopOf="@+id/login_fragment_firebase_auth_google_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/login_fragment_firebase_auth_google_btn"
-            android:layout_width="280dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/login_fragment_firebase_btn_width"
+            android:layout_height="@dimen/login_fragment_firebase_btn_height"
             app:backgroundTint="@color/google_button"
             android:fontFamily="@font/roboto"
             android:text="@string/sign_in_with_google"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp"
+            android:textSize="@dimen/login_fragment_firebase_btn_text_size"
             app:icon="@drawable/ic_google_logo"
-            app:iconSize="20dp"
+            app:iconSize="@dimen/login_fragment_firebase_btn_icon_size"
+            android:alpha="0"
             app:layout_constraintBottom_toTopOf="@id/login_fragment_firebase_auth_email_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/login_fragment_firebase_auth_email_btn"
-            android:layout_width="280dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="40dp"
+            android:layout_width="@dimen/login_fragment_firebase_btn_width"
+            android:layout_height="@dimen/login_fragment_firebase_btn_height"
+            android:layout_marginBottom="@dimen/login_fragment_firebase_auth_email_btn_margin"
             android:fontFamily="@font/roboto"
             android:text="@string/sign_in_with_email"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp"
+            android:textSize="@dimen/login_fragment_firebase_btn_text_size"
             app:backgroundTint="@color/clear_orange"
             app:icon="@drawable/ic_mail_logo"
-            app:iconSize="20dp"
+            app:iconSize="@dimen/login_fragment_firebase_btn_icon_size"
+            android:alpha="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_fragment_facebook_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/login_fragment_firebase_auth_google_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

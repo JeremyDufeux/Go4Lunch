@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="@dimen/drawer_root_height"
     android:layout_width="match_parent">
 
     <ImageView
         android:id="@+id/drawer_background_iv"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/drawer_background_iv_height"
         android:contentDescription="@string/drawer_background"
         android:scaleType="centerCrop"
         android:src="@drawable/background_2"
@@ -18,23 +18,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/drawer_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="50dp"
+        android:layout_marginVertical="@dimen/drawer_title_tv_margin"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="40sp"
+        android:textSize="@dimen/drawer_title_tv_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/drawer_profile_pic_iv"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_margin="20dp"
+        android:layout_width="@dimen/drawer_profile_pic_iv_size"
+        android:layout_height="@dimen/drawer_profile_pic_iv_size"
+        android:layout_margin="@dimen/drawer_profile_pic_iv_margin"
         android:src="@drawable/ic_profile"
         android:contentDescription="@string/profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,12 +44,12 @@
         android:id="@+id/drawer_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/drawer_name_tv_margin"
+        android:layout_marginTop="@dimen/drawer_name_tv_margin"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/john_smith"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/drawer_name_tv_text_size"
         app:layout_constraintStart_toEndOf="@+id/drawer_profile_pic_iv"
         app:layout_constraintTop_toTopOf="@+id/drawer_profile_pic_iv" />
 
@@ -60,7 +60,7 @@
         android:fontFamily="@font/roboto_condensed_regular"
         android:text="@string/jsmith_1337_gmail_com"
         android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textSize="@dimen/drawer_email_tv_text_size"
         app:layout_constraintStart_toStartOf="@+id/drawer_name_tv"
         app:layout_constraintTop_toBottomOf="@+id/drawer_name_tv" />
 

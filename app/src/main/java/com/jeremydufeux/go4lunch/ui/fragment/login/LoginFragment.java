@@ -291,12 +291,12 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     // ---------------
 
     private void configureFacebookSignIn() {
-        mBinding.loginFragmentFrameLayoutFacebookButton.frameFirebaseAuthFacebookBtn.setOnClickListener(
-                v -> mBinding.loginFragmentFrameLayoutFacebookButton.frameFacebookLoginButton.performClick());
+        mBinding.loginFragmentFirebaseAuthFacebookBtn.setOnClickListener(
+                v -> mBinding.loginFragmentFacebookBtn.performClick());
 
         mCallbackManager = CallbackManager.Factory.create();
 
-        LoginButton loginButton = mBinding.loginFragmentFrameLayoutFacebookButton.frameFacebookLoginButton;
+        LoginButton loginButton = mBinding.loginFragmentFacebookBtn;
         loginButton.setPermissions(Arrays.asList("email", "public_profile"));
         loginButton.setFragment(this);
         loginButton.registerCallback(mCallbackManager, this);
@@ -399,7 +399,9 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     }
 
     private void showLoginButtons(){
-        mBinding.loginFragmentFirebaseAuthGoogleBtn.animate().alpha(1).setDuration(1000).setStartDelay(500).start();
-        mBinding.loginFragmentFrameLayoutFacebookButton.frameFirebaseAuthFacebookBtn.animate().alpha(1).setDuration(1000).setStartDelay(500).start();
+        mBinding.loginFragmentFirebaseAuthTwitterBtn.animate().alpha(1).setDuration(1000).setStartDelay(500).start();
+        mBinding.loginFragmentFirebaseAuthFacebookBtn.animate().alpha(1).setDuration(1000).setStartDelay(600).start();
+        mBinding.loginFragmentFirebaseAuthGoogleBtn.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
+        mBinding.loginFragmentFirebaseAuthEmailBtn.animate().alpha(1).setDuration(1000).setStartDelay(800).start();
     }
 }

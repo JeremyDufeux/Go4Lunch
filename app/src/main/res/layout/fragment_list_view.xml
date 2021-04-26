@@ -30,6 +30,6 @@
         android:visibility="invisible"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/no_restaurant_found_list_view"
-        android:textSize="18sp"
+        android:textSize="@dimen/list_view_fragment_no_restaurant_tv_text_size"
         android:textAlignment="center" />
 </FrameLayout>

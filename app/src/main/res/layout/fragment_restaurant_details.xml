@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/fragment_restaurant_details_photo_iv"
         android:layout_width="match_parent"
-        android:layout_height="290dp"
+        android:layout_height="@dimen/fragment_restaurant_details_photo_iv_height"
         android:contentDescription="@string/restaurant_photo"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +23,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_restaurant_details_go_fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="@dimen/fragment_restaurant_details_go_fab_size"
+        android:layout_height="@dimen/fragment_restaurant_details_go_fab_size"
+        android:layout_marginEnd="@dimen/fragment_restaurant_details_go_fab_margin"
         app:backgroundTint="@color/white"
         app:borderWidth="0dp"
         android:src="@drawable/ic_check"
@@ -41,9 +41,8 @@
         android:layout_height="wrap_content"
         android:background="@color/orange"
         android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingHorizontal="15dp"
+        android:paddingVertical="@dimen/fragment_restaurant_details_info_ll_v_padding"
+        android:paddingHorizontal="@dimen/fragment_restaurant_details_info_ll_h_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_photo_iv">
@@ -63,33 +62,33 @@
                     android:id="@+id/fragment_restaurant_details_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="@dimen/fragment_restaurant_details_name_tv_text_margin"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="@dimen/fragment_restaurant_details_name_tv_text_size"
                     tools:text="@sample/restaurants.json/names/name/value" />
 
                 <ImageView
                     android:id="@+id/fragment_restaurant_details_star_1_iv"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/fragment_restaurant_details_star_iv_size"
+                    android:layout_height="@dimen/fragment_restaurant_details_star_iv_size"
                     android:layout_gravity="bottom"
                     android:contentDescription="@string/rating"
                     android:src="@drawable/ic_star" />
 
                 <ImageView
                     android:id="@+id/fragment_restaurant_details_star_2_iv"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/fragment_restaurant_details_star_iv_size"
+                    android:layout_height="@dimen/fragment_restaurant_details_star_iv_size"
                     android:layout_gravity="bottom"
                     android:contentDescription="@string/rating"
                     android:src="@drawable/ic_star" />
 
                 <ImageView
                     android:id="@+id/fragment_restaurant_details_star_3_iv"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/fragment_restaurant_details_star_iv_size"
+                    android:layout_height="@dimen/fragment_restaurant_details_star_iv_size"
                     android:layout_gravity="bottom"
                     android:contentDescription="@string/rating"
                     android:src="@drawable/ic_star"/>
@@ -100,9 +99,9 @@
             android:id="@+id/fragment_restaurant_details_address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15sp"
+            android:layout_marginBottom="@dimen/fragment_restaurant_details_address_tv_margin"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="@dimen/fragment_restaurant_details_address_tv_text_size"
             tools:text="@sample/restaurants.json/names/address/value" />
 
     </LinearLayout>
@@ -129,9 +128,9 @@
 
             <ImageView
                 android:id="@+id/fragment_restaurant_details_call_iv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginVertical="10dp"
+                android:layout_width="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_height="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:src="@drawable/ic_call"
                 app:tint="@color/orange"
                 android:contentDescription="@string/call_image"/>
@@ -140,11 +139,11 @@
                 android:id="@+id/fragment_restaurant_details_call_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:text="@string/call"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/orange"
-                android:textSize="16sp" />
+                android:textSize="@dimen/fragment_restaurant_details_contact_tv_text_size" />
 
         </LinearLayout>
 
@@ -159,9 +158,9 @@
 
             <ImageView
                 android:id="@+id/fragment_restaurant_details_like_iv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginVertical="10dp"
+                android:layout_width="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_height="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:src="@drawable/ic_like"
                 app:tint="@color/orange"
                 android:contentDescription="@string/like_image" />
@@ -170,11 +169,11 @@
                 android:id="@+id/fragment_restaurant_details_like_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:text="@string/like"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/orange"
-                android:textSize="16sp"/>
+                android:textSize="@dimen/fragment_restaurant_details_contact_tv_text_size"/>
         </LinearLayout>
 
         <LinearLayout
@@ -188,9 +187,9 @@
 
             <ImageView
                 android:id="@+id/fragment_restaurant_details_website_iv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginVertical="10dp"
+                android:layout_width="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_height="@dimen/fragment_restaurant_details_contact_icon_iv_size"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:src="@drawable/ic_web"
                 app:tint="@color/orange"
                 android:contentDescription="@string/website_image" />
@@ -199,20 +198,20 @@
                 android:id="@+id/fragment_restaurant_details_website_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="@dimen/fragment_restaurant_details_contact_icon_iv_margin"
                 android:text="@string/website"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/orange"
-                android:textSize="16sp"/>
+                android:textSize="@dimen/fragment_restaurant_details_contact_tv_text_size"/>
 
         </LinearLayout>
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/fragment_restaurant_details_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginVertical="6dp"
+        android:layout_marginVertical="@dimen/fragment_restaurant_details_divider_margin"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -226,7 +225,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_divider" />
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

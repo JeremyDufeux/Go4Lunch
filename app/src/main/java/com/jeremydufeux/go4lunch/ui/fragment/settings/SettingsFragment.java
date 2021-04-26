@@ -116,7 +116,7 @@ public class SettingsFragment extends Fragment {
                 .error(R.drawable.ic_default_workmate_picture)
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mBinding.settingsFragmentPicFl.picIv);
+                .into(mBinding.settingsFragmentPicFl.frameLayoutProfilePicIv);
 
         mBinding.settingsFragmentNameTv.setText(mWorkmate.getFullName());
         mBinding.settingsFragmentNicknameEt.setText(mWorkmate.getNickname());
@@ -195,7 +195,7 @@ public class SettingsFragment extends Fragment {
                 Glide.with(this) //SHOWING PREVIEW OF IMAGE
                         .load(mUriNewProfilePic)
                         .apply(RequestOptions.circleCropTransform())
-                        .into(mBinding.settingsFragmentPicFl.picIv);
+                        .into(mBinding.settingsFragmentPicFl.frameLayoutProfilePicIv);
             }
         }
     }

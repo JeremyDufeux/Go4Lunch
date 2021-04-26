@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:padding="10dp">
+    android:padding="@dimen/fragment_list_view_place_item_root_padding">
 
     <TextView
         android:id="@+id/place_item_name_tv"
@@ -47,18 +47,17 @@
         android:id="@+id/place_item_distance_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginHorizontal="@dimen/place_item_distance_tv_margin"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/restaurants.json/names/distance/value" />
 
     <ImageView
         android:id="@+id/place_item_workmate_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/place_item_workmate_iv_size"
+        android:layout_height="@dimen/place_item_workmate_iv_size"
         app:tint="@color/black"
         android:src="@drawable/ic_person"
-        android:visibility="gone"
         android:contentDescription="@string/workmates_interested"
         app:layout_constraintBottom_toBottomOf="@+id/place_item_workmate_amount_tv"
         app:layout_constraintEnd_toStartOf="@+id/place_item_workmate_amount_tv"
@@ -68,7 +67,7 @@
         android:id="@+id/place_item_workmate_amount_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="@dimen/place_item_workmate_amount_tv_margin"
         android:textColor="@color/black"
         tools:text="@sample/restaurants.json/names/workmates/value"
         app:layout_constraintBottom_toTopOf="@+id/place_item_star_1_iv"
@@ -77,20 +76,18 @@
 
     <ImageView
         android:id="@+id/place_item_star_1_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="@dimen/place_item_star_iv_size"
+        android:layout_height="@dimen/place_item_star_iv_size"
+        android:layout_marginEnd="@dimen/place_item_star_1_iv_margin"
         android:src="@drawable/ic_star"
-        android:visibility="invisible"
         android:contentDescription="@string/rating"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/place_item_picture_iv" />
 
     <ImageView
         android:id="@+id/place_item_star_2_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:visibility="invisible"
+        android:layout_width="@dimen/place_item_star_iv_size"
+        android:layout_height="@dimen/place_item_star_iv_size"
         android:src="@drawable/ic_star"
         android:contentDescription="@string/rating"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,9 +95,8 @@
 
     <ImageView
         android:id="@+id/place_item_star_3_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:visibility="invisible"
+        android:layout_width="@dimen/place_item_star_iv_size"
+        android:layout_height="@dimen/place_item_star_iv_size"
         android:src="@drawable/ic_star"
         android:contentDescription="@string/rating"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,8 +104,8 @@
 
     <ImageView
         android:id="@+id/place_item_picture_iv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/place_item_picture_iv_size"
+        android:layout_height="@dimen/place_item_picture_iv_size"
         android:contentDescription="@string/restaurant_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:srcCompat="@sample/restaurants"

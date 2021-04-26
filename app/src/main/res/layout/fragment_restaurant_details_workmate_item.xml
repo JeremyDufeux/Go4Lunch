@@ -8,10 +8,10 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/workmate_item_picture_iv"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_margin="10dp"
+        android:id="@+id/details_workmate_item_picture_iv"
+        android:layout_width="@dimen/details_workmate_item_picture_iv_size"
+        android:layout_height="@dimen/details_workmate_item_picture_iv_size"
+        android:layout_margin="@dimen/details_workmate_item_picture_iv_margin"
         android:contentDescription="@string/restaurant_photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,16 +22,16 @@
         android:id="@+id/workmate_item_name_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="@dimen/details_workmate_item_name_tv_margin"
         android:ellipsize="end"
         android:fontFamily="@font/roboto_medium"
         android:singleLine="true"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/workmate_item_picture_iv"
+        android:textSize="@dimen/details_workmate_item_name_tv_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/details_workmate_item_picture_iv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/workmate_item_picture_iv"
-        app:layout_constraintTop_toTopOf="@+id/workmate_item_picture_iv"
+        app:layout_constraintStart_toEndOf="@+id/details_workmate_item_picture_iv"
+        app:layout_constraintTop_toTopOf="@+id/details_workmate_item_picture_iv"
         tools:text="@sample/workmates.json/names/name/value" />
 
 

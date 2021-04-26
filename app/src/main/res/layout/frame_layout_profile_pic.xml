@@ -6,16 +6,16 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/pic_iv"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:id="@+id/frame_layout_profile_pic_iv"
+        android:layout_width="@dimen/frame_layout_profile_pic_iv_size"
+        android:layout_height="@dimen/frame_layout_profile_pic_iv_size"
         tools:srcCompat="@sample/workmates"
         android:contentDescription="@string/profile_pic" />
 
     <ImageView
-        android:id="@+id/camera_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:id="@+id/frame_layout_profile_camera_iv"
+        android:layout_width="@dimen/frame_layout_profile_camera_iv_size"
+        android:layout_height="@dimen/frame_layout_profile_camera_iv_size"
         android:contentDescription="@string/profile_picture"
         android:src="@drawable/camera_drawable"
         android:layout_gravity="bottom|end"/>

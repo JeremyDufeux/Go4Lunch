@@ -31,7 +31,7 @@
                 android:id="@+id/main_activity_search_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/main_activity_search_card_margin"
                 android:alpha="0"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/main_activity_toolbar"
@@ -68,8 +68,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
-                    android:layout_margin="20dp"
-                    android:minHeight="15dp"
+                    android:layout_margin="@dimen/main_activity_close_search_button_margin"
+                    android:minHeight="@dimen/main_activity_close_search_button_min_height"
                     android:alpha="0.0"
                     android:visibility="gone"
                     android:fontFamily="@font/roboto_medium"
@@ -78,7 +78,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:icon="@drawable/ic_close"
-                    app:iconSize="10dp"
+                    app:iconSize="@dimen/main_activity_close_search_button_icon_size"
                     app:iconTint="@color/white"
                     app:background="@drawable/rounded_button" />
 
@@ -116,8 +116,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/activity_main_nav_view_image_size"
+                android:layout_height="@dimen/activity_main_nav_view_image_size"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_logo"
                 app:tint="@color/white"
