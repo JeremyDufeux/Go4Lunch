@@ -13,27 +13,13 @@
     <ImageView
         android:id="@+id/fragment_restaurant_details_photo_iv"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/fragment_restaurant_details_photo_iv_height"
+        android:layout_height="@dimen/fragment_restaurant_details_photo_iv_start_height"
         android:contentDescription="@string/restaurant_photo"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@sample/restaurants" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_restaurant_details_go_fab"
-        android:layout_width="@dimen/fragment_restaurant_details_go_fab_size"
-        android:layout_height="@dimen/fragment_restaurant_details_go_fab_size"
-        android:layout_marginEnd="@dimen/fragment_restaurant_details_go_fab_margin"
-        app:backgroundTint="@color/white"
-        app:borderWidth="0dp"
-        android:src="@drawable/ic_check"
-        app:tint="@color/orange"
-        android:contentDescription="@string/go_to_this_restaurant_button"
-        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_photo_iv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fragment_restaurant_details_info_ll" />
 
     <LinearLayout
         android:id="@+id/fragment_restaurant_details_info_ll"
@@ -99,12 +85,26 @@
             android:id="@+id/fragment_restaurant_details_address_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fragment_restaurant_details_address_tv_margin"
+            android:layout_marginBottom="@dimen/fragment_restaurant_details_info_ll_v_padding"
             android:textColor="@color/white"
             android:textSize="@dimen/fragment_restaurant_details_address_tv_text_size"
             tools:text="@sample/restaurants.json/names/address/value" />
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_restaurant_details_go_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fragment_restaurant_details_go_fab_margin"
+        app:backgroundTint="@color/white"
+        app:borderWidth="0dp"
+        android:src="@drawable/ic_check"
+        app:tint="@color/orange"
+        android:contentDescription="@string/go_to_this_restaurant_button"
+        app:layout_constraintTop_toBottomOf="@id/fragment_restaurant_details_photo_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fragment_restaurant_details_info_ll" />
 
     <LinearLayout
         android:id="@+id/fragment_restaurant_details_links_ll"

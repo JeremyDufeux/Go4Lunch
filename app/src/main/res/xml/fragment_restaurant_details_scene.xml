@@ -4,7 +4,7 @@
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:layout_height="280dp"
+            android:layout_height="@dimen/fragment_restaurant_details_photo_iv_start_height"
             android:layout_width="match_parent"
             android:id="@+id/fragment_restaurant_details_photo_iv"
             app:layout_constraintEnd_toEndOf="parent"
@@ -13,7 +13,7 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:layout_height="100dp"
+            android:layout_height="@dimen/fragment_restaurant_details_photo_iv_stop_height"
             android:layout_width="match_parent"
             android:id="@+id/fragment_restaurant_details_photo_iv"
             app:layout_constraintEnd_toEndOf="parent"

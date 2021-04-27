@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:layout_height="@dimen/drawer_root_height"
+    android:layout_height="@dimen/drawer_background_iv_height"
     android:layout_width="match_parent">
 
     <ImageView

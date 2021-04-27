@@ -14,10 +14,13 @@
             android:id="@+id/login_fragment_background_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/background"
             android:scaleType="centerCrop"
             android:src="@drawable/background_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/background" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -128,5 +131,6 @@
             app:layout_constraintBottom_toTopOf="@+id/login_fragment_firebase_auth_google_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

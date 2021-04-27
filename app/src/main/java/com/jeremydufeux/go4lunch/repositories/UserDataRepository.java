@@ -131,6 +131,7 @@ public class UserDataRepository {
         mMapViewCameraRadius = radius;
         mMapViewAlreadyStarted = true;
         mMapViewDataSet = true;
+        savePreferences();
     }
 
     // -------------

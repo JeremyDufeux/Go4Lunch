@@ -8,100 +8,116 @@
     tools:context=".ui.fragment.settings.SettingsFragment"
     android:padding="@dimen/settings_fragment_padding">
 
-    <include
-        android:id="@+id/settings_fragment_pic_fl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/settings_fragment_pic_fl_margin"
-        layout="@layout/frame_layout_profile_pic"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/settings_fragment_save_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/settings_fragment_name_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/settings_fragment_name_tv_margin"
-        android:fontFamily="@font/roboto_medium"
-        android:singleLine="true"
-        android:textColor="@color/black"
-        android:textSize="@dimen/settings_fragment_name_tv_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_pic_fl"
-        tools:text="@sample/workmates.json/names/name/value" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/settings_fragment_nickname_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/settings_fragment_nickname_tv_margin_top"
-        android:text="@string/nickname_field"
-        android:textSize="@dimen/settings_fragment_field_tv_text_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_name_tv" />
+            <include
+                android:id="@+id/settings_fragment_pic_fl"
+                layout="@layout/frame_layout_profile_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/settings_fragment_pic_fl_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/settings_fragment_nickname_et"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_nickname_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/settings_fragment_barrier1"
-        app:layout_constraintTop_toTopOf="@+id/settings_fragment_nickname_tv"
-        tools:text="@sample/workmates.json/names/name/value"
-        android:hint="@string/nickname"
-        android:autofillHints="@string/nickname"
-        android:inputType="text"/>
+            <TextView
+                android:id="@+id/settings_fragment_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_fragment_name_tv_margin"
+                android:fontFamily="@font/roboto_medium"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/settings_fragment_name_tv_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settings_fragment_pic_fl"
+                tools:text="@sample/workmates.json/names/name/value" />
 
-    <TextView
-        android:id="@+id/settings_fragment_enable_notifications_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/settings_fragment_field_tv_margin_top"
-        android:text="@string/notifications_field"
-        android:textSize="@dimen/settings_fragment_field_tv_text_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_nickname_tv" />
+            <TextView
+                android:id="@+id/settings_fragment_nickname_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_fragment_nickname_tv_margin_top"
+                android:text="@string/nickname_field"
+                android:textSize="@dimen/settings_fragment_field_tv_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settings_fragment_name_tv" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/settings_fragment_enable_notifications_sw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_enable_notifications_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/settings_fragment_enable_notifications_tv" />
+            <EditText
+                android:id="@+id/settings_fragment_nickname_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/nickname"
+                android:hint="@string/nickname"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_nickname_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/settings_fragment_barrier1"
+                app:layout_constraintTop_toTopOf="@+id/settings_fragment_nickname_tv"
+                tools:text="@sample/workmates.json/names/name/value" />
 
-    <TextView
-        android:id="@+id/settings_fragment_unit_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/settings_fragment_field_tv_margin_top"
-        android:text="@string/distance_unit"
-        android:textSize="@dimen/settings_fragment_field_tv_text_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_fragment_enable_notifications_tv" />
+            <TextView
+                android:id="@+id/settings_fragment_enable_notifications_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_fragment_field_tv_margin_top"
+                android:text="@string/notifications_field"
+                android:textSize="@dimen/settings_fragment_field_tv_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settings_fragment_nickname_tv" />
 
-    <Spinner
-        android:id="@+id/settings_fragment_unit_sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
-        android:entries="@array/unit_array"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_unit_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/settings_fragment_unit_tv" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_fragment_enable_notifications_sw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_enable_notifications_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/settings_fragment_enable_notifications_tv" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/settings_fragment_barrier1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="right"
-        app:constraint_referenced_ids="settings_fragment_nickname_tv,
-        settings_fragment_enable_notifications_tv,
-        settings_fragment_unit_tv"/>
+            <TextView
+                android:id="@+id/settings_fragment_unit_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_fragment_field_tv_margin_top"
+                android:text="@string/distance_unit"
+                android:textSize="@dimen/settings_fragment_field_tv_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settings_fragment_enable_notifications_tv" />
+
+            <Spinner
+                android:id="@+id/settings_fragment_unit_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/unit_array"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_fragment_unit_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/settings_fragment_unit_tv" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/settings_fragment_barrier1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="right"
+                app:constraint_referenced_ids="settings_fragment_nickname_tv,
+                settings_fragment_enable_notifications_tv,
+                settings_fragment_unit_tv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/settings_fragment_save_btn"
@@ -110,7 +126,7 @@
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
