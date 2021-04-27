@@ -44,13 +44,12 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
     }
 
     public void calculateDistanceFromUser(Restaurant restaurant) {
+        restaurant.setDistanceUnitString(mDistanceUnit);
         if(mLocation != null) {
             if(mDistanceUnit == R.string.unit_feet_short) {
                 restaurant.setDistanceFromUser((int) (mLocation.distanceTo(restaurant.getLocation()) * 3.28084f));
-                restaurant.setDistanceUnitString(mDistanceUnit);
             } else {
                 restaurant.setDistanceFromUser((int) mLocation.distanceTo(restaurant.getLocation()));
-                restaurant.setDistanceUnitString(mDistanceUnit);
             }
             restaurant.setDistanceTvVisibility(View.VISIBLE);
         } else {

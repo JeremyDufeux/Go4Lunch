@@ -9,6 +9,12 @@
     tools:context=".ui.fragment.mapView.MapViewFragment"
     android:id="@+id/map_view_fragment_coordinator">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_view_fragment_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
     <Button
         android:id="@+id/map_view_fragment_search_button"
         android:layout_width="wrap_content"
@@ -22,12 +28,6 @@
         android:fontFamily="@font/roboto_medium"
         android:text="@string/search_this_area"
         android:textAllCaps="false"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map_view_fragment_map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <ProgressBar
         android:id="@+id/map_view_fragment_progress_bar"
