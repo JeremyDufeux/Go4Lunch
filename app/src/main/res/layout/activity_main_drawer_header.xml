@@ -42,25 +42,31 @@
 
     <TextView
         android:id="@+id/drawer_name_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/drawer_name_tv_margin"
         android:layout_marginTop="@dimen/drawer_name_tv_margin"
+        android:ellipsize="end"
         android:fontFamily="@font/roboto_medium"
+        android:singleLine="true"
         android:text="@string/john_smith"
         android:textColor="@color/white"
         android:textSize="@dimen/drawer_name_tv_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/drawer_profile_pic_iv"
         app:layout_constraintTop_toTopOf="@+id/drawer_profile_pic_iv" />
 
     <TextView
         android:id="@+id/drawer_email_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:fontFamily="@font/roboto_condensed_regular"
+        android:singleLine="true"
         android:text="@string/jsmith_1337_gmail_com"
         android:textColor="@color/white"
         android:textSize="@dimen/drawer_email_tv_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/drawer_name_tv"
         app:layout_constraintTop_toBottomOf="@+id/drawer_name_tv" />
 

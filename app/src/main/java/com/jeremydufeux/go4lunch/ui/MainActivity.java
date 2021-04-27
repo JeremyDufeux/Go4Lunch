@@ -145,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements
                 mToolbar.setVisibility(View.VISIBLE);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 mBottomNavigationView.setVisibility(View.GONE);
+                mSearchItem.setVisible(false);
+                hideSearch();
             } else if(destination.getId() == R.id.restaurant_details_fragment) {
                 mToolbar.setVisibility(View.GONE);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
