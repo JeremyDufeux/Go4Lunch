@@ -25,12 +25,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.jeremydufeux.go4lunch.utils.Utils.getMillisToLunchTime;
 import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 @HiltViewModel
@@ -120,8 +119,9 @@ public class SettingsViewModel extends ViewModel {
                     return null;
                 })
                 .subscribe(restaurant -> {
-                    if(restaurant != null){
-                        mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(restaurant));
+                    long timeBeforeLunch = getMillisToLunchTime();
+                    if(restaurant != null && timeBeforeLunch > 0){
+                        mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(timeBeforeLunch, restaurant));
                     }
                 }));
     }

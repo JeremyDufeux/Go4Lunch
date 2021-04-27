@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.jeremydufeux.go4lunch.utils.Utils.getMillisToLunchTime;
 import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_CURRENT_USER_ID;
 import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ADDRESS;
 import static com.jeremydufeux.go4lunch.worker.NotificationWorker.INPUT_RESTAURANT_ID;
@@ -115,7 +114,7 @@ public class RestaurantDetailsFragment extends Fragment {
             if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
             } else if(event instanceof CreateNotificationLiveEvent){
-                createNotification(((CreateNotificationLiveEvent) event).getRestaurant());
+                createNotification(((CreateNotificationLiveEvent) event).getTimeBeforeLunch(), ((CreateNotificationLiveEvent) event).getRestaurant());
             }else if(event instanceof RemoveLastNotificationWorkLiveEvent){
                 removeLastNotificationWork();
             }
@@ -169,11 +168,11 @@ public class RestaurantDetailsFragment extends Fragment {
         WorkManager.getInstance(requireContext()).cancelAllWorkByTag(getString(R.string.work_notification_tag));
     }
 
-    private void createNotification(Restaurant restaurant) {
+    private void createNotification(long timeBeforeLunch, Restaurant restaurant) {
         removeLastNotificationWork();
 
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .setInitialDelay(getMillisToLunchTime(), TimeUnit.MILLISECONDS)
+                .setInitialDelay(timeBeforeLunch, TimeUnit.MILLISECONDS)
                 .addTag(getString(R.string.work_notification_tag))
                 .setInputData(new Data.Builder()
                         .putString(INPUT_CURRENT_USER_ID, mCurrentUser.getUId())

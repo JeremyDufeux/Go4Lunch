@@ -83,6 +83,12 @@ public class NotificationWorker extends Worker {
                     public void onLoadCleared(@Nullable Drawable placeholder) {
 
                     }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        createNotification(workmateList, null);
+                        super.onLoadFailed(errorDrawable);
+                    }
                 });
     }
 

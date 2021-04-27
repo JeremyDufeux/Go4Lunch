@@ -8,14 +8,18 @@ import java.util.Date;
 public class Utils {
 
     public static boolean isToday(Date date) {
-        Calendar now = Calendar.getInstance();
+        if(date != null) {
+            Calendar now = Calendar.getInstance();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
 
-        return (cal.get(Calendar.ERA) == now.get(Calendar.ERA) &&
-                cal.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
-                cal.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR));
+            return (cal.get(Calendar.ERA) == now.get(Calendar.ERA) &&
+                    cal.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                    cal.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR));
+        } else {
+            return false;
+        }
     }
 
     public static Timestamp getTodayStartTimestamp(){

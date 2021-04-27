@@ -30,6 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.jeremydufeux.go4lunch.utils.Utils.getMillisToLunchTime;
 import static com.jeremydufeux.go4lunch.utils.Utils.isToday;
 
 @HiltViewModel
@@ -132,8 +133,9 @@ public class RestaurantDetailsViewModel extends ViewModel {
                 mSingleLiveEvent.postValue(new RemoveLastNotificationWorkLiveEvent());
             } else {
                 mWorkmatesRepository.setChosenRestaurantForUserId(restaurant.getUId(), restaurant.getName());
-                if(mUserDataRepository.isNotificationEnabled()) {
-                    mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(restaurant));
+                long timeBeforeLunch = getMillisToLunchTime();
+                if(mUserDataRepository.isNotificationEnabled() && timeBeforeLunch > 0) {
+                    mSingleLiveEvent.postValue(new CreateNotificationLiveEvent(timeBeforeLunch, restaurant));
                 }
             }
         });
