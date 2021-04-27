@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.firebase.crashlytics'
 }
 
 def mapApiKey = project.properties['MAPS_API_KEY']
@@ -126,6 +127,10 @@ dependencies {
 
     // Mockito
     testImplementation 'org.mockito:mockito-core:2.23.0'
+
+    // Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     // Canary Leaks
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
