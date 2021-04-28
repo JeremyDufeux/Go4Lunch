@@ -1,0 +1,95 @@
+<resources>
+    <!-- activity_main -->
+    <dimen name="main_activity_search_card_margin">5dp</dimen>
+    <dimen name="main_activity_close_search_button_margin">20dp</dimen>
+    <dimen name="main_activity_close_search_button_min_height">15dp</dimen>
+    <dimen name="main_activity_close_search_button_icon_size">10dp</dimen>
+    <dimen name="activity_main_nav_view_image_size">150dp</dimen>
+
+    <!-- activity_main_drawer_header -->
+    <dimen name="drawer_background_iv_height">250dp</dimen>
+    <dimen name="drawer_title_tv_margin">50dp</dimen>
+    <dimen name="drawer_title_tv_text_size">40sp</dimen>
+    <dimen name="drawer_profile_pic_iv_size">65dp</dimen>
+    <dimen name="drawer_profile_pic_iv_margin">20dp</dimen>
+    <dimen name="drawer_name_tv_margin">10dp</dimen>
+    <dimen name="drawer_name_tv_text_size">16sp</dimen>
+    <dimen name="drawer_email_tv_text_size">15sp</dimen>
+
+    <!-- dialog_email -->
+    <dimen name="dialog_email_root_padding">20dp</dimen>
+    <dimen name="dialog_email_sign_up_button_margin">15dp</dimen>
+    <dimen name="dialog_email_sign_up_tv_margin">10dp</dimen>
+    <dimen name="dialog_email_sign_up_tv_text_size">18sp</dimen>
+
+    <!-- fragment_list_view -->
+    <dimen name="list_view_fragment_no_restaurant_tv_text_size">18sp</dimen>
+
+    <!-- fragment_list_view_place_item -->
+    <dimen name="fragment_list_view_place_item_root_padding">7dp</dimen>
+    <dimen name="place_item_distance_tv_margin">15dp</dimen>
+    <dimen name="place_item_workmate_iv_size">25dp</dimen>
+    <dimen name="place_item_workmate_amount_tv_margin">5dp</dimen>
+    <dimen name="place_item_star_iv_size">20dp</dimen>
+    <dimen name="place_item_star_1_iv_margin">5dp</dimen>
+    <dimen name="place_item_picture_iv_size">75dp</dimen>
+
+    <!-- fragment_login -->
+    <dimen name="login_fragment_logo_iv_size">140dp</dimen>
+    <dimen name="login_fragment_logo_iv_margin">50dp</dimen>
+    <dimen name="login_fragment_app_name_tv_text_size">60sp</dimen>
+    <dimen name="login_fragment_app_tag_tv_text_size">12sp</dimen>
+    <dimen name="login_fragment_firebase_btn_width">280dp</dimen>
+    <dimen name="login_fragment_firebase_btn_height">60dp</dimen>
+    <dimen name="login_fragment_firebase_btn_text_size">16sp</dimen>
+    <dimen name="login_fragment_firebase_btn_icon_size">20dp</dimen>
+    <dimen name="login_fragment_firebase_auth_email_btn_margin">40dp</dimen>
+
+    <!-- fragment_map_view -->
+    <dimen name="map_view_fragment_search_button_min_height">15dp</dimen>
+    <dimen name="map_view_fragment_search_button_margin">10dp</dimen>
+    <dimen name="map_view_fragment_progress_bar_margin">10dp</dimen>
+    <dimen name="map_view_fragment_location_btn_margin">20dp</dimen>
+
+    <!-- fragment_restaurant_details -->
+    <dimen name="fragment_restaurant_details_photo_iv_start_height">240dp</dimen>
+    <dimen name="fragment_restaurant_details_photo_iv_stop_height">200dp</dimen>
+    <dimen name="fragment_restaurant_details_go_fab_size">56dp</dimen>
+    <dimen name="fragment_restaurant_details_go_fab_margin">20dp</dimen>
+    <dimen name="fragment_restaurant_details_info_ll_v_padding">20dp</dimen>
+    <dimen name="fragment_restaurant_details_info_ll_h_padding">15dp</dimen>
+    <dimen name="fragment_restaurant_details_name_tv_text_margin">8dp</dimen>
+    <dimen name="fragment_restaurant_details_name_tv_text_size">25sp</dimen>
+    <dimen name="fragment_restaurant_details_star_iv_size">25dp</dimen>
+    <dimen name="fragment_restaurant_details_address_tv_text_size">15sp</dimen>
+    <dimen name="fragment_restaurant_details_contact_icon_iv_size">30dp</dimen>
+    <dimen name="fragment_restaurant_details_contact_icon_iv_margin">8dp</dimen>
+    <dimen name="fragment_restaurant_details_contact_tv_text_size">16sp</dimen>
+    <dimen name="fragment_restaurant_details_divider_margin">6dp</dimen>
+
+    <!-- fragment_restaurant_details_workmate_item -->
+    <dimen name="details_workmate_item_picture_iv_size">60dp</dimen>
+    <dimen name="details_workmate_item_picture_iv_margin">10dp</dimen>
+    <dimen name="details_workmate_item_name_tv_margin">15dp</dimen>
+    <dimen name="details_workmate_item_name_tv_text_size">16sp</dimen>
+
+    <!-- fragment_settings -->
+    <dimen name="settings_fragment_padding">10dp</dimen>
+    <dimen name="settings_fragment_pic_fl_margin">20dp</dimen>
+    <dimen name="settings_fragment_name_tv_margin">10dp</dimen>
+    <dimen name="settings_fragment_name_tv_text_size">20sp</dimen>
+    <dimen name="settings_fragment_field_tv_text_size">20sp</dimen>
+    <dimen name="settings_fragment_nickname_tv_margin_top">50dp</dimen>
+    <dimen name="settings_fragment_field_tv_margin_top">30dp</dimen>
+
+    <!-- fragment_restaurant_workmate_item -->
+    <dimen name="workmate_item_picture_iv_size">60dp</dimen>
+    <dimen name="workmate_item_picture_iv_margin">10dp</dimen>
+    <dimen name="workmate_item_chosen_tv_margin">15dp</dimen>
+    <dimen name="workmate_item_chosen_tv_text_size">16sp</dimen>
+
+    <!-- frame_layout_profile_pic -->
+    <dimen name="frame_layout_profile_pic_iv_size">120dp</dimen>
+    <dimen name="frame_layout_profile_camera_iv_size">40dp</dimen>
+
+</resources>
