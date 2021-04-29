@@ -59,7 +59,7 @@ public class ListViewViewModel extends ViewModel {
                         }
                 ));
 
-        mDisposable.add(mRestaurantUseCase.observeRestaurantDetailsList()
+        mDisposable.add(mRestaurantUseCase.observeRestaurantList()
                 .subscribeOn(Schedulers.computation())
                 .map(new RestaurantToListViewMapper(mUserDataRepository.getLocation(),
                         mUserDataRepository.getDistanceUnit(),

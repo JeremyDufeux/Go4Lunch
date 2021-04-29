@@ -42,7 +42,7 @@ public class RestaurantUseCase{
         mRestaurantRepository.clearRestaurantList();
         mDisposable = getNearbyPlacesObserver(latitude, longitude, radius)
                 .subscribe(
-                        mRestaurantRepository::updateRestaurant,
+                        mRestaurantRepository::addNewRestaurant,
                         throwable -> {
                             mErrorsObservable.onNext(new Exception(throwable));
                             Log.e("RestaurantUseCase", "getNearbyPlaces: " + throwable.toString());
@@ -74,7 +74,6 @@ public class RestaurantUseCase{
                     for(Workmate workmate : interestedWorkmates) {
                         restaurant.getInterestedWorkmates().add(workmate.getUId());
                     }
-                    mRestaurantRepository.addNewRestaurant(restaurant);
                     return restaurant;
                 });
     }
@@ -90,7 +89,7 @@ public class RestaurantUseCase{
             mDisposable = getNextPagePlacesObserver()
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                            mRestaurantRepository::updateRestaurant,
+                            mRestaurantRepository::addNewRestaurant,
                             throwable -> {
                                 mErrorsObservable.onNext(new Exception(throwable));
                                 Log.e("RestaurantUseCase", "getNearbyPlaces: " + throwable.toString());
@@ -131,10 +130,6 @@ public class RestaurantUseCase{
 
     public Observable<HashMap<String, Restaurant>> observeRestaurantList(){
         return mRestaurantRepository.observeRestaurantList();
-    }
-
-    public Observable<HashMap<String, Restaurant>> observeRestaurantDetailsList(){
-        return mRestaurantRepository.observeRestaurantDetailList();
     }
 
     public Observable<Exception> observeErrors(){
