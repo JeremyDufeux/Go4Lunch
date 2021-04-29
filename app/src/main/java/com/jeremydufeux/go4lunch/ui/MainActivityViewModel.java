@@ -111,12 +111,4 @@ public class MainActivityViewModel extends ViewModel {
                 mUserDataRepository.getMapViewCameraLongitude(),
                 mUserDataRepository.getMapViewCameraRadius());
     }
-
-    // ---------------
-    // Preferences
-    // ---------------
-
-    public void savePreferences() {
-        mUserDataRepository.savePreferences();
-    }
 }

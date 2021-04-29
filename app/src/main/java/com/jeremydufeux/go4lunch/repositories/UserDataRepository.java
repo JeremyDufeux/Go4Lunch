@@ -48,7 +48,7 @@ public class UserDataRepository {
     // SharedPreferences
     // -------------
 
-    public void savePreferences(){
+    private void savePreferences(){
         mPreferences.edit()
                 .putLong(PREF_CAMERA_LAT, Double.doubleToRawLongBits(mMapViewCameraLatitude))
                 .putLong(PREF_CAMERA_LNG, Double.doubleToRawLongBits(mMapViewCameraLongitude))
@@ -56,7 +56,7 @@ public class UserDataRepository {
                 .apply();
     }
 
-    void readPref(){
+    private void readPref(){
         if(mPreferences.contains(PREF_CAMERA_LAT)) {
             mMapViewCameraLatitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LAT, 0));
             mMapViewCameraLongitude =  Double.longBitsToDouble(mPreferences.getLong(PREF_CAMERA_LNG, 0));

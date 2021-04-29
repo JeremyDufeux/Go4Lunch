@@ -338,12 +338,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        mViewModel.savePreferences();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mViewModel.clearDisposables();

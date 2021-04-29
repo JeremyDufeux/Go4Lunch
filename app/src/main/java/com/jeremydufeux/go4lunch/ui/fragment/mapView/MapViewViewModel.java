@@ -11,8 +11,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToMapViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.AddMarkersLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.FocusCameraLiveEvent;
@@ -25,6 +25,7 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
@@ -43,6 +44,7 @@ public class MapViewViewModel extends ViewModel {
 
     private final RestaurantUseCase mRestaurantUseCase;
     private final UserDataRepository mUserDataRepository;
+    private final Executor mExecutor;
 
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
@@ -57,9 +59,12 @@ public class MapViewViewModel extends ViewModel {
     private Location mLocation;
 
     @Inject
-    public MapViewViewModel(RestaurantUseCase restaurantUseCase, UserDataRepository userDataRepository) {
+    public MapViewViewModel(RestaurantUseCase restaurantUseCase,
+                            UserDataRepository userDataRepository,
+                            Executor executor) {
         mRestaurantUseCase = restaurantUseCase;
         mUserDataRepository = userDataRepository;
+        mExecutor = executor;
     }
 
     public void startObservers(){
@@ -216,7 +221,7 @@ public class MapViewViewModel extends ViewModel {
     // -------------
 
     private void saveCameraData(double latitude, double longitude, float zoom, double radius) {
-        mUserDataRepository.setMapViewData(latitude, longitude, zoom, radius);
+        mExecutor.execute(() -> mUserDataRepository.setMapViewData(latitude, longitude, zoom, radius));
     }
     
     // ---------------
