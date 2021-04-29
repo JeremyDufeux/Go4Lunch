@@ -34,7 +34,7 @@ public class ListViewViewModelTest {
     @Before
     public void init(){
         mViewModel = new  ListViewViewModel(mRestaurantUseCase, mUserDataRepository);
-        when(mRestaurantUseCase.observeRestaurantDetailsList()).thenReturn(Observable.just(generateRestaurantList()));
+        when(mRestaurantUseCase.observeRestaurantList()).thenReturn(Observable.just(generateRestaurantList()));
         when(mRestaurantUseCase.observeErrors()).thenReturn(Observable.just(new Exception(new Throwable())));
     }
 

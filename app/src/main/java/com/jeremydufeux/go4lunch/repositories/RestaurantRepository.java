@@ -22,7 +22,6 @@ public class RestaurantRepository {
         mRestaurantHashMap = new HashMap<>();
 
         mRestaurantListObservable = BehaviorSubject.create();
-        mRestaurantListObservable.onNext(mRestaurantHashMap);
     }
 
     public void addNewRestaurant(Restaurant restaurant) {
@@ -44,6 +43,7 @@ public class RestaurantRepository {
     public Observable<Restaurant> getRestaurantWithId(String placeId) {
         return Observable.just(Objects.requireNonNull(mRestaurantHashMap.get(placeId)));
     }
+
     public Observable<Boolean> isRestaurantPresent(String placeId) {
         return Observable.just(mRestaurantHashMap.containsKey(placeId));
     }

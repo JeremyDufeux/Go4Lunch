@@ -86,18 +86,6 @@ public class RestaurantUseCaseTest {
 
         mRestaurantUseCase.observeRestaurantList()
                 .test()
-                .assertValue(restaurantHashMap -> restaurantHashMap.size() == mFirstPlaceSearchResults.getPlaceSearches().size()
-                                && restaurantHashMap.containsKey(mFirstPlaceId)
-                                && Objects.requireNonNull(restaurantHashMap.get(mSecondPlaceId)).getName().equals(mFirstPlaceSearchResults.getPlaceSearches().get(1).getName())
-                        );
-    }
-
-    @Test
-    public void test_getNearbyPlaces_checkRestaurantDetailsList(){
-        mRestaurantUseCase.getNearbyPlaces(0, 0, 0);
-
-        mRestaurantUseCase.observeRestaurantDetailsList()
-                .test()
                 .assertValue(restaurantHashMap ->
                         restaurantHashMap.size() == mFirstPlaceSearchResults.getPlaceSearches().size()
                         && restaurantHashMap.containsKey(mFirstPlaceId)
@@ -109,14 +97,14 @@ public class RestaurantUseCaseTest {
     public void test_loadNextPage_checkNewListSizeAndNewPlaceName(){
         mRestaurantUseCase.getNearbyPlaces(0, 0, 0);
 
-        mRestaurantUseCase.observeRestaurantDetailsList()
+        mRestaurantUseCase.observeRestaurantList()
                 .test()
                 .assertValue(restaurantHashMap ->
                         restaurantHashMap.size() == mFirstPlaceSearchResults.getPlaceSearches().size());
 
         mRestaurantUseCase.loadNextPage();
 
-        mRestaurantUseCase.observeRestaurantDetailsList()
+        mRestaurantUseCase.observeRestaurantList()
                 .test()
                 .assertValue(restaurantHashMap ->
                         restaurantHashMap.size() == mFirstPlaceSearchResults.getPlaceSearches().size() + mSecondPlaceSearchResults.getPlaceSearches().size()
@@ -139,7 +127,7 @@ public class RestaurantUseCaseTest {
                 .test()
                 .assertValue(restaurantHashMap -> restaurantHashMap.containsKey(placeId));
 
-        mRestaurantUseCase.observeRestaurantDetailsList()
+        mRestaurantUseCase.observeRestaurantList()
                 .test()
                 .assertValue(restaurantHashMap -> Objects.requireNonNull(restaurantHashMap.get(placeId)).getName().equals("Bfc Tandoori"));
     }

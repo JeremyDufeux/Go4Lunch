@@ -38,31 +38,6 @@ public class RestaurantRepositoryTest {
                 )
                 .dispose();
     }
-    @Test
-    public void test_updateRestaurant_checkRestaurant() {
-        Restaurant restaurant = generateRestaurant();
-
-        mRestaurantRepository.setNewListSize(1);
-        mRestaurantRepository.addNewRestaurant(restaurant);
-
-        mRestaurantRepository.observeRestaurantList()
-                .test()
-                .assertValue(restaurantHashMap ->
-                        restaurantHashMap.containsValue(restaurant)
-                )
-                .dispose();
-
-        Restaurant restaurantDetails = generateRestaurant();
-        mRestaurantRepository.updateRestaurant(restaurantDetails);
-
-        mRestaurantRepository.observeRestaurantDetailList()
-                .test()
-                .assertValue(restaurantHashMap ->
-                        restaurantHashMap.containsValue(restaurantDetails)
-                )
-                .dispose();
-
-    }
 
     @Test
     public void test_getRestaurantWithId_checkRestaurant(){
@@ -83,17 +58,6 @@ public class RestaurantRepositoryTest {
             .test()
             .assertValue(true);
 
-    }
-
-    @Test
-    public void test_clearRestaurantList(){
-        Restaurant restaurant = generateRestaurantDetails();
-        mRestaurantRepository.addNewRestaurant(restaurant);
-        mRestaurantRepository.clearRestaurantList();
-
-        mRestaurantRepository.observeRestaurantDetailList()
-                .test()
-                .assertValue(HashMap::isEmpty);
     }
 
     // ---------------
