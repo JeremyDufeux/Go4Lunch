@@ -17,6 +17,8 @@ public class Restaurant implements Comparable<Restaurant>{
     private String mPhotoUrl;
     private float mRating;
     private final List<String> mInterestedWorkmates = new ArrayList<>();
+    private Location mLocation;
+    private int mDistanceFromUser;
 
     // For Opening
     /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
@@ -26,13 +28,10 @@ public class Restaurant implements Comparable<Restaurant>{
     private boolean mAlwaysOpen;
     private int mUtcOffset;
 
-    private Location mLocation;
-    private int mDistanceFromUser;
-
     // For Google Maps
     private Marker mMarker;
 
-    // For ListViewPlacesAdapter
+    // For Ui
     private int mDistanceTvVisibility;
     private int mStar1IvVisibility;
     private int mStar2IvVisibility;

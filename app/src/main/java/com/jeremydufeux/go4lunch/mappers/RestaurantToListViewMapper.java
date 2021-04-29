@@ -90,7 +90,7 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
         }
     }
 
-    // If closing soon, return the closing time, else return an empty String
+    // If closing soon, return the closing time, else return open or closed
     public String getOpenStatus(Restaurant restaurant){
         if(restaurant.getOpeningHours().containsKey(mNowCal.get(Calendar.DAY_OF_WEEK) - 1)) {
             for (Restaurant.OpenPeriod period : Objects.requireNonNull(restaurant.getOpeningHours().get(mNowCal.get(Calendar.DAY_OF_WEEK) - 1), "Opening hours not found for this day")) {
