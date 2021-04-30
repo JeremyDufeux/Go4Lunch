@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -86,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements
         configureBottomNavigation();
         configureToolbar();
         configureDrawer();
-        configureNavControllerListener();
         configureSearchView();
+        configureNavigationListener();
     }
 
     // ---------------
@@ -134,39 +136,6 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout = mBinding.activityMainDrawerLayout;
     }
 
-    private void configureNavControllerListener() {
-        mNavController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-
-            if(destination.getId() == R.id.login_fragment) {
-                mToolbar.setVisibility(View.GONE);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                mBottomNavigationView.setVisibility(View.GONE);
-            } else if(destination.getId() == R.id.settings_fragment) {
-                mToolbar.setVisibility(View.VISIBLE);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                mBottomNavigationView.setVisibility(View.GONE);
-                mSearchItem.setVisible(false);
-                hideSearch();
-            } else if(destination.getId() == R.id.restaurant_details_fragment) {
-                mToolbar.setVisibility(View.GONE);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                mBottomNavigationView.setVisibility(View.GONE);
-            } else {
-                mToolbar.setVisibility(View.VISIBLE);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                mBottomNavigationView.setVisibility(View.VISIBLE);
-                if(mSearchItem != null) {
-                    if(destination.getId() != R.id.workmates_fragment) {
-                        mSearchItem.setVisible(true);
-                    } else {
-                        mSearchItem.setVisible(false);
-                        hideSearch();
-                    }
-                }
-            }
-        });
-    }
-
     private void configureSearchView(){
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
 
@@ -200,6 +169,10 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         mBinding.mainActivityCloseSearchButton.setOnClickListener(v -> hideSearch());
+    }
+
+    private void configureNavigationListener() {
+        mNavController.addOnDestinationChangedListener(this::onDestinationChanged);
     }
 
     // ---------------
@@ -269,6 +242,36 @@ public class MainActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.arg_restaurant_id), restaurantId);
         mNavController.navigate(R.id.restaurant_details_fragment, bundle);
+    }
+
+    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+        if(destination.getId() == R.id.login_fragment) {
+            mToolbar.setVisibility(View.GONE);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            mBottomNavigationView.setVisibility(View.GONE);
+        } else if(destination.getId() == R.id.settings_fragment) {
+            mToolbar.setVisibility(View.VISIBLE);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            mBottomNavigationView.setVisibility(View.GONE);
+            mSearchItem.setVisible(false);
+            hideSearch();
+        } else if(destination.getId() == R.id.restaurant_details_fragment) {
+            mToolbar.setVisibility(View.GONE);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            mBottomNavigationView.setVisibility(View.GONE);
+        } else {
+            mToolbar.setVisibility(View.VISIBLE);
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            mBottomNavigationView.setVisibility(View.VISIBLE);
+            if(mSearchItem != null) {
+                if(destination.getId() != R.id.workmates_fragment) {
+                    mSearchItem.setVisible(true);
+                } else {
+                    mSearchItem.setVisible(false);
+                    hideSearch();
+                }
+            }
+        }
     }
 
     // ---------------

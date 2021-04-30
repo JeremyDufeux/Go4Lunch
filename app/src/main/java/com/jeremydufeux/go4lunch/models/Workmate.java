@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.models;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +33,11 @@ public class Workmate implements Comparable<Workmate>{
     public Workmate() {
     }
 
-    public Workmate(String uId, String fullName, String nickname, @Nullable String email, @Nullable String pictureUrl) {
+    public Workmate(String uId,
+                    String fullName,
+                    String nickname,
+                    @Nullable String email,
+                    @Nullable String pictureUrl) {
         mUId = uId;
         mFullName = fullName;
         mNickname = nickname;

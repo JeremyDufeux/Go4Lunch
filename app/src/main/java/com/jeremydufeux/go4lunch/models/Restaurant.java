@@ -19,8 +19,10 @@ public class Restaurant implements Comparable<Restaurant>{
     private int mDistanceFromUser;
 
     // For Opening
-    /** The HashMap represent the week, the key is for the day of the week: 0 for monday, 6 for sunday,
-     The list in value contain period of time where the place is open during the day, represented by the nested class OpenPeriod  **/
+    /** The HashMap mOpeningHours represent the week,
+     * the key is for the day of the week: 0 for monday, 6 for sunday,
+     * The list in value contain period of time where the place is open during the day,
+     * the period is represented by the nested class OpenPeriod  **/
     private HashMap<Integer, List<OpenPeriod>>  mOpeningHours;
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
