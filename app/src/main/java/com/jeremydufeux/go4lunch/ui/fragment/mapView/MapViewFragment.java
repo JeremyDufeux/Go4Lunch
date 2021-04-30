@@ -186,20 +186,11 @@ public class MapViewFragment extends Fragment implements
     private Observer<HashMap<String, Restaurant>> onRestaurantListChanged(){
         return restaurantList -> {
             hideProgressBar();
-            removeUnusedMarkers(restaurantList);
             mRestaurantList = restaurantList;
             if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                 addMarkers();
             }
         };
-    }
-
-    private void removeUnusedMarkers(HashMap<String, Restaurant> restaurantList) {
-        for (Restaurant restaurant : mRestaurantList.values()) {
-            if (!restaurantList.containsKey(restaurant.getUId())) {
-                restaurant.getMarker().remove();
-            }
-        }
     }
 
     private void addMarkers(){
@@ -209,8 +200,8 @@ public class MapViewFragment extends Fragment implements
                     .position(new LatLng(restaurant.getLocation().getLatitude(), restaurant.getLocation().getLongitude()))
                     .icon(BitmapDescriptorFactory.fromResource(restaurant.getMarkerOptionIconResource()));
 
-            restaurant.setMarker(mMap.addMarker(markerOptions));
-            restaurant.getMarker().setTag(restaurant.getUId());
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(restaurant.getUId());
         }
     }
 
