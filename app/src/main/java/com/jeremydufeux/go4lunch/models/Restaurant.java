@@ -2,8 +2,6 @@ package com.jeremydufeux.go4lunch.models;
 
 import android.location.Location;
 
-import com.google.android.gms.maps.model.Marker;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,9 +25,6 @@ public class Restaurant implements Comparable<Restaurant>{
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
     private int mUtcOffset;
-
-    // For Google Maps
-    private Marker mMarker;
 
     // For Ui
     private int mDistanceTvVisibility;
@@ -133,14 +128,6 @@ public class Restaurant implements Comparable<Restaurant>{
 
     public void setLocation(Location location) {
         mLocation = location;
-    }
-
-    public Marker getMarker() {
-        return mMarker;
-    }
-
-    public void setMarker(Marker marker) {
-        mMarker = marker;
     }
 
     public int getOpenTvString() {
