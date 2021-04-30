@@ -67,6 +67,7 @@ public class ListViewPlacesAdapter extends RecyclerView.Adapter<ListViewPlacesAd
 
             Glide.with(context)
                     .load(restaurant.getPhotoUrl())
+                    .timeout(2000)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mBinding.placeItemPictureIv);

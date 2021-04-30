@@ -148,6 +148,7 @@ public class RestaurantDetailsFragment extends Fragment {
 
         Glide.with(this)
                 .load(mRestaurant.getPhotoUrl())
+                .timeout(2000)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(mBinding.fragmentRestaurantDetailsPhotoIv);
