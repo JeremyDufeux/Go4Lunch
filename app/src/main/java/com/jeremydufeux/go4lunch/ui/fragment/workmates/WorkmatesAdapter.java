@@ -105,9 +105,14 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.Work
 
         @Override
         public boolean areContentsTheSame(@NonNull Workmate oldItem, @NonNull Workmate newItem) {
-            return oldItem.getNickname().equals(newItem.getNickname())
-                    && oldItem.getChosenRestaurantName().equals(newItem.getChosenRestaurantName())
-                    && oldItem.getChosenRestaurantDate().equals(newItem.getChosenRestaurantDate());
+            if(oldItem.getChosenRestaurantDate() != null && newItem.getChosenRestaurantDate() != null) {
+                return oldItem.getNickname().equals(newItem.getNickname())
+                        && oldItem.getChosenRestaurantName().equals(newItem.getChosenRestaurantName())
+                        && oldItem.getChosenRestaurantDate().equals(newItem.getChosenRestaurantDate());
+            } else {
+                return oldItem.getNickname().equals(newItem.getNickname())
+                        && oldItem.getChosenRestaurantName().equals(newItem.getChosenRestaurantName());
+            }
         }
     }
 }
