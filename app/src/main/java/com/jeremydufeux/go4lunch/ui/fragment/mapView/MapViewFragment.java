@@ -112,7 +112,7 @@ public class MapViewFragment extends Fragment implements
 
         mBinding = FragmentMapViewBinding.inflate(getLayoutInflater());
         mBinding.mapViewFragmentLocationBtn.setOnClickListener(v -> requestFocusToLocation());
-        mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisAreaAction());
+        mBinding.mapViewFragmentSearchButton.setOnClickListener(v -> searchThisArea());
 
         configureMaps();
 
@@ -166,10 +166,12 @@ public class MapViewFragment extends Fragment implements
         }
     }
 
-    private void searchThisAreaAction() {
+    private void searchThisArea() {
         hideSearchButton();
         showProgressBar();
-        mViewModel.getNearbyPlaces(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude, getVisibleRegionRadius());
+        mViewModel.getNearbyPlaces(mMap.getCameraPosition().target.latitude,
+                mMap.getCameraPosition().target.longitude,
+                getVisibleRegionRadius());
     }
 
     private void onCameraIdle() {
@@ -179,13 +181,21 @@ public class MapViewFragment extends Fragment implements
                 getVisibleRegionRadius());
     }
 
+    private boolean onMarkerClick(Marker marker) {
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.arg_restaurant_id), (String) Objects.requireNonNull(marker.getTag()));
+        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.restaurant_details_fragment, bundle);
+        return true;
+    }
+
     // ---------------
-    // Places
+    // Markers
     // ---------------
 
     private Observer<HashMap<String, Restaurant>> onRestaurantListChanged(){
         return restaurantList -> {
             hideProgressBar();
+            removeMarkers();
             mRestaurantList = restaurantList;
             if (mMap.getCameraPosition().zoom > LIMIT_ZOOM_VALUE) {
                 addMarkers();
@@ -194,7 +204,6 @@ public class MapViewFragment extends Fragment implements
     }
 
     private void addMarkers(){
-        mMap.clear();
         for (Restaurant restaurant : mRestaurantList.values()) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(new LatLng(restaurant.getLocation().getLatitude(), restaurant.getLocation().getLongitude()))
@@ -207,13 +216,6 @@ public class MapViewFragment extends Fragment implements
 
     private void removeMarkers(){
         mMap.clear();
-    }
-
-    private boolean onMarkerClick(Marker marker) {
-        Bundle bundle = new Bundle();
-        bundle.putString(getString(R.string.arg_restaurant_id), (String) Objects.requireNonNull(marker.getTag()));
-        Navigation.findNavController(mBinding.getRoot()).navigate(R.id.restaurant_details_fragment, bundle);
-        return true;
     }
 
     // ---------------

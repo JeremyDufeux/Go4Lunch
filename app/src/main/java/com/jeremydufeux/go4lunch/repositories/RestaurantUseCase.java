@@ -9,14 +9,11 @@ import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.utils.NoMorePageException;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -40,30 +37,22 @@ public class RestaurantUseCase{
 
     public void getNearbyPlaces(double latitude, double longitude, double radius) {
         mRestaurantRepository.clearRestaurantList();
-        mDisposable = getNearbyPlacesObserver(latitude, longitude, radius)
-                .subscribe(
-                        mRestaurantRepository::addNewRestaurant,
-                        throwable -> {
-                            mErrorsObservable.onNext(new Exception(throwable));
-                            Log.e("RestaurantUseCase", "getNearbyPlaces: " + throwable.toString());
-                        });
-    }
-
-    private Observable<Restaurant> getNearbyPlacesObserver(double latitude, double longitude, double radius){
-        return mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius)
+        mDisposable = mGooglePlacesRepository.getNearbyPlaces(latitude, longitude, radius)
                 .subscribeOn(Schedulers.io())
                 .map(new NearbyPlacesResultToRestaurantMapper())
                 .map(restaurants -> {
                     mRestaurantRepository.setNewListSize(restaurants.size());
                     return restaurants;
                 })
-                .switchMap((Function<List<Restaurant>, ObservableSource<Restaurant>>)
-                        Observable::fromIterable)
-                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getInterestedWorkmates)
-                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getDetailsForPlace)
-                ;
+                .switchMap(Observable::fromIterable)
+                .flatMap(this::getInterestedWorkmates)
+                .flatMap(this::getDetailsForPlace)
+                .subscribe(
+                        mRestaurantRepository::addNewRestaurant,
+                        throwable -> {
+                            mErrorsObservable.onNext(new Exception(throwable));
+                            Log.e("RestaurantUseCase", "getNearbyPlaces: " + throwable.toString());
+                        });
     }
 
     private Observable<Restaurant> getInterestedWorkmates(Restaurant restaurant){
@@ -86,7 +75,15 @@ public class RestaurantUseCase{
 
     public void loadNextPage() {
         if(mGooglePlacesRepository.haveNextPageToken()) {
-            mDisposable = getNextPagePlacesObserver()
+            mDisposable = mGooglePlacesRepository.getNextPageNearbyPlaces()
+                    .map(new NearbyPlacesResultToRestaurantMapper())
+                    .map(restaurants -> {
+                        mRestaurantRepository.setAddListSize(restaurants.size());
+                        return restaurants;
+                    })
+                    .switchMap(Observable::fromIterable)
+                    .flatMap(this::getInterestedWorkmates)
+                    .flatMap(this::getDetailsForPlace)
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                             mRestaurantRepository::addNewRestaurant,
@@ -99,26 +96,9 @@ public class RestaurantUseCase{
         }
     }
 
-    private Observable<Restaurant> getNextPagePlacesObserver(){
-        return mGooglePlacesRepository.getNextPageNearbyPlaces()
-                .subscribeOn(Schedulers.io())
-                .map(new NearbyPlacesResultToRestaurantMapper())
-                .map(restaurants -> {
-                    mRestaurantRepository.setAddListSize(restaurants.size());
-                    return restaurants;
-                })
-                .switchMap((Function<List<Restaurant>, ObservableSource<Restaurant>>)
-                        Observable::fromIterable)
-                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getInterestedWorkmates)
-                .flatMap((Function<Restaurant, ObservableSource<Restaurant>>)
-                        this::getDetailsForPlace)
-                ;
-    }
-
     public Observable<Restaurant> getRestaurantWithId(String restaurantId){
         return mRestaurantRepository.isRestaurantPresent(restaurantId)
-                .flatMap((Function<Boolean, ObservableSource<Restaurant>>) restaurantPresent -> {
+                .flatMap(restaurantPresent -> {
                     if(restaurantPresent){
                         return mRestaurantRepository.getRestaurantWithId(restaurantId);
                     }else {
