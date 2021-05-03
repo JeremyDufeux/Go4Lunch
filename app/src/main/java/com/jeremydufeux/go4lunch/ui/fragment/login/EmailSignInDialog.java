@@ -18,7 +18,7 @@ import com.jeremydufeux.go4lunch.databinding.DialogEmailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class EmailDialog extends DialogFragment {
+public class EmailSignInDialog extends DialogFragment {
     public static final int MODE_SIGN_IN = 0;
     public static final int MODE_SIGN_UP = 1;
     public static final int MODE_RESET_PASSWORD = 2;

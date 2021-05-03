@@ -52,9 +52,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes.SIGN_IN_CANCELLED;
 import static com.google.android.gms.common.api.CommonStatusCodes.NETWORK_ERROR;
 import static com.google.android.gms.common.api.CommonStatusCodes.TIMEOUT;
-import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailDialog.MODE_RESET_PASSWORD;
-import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailDialog.MODE_SIGN_IN;
-import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailDialog.MODE_SIGN_UP;
+import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailSignInDialog.MODE_RESET_PASSWORD;
+import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailSignInDialog.MODE_SIGN_IN;
+import static com.jeremydufeux.go4lunch.ui.fragment.login.EmailSignInDialog.MODE_SIGN_UP;
 
 @AndroidEntryPoint
 public class LoginFragment extends Fragment implements FacebookCallback<LoginResult> {
@@ -144,9 +144,9 @@ public class LoginFragment extends Fragment implements FacebookCallback<LoginRes
     }
 
     private void openEmailDialog(){
-        EmailDialog emailDialog = new EmailDialog();
-        emailDialog.setListener(this::signUpWithEmail);
-        emailDialog.show(requireActivity().getSupportFragmentManager(), null);
+        EmailSignInDialog emailSignInDialog = new EmailSignInDialog();
+        emailSignInDialog.setListener(this::signUpWithEmail);
+        emailSignInDialog.show(requireActivity().getSupportFragmentManager(), null);
     }
 
     private void signUpWithEmail(int mode, String email, String password, String name, String nickname) {
