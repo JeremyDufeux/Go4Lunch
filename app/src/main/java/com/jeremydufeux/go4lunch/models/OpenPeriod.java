@@ -1,43 +1,48 @@
 package com.jeremydufeux.go4lunch.models;
 
 public class OpenPeriod {
-    private final int openingDay;
-    private final int openingHour;
-    private final int openingMinute;
-    private final int closingDay;
-    private final int closingHour;
-    private final int closingMinute;
+    private final int mOpeningDay;
+    private final int mOpeningHour;
+    private final int mOpeningMinute;
+    private final int mClosingDay;
+    private final int mClosingHour;
+    private final int mClosingMinute;
 
-    public OpenPeriod(int openingDay, int openingHour, int openingMinute, int closingDay, int closingHour, int closingMinute) {
-        this.openingDay = openingDay;
-        this.openingHour = openingHour;
-        this.openingMinute = openingMinute;
-        this.closingDay = closingDay;
-        this.closingHour = closingHour;
-        this.closingMinute = closingMinute;
+    public OpenPeriod(int openingDay,
+                      int openingHour,
+                      int openingMinute,
+                      int closingDay,
+                      int closingHour,
+                      int closingMinute) {
+        mOpeningDay = openingDay;
+        mOpeningHour = openingHour;
+        mOpeningMinute = openingMinute;
+        mClosingDay = closingDay;
+        mClosingHour = closingHour;
+        mClosingMinute = closingMinute;
     }
 
     public int getOpeningDay() {
-        return openingDay;
+        return mOpeningDay;
     }
 
     public int getOpeningHour() {
-        return openingHour;
+        return mOpeningHour;
     }
 
     public int getOpeningMinute() {
-        return openingMinute;
+        return mOpeningMinute;
     }
 
     public int getClosingDay() {
-        return closingDay;
+        return mClosingDay;
     }
 
     public int getClosingHour() {
-        return closingHour;
+        return mClosingHour;
     }
 
     public int getClosingMinute() {
-        return closingMinute;
+        return mClosingMinute;
     }
 }

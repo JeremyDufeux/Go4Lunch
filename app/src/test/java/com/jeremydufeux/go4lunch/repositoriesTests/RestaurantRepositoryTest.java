@@ -9,9 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class RestaurantRepositoryTest {
     @Rule
@@ -81,12 +79,10 @@ public class RestaurantRepositoryTest {
         restaurant.setRating(4.2f);
         restaurant.setPhotoUrl("ATtYBwJo7zHiJORkGmRCpOD8ig6tRng0akzKblJtuxoQth0O2-DQXmp-EPynI1qGkpz8PEjDpKOufkty-kt9jEH4i-5_xD0v-GpVmbLoesD9OqFEb-Bj_NQa0MAJRZIoiYxP4C0j64MWMRcDECscR2KMHV0zl6TRqumQAi0AnjzwVVmCepIp");
 
-        List<OpenPeriod> openingHours = new ArrayList<>();
         for(int i = 0; i < Calendar.DAY_OF_WEEK; i++){
             OpenPeriod openPeriod = new OpenPeriod(1, 10, 0, 1, 20, 0);
-            openingHours.add(openPeriod);
+            restaurant.getOpeningPeriods().add(openPeriod);
         }
-        restaurant.setOpeningPeriods(openingHours);
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
 

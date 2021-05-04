@@ -62,7 +62,6 @@ public class GooglePlacesRepository {
                 + "address_component,"
                 + "geometry,"
                 + "vicinity,"
-                + "opening_hours,"
                 + "utc_offset,"
                 + "photo,"
                 + "international_phone_number,"
@@ -81,7 +80,12 @@ public class GooglePlacesRepository {
     public Observable<PlaceAutocomplete> getAutocompletePlaces(String input, double latitude, double longitude, double radius){
         String latlng = latitude + "," + longitude;
 
-        return mPlacesService.fetchPlaceAutocomplete(BuildConfig.MAPS_API_KEY, mSessionToken, input, latlng, String.valueOf(radius), AUTOCOMPLETE_PLACE_TYPE)
+        return mPlacesService.fetchPlaceAutocomplete(BuildConfig.MAPS_API_KEY,
+                    mSessionToken,
+                    input,
+                    latlng,
+                    String.valueOf(radius),
+                    AUTOCOMPLETE_PLACE_TYPE)
                 .subscribeOn(Schedulers.io())
                 .timeout(PLACE_SERVICE_TIMEOUT, TimeUnit.SECONDS);
     }

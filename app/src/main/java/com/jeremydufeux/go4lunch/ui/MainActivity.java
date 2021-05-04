@@ -188,14 +188,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void onAutocompleteSelection(int position){
-        if(mAdapter.getCount() != 0) {
-            Cursor cursor = (Cursor) mAdapter.getItem(position);
-            String restaurantId = cursor.getString(cursor.getColumnIndex(CURSOR_MATRIX_ID));
-            navigateToRestaurantDetails(restaurantId);
-            hideSearch();
-        } else {
-            showSnackBar(R.string.no_restaurants_found);
-        }
+        Cursor cursor = (Cursor) mAdapter.getItem(position);
+        String restaurantId = cursor.getString(cursor.getColumnIndex(CURSOR_MATRIX_ID));
+        navigateToRestaurantDetails(restaurantId);
+        hideSearch();
     }
 
     @Override

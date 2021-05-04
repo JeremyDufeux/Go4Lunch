@@ -11,7 +11,6 @@ import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
@@ -75,11 +74,8 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
     private void setOpeningData(PlaceDetails placeDetail) {
         if(placeDetail.getOpeningHours() != null) {
             mRestaurant.setOpeningHoursAvailable(true);
-            mRestaurant.setUtcOffset(placeDetail.getUtcOffset()*60000);
 
             if(placeDetail.getOpeningHours().getPeriods() != null) {
-
-                List<OpenPeriod> openingHours = new ArrayList<>();
 
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
                     if(period.getClose() != null) {
@@ -90,12 +86,11 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
                                 period.getClose().getDay() + 1,
                                 Integer.parseInt(period.getClose().getTime().substring(0, 2)),
                                 Integer.parseInt(period.getClose().getTime().substring(2, 4)));
-                        openingHours.add(openPeriod);
+                        mRestaurant.getOpeningPeriods().add(openPeriod);
                     } else {
                         mRestaurant.setAlwaysOpen(true);
                     }
                 }
-                mRestaurant.setOpeningPeriods(openingHours);
             }
         }
     }

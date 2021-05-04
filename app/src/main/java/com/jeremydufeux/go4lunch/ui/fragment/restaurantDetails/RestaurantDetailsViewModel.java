@@ -49,8 +49,6 @@ public class RestaurantDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<Workmate>> mWorkmatesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Workmate> mCurrentUserLiveData = new MutableLiveData<>();
 
-    private String mLastRestaurantId = "";
-
     @Inject
     public RestaurantDetailsViewModel(RestaurantUseCase restaurantUseCase,
                                       WorkmatesRepository workmatesRepository,
@@ -76,15 +74,9 @@ public class RestaurantDetailsViewModel extends ViewModel {
     }
 
     public void initViewModel(String restaurantId) {
-        getRestaurantWithId(restaurantId);
-        if(!mLastRestaurantId.equals(restaurantId)){
-            clearWorkmatesLiveData();
-        }
-        mLastRestaurantId = restaurantId;
-    }
+        mWorkmatesLiveData.setValue(new ArrayList<>());
 
-    public void getRestaurantWithId(String placeId) {
-        mDisposable.add(mRestaurantUseCase.getRestaurantWithId(placeId)
+        mDisposable.add(mRestaurantUseCase.getRestaurantWithId(restaurantId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(mRestaurantLiveData::postValue,
                         throwable -> {
@@ -92,7 +84,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
                             mSingleLiveEvent.postValue(new ShowSnackbarLiveEvent(R.string.error));
                 }));
 
-        mDisposable.add(mWorkmatesRepository.getInterestedWorkmatesForRestaurants(placeId)
+        mDisposable.add(mWorkmatesRepository.getInterestedWorkmatesForRestaurants(restaurantId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(mWorkmatesLiveData::postValue,
                         throwable -> {
@@ -102,7 +94,7 @@ public class RestaurantDetailsViewModel extends ViewModel {
 
         mDisposable.add(mWorkmatesRepository.observeCurrentUser()
                 .subscribeOn(Schedulers.io())
-                .map(new WorkmateToDetailsMapper(placeId))
+                .map(new WorkmateToDetailsMapper(restaurantId))
                 .subscribe(mCurrentUserLiveData::postValue,
                         throwable -> {
                             Log.e(TAG, "mWorkmatesRepository.observeCurrentUser: ", throwable);
@@ -148,10 +140,6 @@ public class RestaurantDetailsViewModel extends ViewModel {
             workmate.getLikedRestaurants().add(restaurant.getUId());
         }
         mExecutor.execute(() -> mWorkmatesRepository.setLikedRestaurants(workmate.getLikedRestaurants()));
-    }
-
-    public void clearWorkmatesLiveData(){
-        mWorkmatesLiveData.setValue(new ArrayList<>());
     }
 
     @Override

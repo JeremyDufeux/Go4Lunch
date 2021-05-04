@@ -94,6 +94,7 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
         for(OpenPeriod period : restaurant.getOpeningPeriods()){
             if((period.getOpeningDay() == mNowCal.get(Calendar.DAY_OF_WEEK))
                     || (period.getClosingDay() == mNowCal.get(Calendar.DAY_OF_WEEK))) {
+
                 Calendar openCal = (Calendar) mNowCal.clone();
                 openCal.set(Calendar.DAY_OF_WEEK, period.getOpeningDay());
                 openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());

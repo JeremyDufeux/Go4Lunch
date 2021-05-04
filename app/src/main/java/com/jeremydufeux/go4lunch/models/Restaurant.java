@@ -13,13 +13,12 @@ public class Restaurant implements Comparable<Restaurant>{
     private String mWebsite;
     private String mPhotoUrl;
     private float mRating;
-    private final List<String> mInterestedWorkmates = new ArrayList<>();
     private Location mLocation;
     private int mDistanceFromUser;
-    private List<OpenPeriod> mOpeningPeriods;
+    private final List<String> mInterestedWorkmates = new ArrayList<>();
+    private final List<OpenPeriod> mOpeningPeriods = new ArrayList<>();
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
-    private int mUtcOffset;
 
     // For Ui
     private int mDistanceTvVisibility;
@@ -41,14 +40,6 @@ public class Restaurant implements Comparable<Restaurant>{
         mUId = placeId;
     }
 
-    public void setAlwaysOpen(boolean alwaysOpen) {
-        mAlwaysOpen = alwaysOpen;
-    }
-
-    public void setRating(float rating) {
-        mRating = rating;
-    }
-
     public String getUId() {
         return mUId;
     }
@@ -67,26 +58,6 @@ public class Restaurant implements Comparable<Restaurant>{
 
     public void setAddress(String address) {
         mAddress = address;
-    }
-
-    public float getRating() {
-        return mRating;
-    }
-
-    public List<String> getInterestedWorkmates() {
-        return mInterestedWorkmates;
-    }
-
-    public void setUtcOffset(int utcOffset) {
-        this.mUtcOffset = utcOffset;
-    }
-
-    public boolean isAlwaysOpen() {
-        return mAlwaysOpen;
-    }
-
-    public int getUtcOffset() {
-        return mUtcOffset;
     }
 
     public String getPhoneNumber() {
@@ -113,68 +84,20 @@ public class Restaurant implements Comparable<Restaurant>{
         mPhotoUrl = photoUrl;
     }
 
+    public float getRating() {
+        return mRating;
+    }
+
+    public void setRating(float rating) {
+        mRating = rating;
+    }
+
     public Location getLocation() {
         return mLocation;
     }
 
     public void setLocation(Location location) {
         mLocation = location;
-    }
-
-    public int getOpenTvString() {
-        return mOpenTvString;
-    }
-
-    public int getDistanceTvVisibility() {
-        return mDistanceTvVisibility;
-    }
-
-    public int getStar1IvVisibility() {
-        return mStar1IvVisibility;
-    }
-
-    public int getStar2IvVisibility() {
-        return mStar2IvVisibility;
-    }
-
-    public int getStar3IvVisibility() {
-        return mStar3IvVisibility;
-    }
-
-    public int getOpenTvVisibility() {
-        return mOpenTvVisibility;
-    }
-
-    public int getOpenTvColor() {
-        return mOpenTvColor;
-    }
-
-    public String getOpenTvCloseTimeString() {
-        return mOpenTvCloseTimeString;
-    }
-
-    public int getWorkmateTvVisibility() {
-        return mWorkmateTvVisibility;
-    }
-
-    public int getWorkmateIvVisibility() {
-        return mWorkmateIvVisibility;
-    }
-
-    public void setOpeningHoursAvailable(boolean openingHoursAvailable) {
-        mOpeningHoursAvailable = openingHoursAvailable;
-    }
-
-    public void setOpeningPeriods(List<OpenPeriod> openingPeriods) {
-        mOpeningPeriods = openingPeriods;
-    }
-
-    public List<OpenPeriod> getOpeningPeriods() {
-        return mOpeningPeriods;
-    }
-
-    public boolean isOpeningHoursAvailable() {
-        return mOpeningHoursAvailable;
     }
 
     public int getDistanceFromUser() {
@@ -185,40 +108,104 @@ public class Restaurant implements Comparable<Restaurant>{
         mDistanceFromUser = distanceFromUser;
     }
 
+    public List<String> getInterestedWorkmates() {
+        return mInterestedWorkmates;
+    }
+
+    public List<OpenPeriod> getOpeningPeriods() {
+        return mOpeningPeriods;
+    }
+
+    public boolean isOpeningHoursAvailable() {
+        return mOpeningHoursAvailable;
+    }
+
+    public void setOpeningHoursAvailable(boolean openingHoursAvailable) {
+        mOpeningHoursAvailable = openingHoursAvailable;
+    }
+
+    public boolean isAlwaysOpen() {
+        return mAlwaysOpen;
+    }
+
+    public void setAlwaysOpen(boolean alwaysOpen) {
+        mAlwaysOpen = alwaysOpen;
+    }
+
+    public int getDistanceTvVisibility() {
+        return mDistanceTvVisibility;
+    }
+
     public void setDistanceTvVisibility(int distanceTvVisibility) {
         mDistanceTvVisibility = distanceTvVisibility;
+    }
+
+    public int getStar1IvVisibility() {
+        return mStar1IvVisibility;
     }
 
     public void setStar1IvVisibility(int star1IvVisibility) {
         mStar1IvVisibility = star1IvVisibility;
     }
 
+    public int getStar2IvVisibility() {
+        return mStar2IvVisibility;
+    }
+
     public void setStar2IvVisibility(int star2IvVisibility) {
         mStar2IvVisibility = star2IvVisibility;
+    }
+
+    public int getStar3IvVisibility() {
+        return mStar3IvVisibility;
     }
 
     public void setStar3IvVisibility(int star3IvVisibility) {
         mStar3IvVisibility = star3IvVisibility;
     }
 
+    public int getOpenTvString() {
+        return mOpenTvString;
+    }
+
     public void setOpenTvString(int openTvString) {
         mOpenTvString = openTvString;
+    }
+
+    public String getOpenTvCloseTimeString() {
+        return mOpenTvCloseTimeString;
     }
 
     public void setOpenTvCloseTimeString(String openTvCloseTimeString) {
         mOpenTvCloseTimeString = openTvCloseTimeString;
     }
 
+    public int getOpenTvVisibility() {
+        return mOpenTvVisibility;
+    }
+
     public void setOpenTvVisibility(int openTvVisibility) {
         mOpenTvVisibility = openTvVisibility;
+    }
+
+    public int getOpenTvColor() {
+        return mOpenTvColor;
     }
 
     public void setOpenTvColor(int openTvColor) {
         mOpenTvColor = openTvColor;
     }
 
+    public int getWorkmateTvVisibility() {
+        return mWorkmateTvVisibility;
+    }
+
     public void setWorkmateTvVisibility(int workmateTvVisibility) {
         mWorkmateTvVisibility = workmateTvVisibility;
+    }
+
+    public int getWorkmateIvVisibility() {
+        return mWorkmateIvVisibility;
     }
 
     public void setWorkmateIvVisibility(int workmateIvVisibility) {
@@ -241,12 +228,12 @@ public class Restaurant implements Comparable<Restaurant>{
         mDetailsWebsiteLlVisibility = detailsWebsiteLlVisibility;
     }
 
-    public void setMarkerOptionIconResource(int markerOptionIconResource) {
-        mMarkerOptionIconResource = markerOptionIconResource;
-    }
-
     public int getMarkerOptionIconResource() {
         return mMarkerOptionIconResource;
+    }
+
+    public void setMarkerOptionIconResource(int markerOptionIconResource) {
+        mMarkerOptionIconResource = markerOptionIconResource;
     }
 
     public int getDistanceUnitString() {
