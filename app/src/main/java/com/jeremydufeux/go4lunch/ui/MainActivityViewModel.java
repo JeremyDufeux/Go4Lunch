@@ -94,6 +94,13 @@ public class MainActivityViewModel extends ViewModel {
     // Search queries
     // ---------------
 
+    public void onQueryTextChange(String newText) {
+        getPlacesAutocomplete(newText,
+                mUserDataRepository.getMapViewCameraLatitude(),
+                mUserDataRepository.getMapViewCameraLongitude(),
+                mUserDataRepository.getMapViewCameraRadius());
+    }
+
     public void getPlacesAutocomplete(String input, double latitude, double longitude, double radius) {
         mAutocompleteDisposable = mGooglePlacesRepository.getAutocompletePlaces(input, latitude, longitude, radius)
                 .map(new AutocompleteToMatrixCursorMapper())
@@ -103,12 +110,5 @@ public class MainActivityViewModel extends ViewModel {
 
     public LiveData<MatrixCursor> observeAutocomplete(){
         return mAutocompleteLiveData;
-    }
-
-    public void onQueryTextChange(String newText) {
-        getPlacesAutocomplete(newText,
-                mUserDataRepository.getMapViewCameraLatitude(),
-                mUserDataRepository.getMapViewCameraLongitude(),
-                mUserDataRepository.getMapViewCameraRadius());
     }
 }

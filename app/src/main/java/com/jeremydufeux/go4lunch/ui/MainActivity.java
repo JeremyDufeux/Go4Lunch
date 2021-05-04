@@ -152,7 +152,9 @@ public class MainActivity extends AppCompatActivity implements
         final String[] from = new String[] {CURSOR_MATRIX_NAME, CURSOR_MATRIX_ID};
         final int[] to = new int[] {android.R.id.text1};
 
-        mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_dropdown_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        mAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         searchView.setSuggestionsAdapter(mAdapter);
 
         searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
