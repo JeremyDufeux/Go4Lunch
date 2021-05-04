@@ -3,7 +3,6 @@ package com.jeremydufeux.go4lunch.models;
 import android.location.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Restaurant implements Comparable<Restaurant>{
@@ -17,13 +16,7 @@ public class Restaurant implements Comparable<Restaurant>{
     private final List<String> mInterestedWorkmates = new ArrayList<>();
     private Location mLocation;
     private int mDistanceFromUser;
-
-    // For Opening
-    /** The HashMap mOpeningHours represent the week,
-     * the key is for the day of the week: 0 for monday, 6 for sunday,
-     * The list in value contain period of time where the place is open during the day,
-     * the period is represented by the nested class OpenPeriod  **/
-    private HashMap<Integer, List<OpenPeriod>>  mOpeningHours;
+    private List<OpenPeriod> mOpeningPeriods;
     private boolean mOpeningHoursAvailable;
     private boolean mAlwaysOpen;
     private int mUtcOffset;
@@ -50,10 +43,6 @@ public class Restaurant implements Comparable<Restaurant>{
 
     public void setAlwaysOpen(boolean alwaysOpen) {
         mAlwaysOpen = alwaysOpen;
-    }
-
-    public void setOpeningHours(HashMap<Integer, List<OpenPeriod>> openingHours) {
-        mOpeningHours = openingHours;
     }
 
     public void setRating(float rating) {
@@ -176,8 +165,12 @@ public class Restaurant implements Comparable<Restaurant>{
         mOpeningHoursAvailable = openingHoursAvailable;
     }
 
-    public HashMap<Integer, List<OpenPeriod>> getOpeningHours() {
-        return mOpeningHours;
+    public void setOpeningPeriods(List<OpenPeriod> openingPeriods) {
+        mOpeningPeriods = openingPeriods;
+    }
+
+    public List<OpenPeriod> getOpeningPeriods() {
+        return mOpeningPeriods;
     }
 
     public boolean isOpeningHoursAvailable() {
@@ -266,35 +259,5 @@ public class Restaurant implements Comparable<Restaurant>{
 
     public int compareTo(Restaurant restaurant) {
         return mDistanceFromUser - restaurant.getDistanceFromUser();
-    }
-
-    public static class OpenPeriod{
-        private final int openingHour;
-        private final int openingMinute;
-        private final int closingHour;
-        private final int closingMinute;
-
-        public OpenPeriod(int openingHour, int openingMinute, int closingHour, int closingMinute) {
-            this.openingHour = openingHour;
-            this.openingMinute = openingMinute;
-            this.closingHour = closingHour;
-            this.closingMinute = closingMinute;
-        }
-
-        public int getOpeningHour() {
-            return openingHour;
-        }
-
-        public int getOpeningMinute() {
-            return openingMinute;
-        }
-
-        public int getClosingHour() {
-            return closingHour;
-        }
-
-        public int getClosingMinute() {
-            return closingMinute;
-        }
     }
 }

@@ -4,6 +4,7 @@ import android.location.Location;
 import android.view.View;
 
 import com.jeremydufeux.go4lunch.R;
+import com.jeremydufeux.go4lunch.models.OpenPeriod;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import java.text.DateFormat;
@@ -12,7 +13,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -90,25 +90,22 @@ public class RestaurantToListViewMapper implements Function<HashMap<String, Rest
         }
     }
 
-    // If closing soon, return the closing time, else return open or closed
     public String getOpenStatus(Restaurant restaurant){
-        if(restaurant.getOpeningHours().containsKey(mNowCal.get(Calendar.DAY_OF_WEEK) - 1)) {
-            for (Restaurant.OpenPeriod period : Objects.requireNonNull(restaurant.getOpeningHours().get(mNowCal.get(Calendar.DAY_OF_WEEK) - 1), "Opening hours not found for this day")) {
+        for(OpenPeriod period : restaurant.getOpeningPeriods()){
+            if((period.getOpeningDay() == mNowCal.get(Calendar.DAY_OF_WEEK))
+                    || (period.getClosingDay() == mNowCal.get(Calendar.DAY_OF_WEEK))) {
                 Calendar openCal = (Calendar) mNowCal.clone();
+                openCal.set(Calendar.DAY_OF_WEEK, period.getOpeningDay());
                 openCal.set(Calendar.HOUR_OF_DAY, period.getOpeningHour());
                 openCal.set(Calendar.MINUTE, period.getOpeningMinute());
 
                 Calendar closeCal = (Calendar) mNowCal.clone();
+                closeCal.set(Calendar.DAY_OF_WEEK, period.getClosingDay());
                 closeCal.set(Calendar.HOUR_OF_DAY, period.getClosingHour());
                 closeCal.set(Calendar.MINUTE, period.getClosingMinute());
 
-                if (period.getClosingHour() == 0) {
-                    closeCal.add(Calendar.DAY_OF_MONTH, 1);
-                }
-
                 if (mNowCal.after(openCal) && mNowCal.before(closeCal)) {
                     mNowCal.add(Calendar.HOUR_OF_DAY, 1);
-
                     if (mNowCal.after(closeCal)) {
                         closeCal.set(Calendar.ZONE_OFFSET, mNowCal.getTimeZone().getRawOffset());
                         return DateFormat.getTimeInstance(DateFormat.SHORT).format(closeCal.getTime());

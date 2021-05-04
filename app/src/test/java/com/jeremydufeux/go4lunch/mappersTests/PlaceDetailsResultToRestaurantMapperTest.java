@@ -3,6 +3,7 @@ package com.jeremydufeux.go4lunch.mappersTests;
 import android.view.View;
 
 import com.jeremydufeux.go4lunch.mappers.PlaceDetailsResultToRestaurantMapper;
+import com.jeremydufeux.go4lunch.models.OpenPeriod;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Close;
@@ -161,15 +162,20 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(restaurant.getUtcOffset(), 120*60000);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.SUNDAY).get(0).getOpeningHour(), 11);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.SUNDAY).get(0).getOpeningMinute(), 30);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.SUNDAY).get(0).getClosingHour(), 18);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.SUNDAY).get(0).getClosingMinute(), 0);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getOpeningHour(), 11);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getOpeningMinute(), 30);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getClosingHour(), 18);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getClosingMinute(), 0);
+        assertEquals(120*60000, restaurant.getUtcOffset());
+        for(OpenPeriod period : restaurant.getOpeningPeriods()) {
+            if(period.getOpeningDay() == Calendar.SUNDAY) {
+                assertEquals(11, period.getOpeningHour());
+                assertEquals(30, period.getOpeningMinute());
+                assertEquals(18, period.getClosingHour());
+                assertEquals(0, period.getClosingMinute());
+            } else if(period.getOpeningDay() == Calendar.THURSDAY) {
+                assertEquals(11, period.getOpeningHour());
+                assertEquals(30, period.getOpeningMinute());
+                assertEquals(18, period.getClosingHour());
+                assertEquals(0, period.getClosingMinute());
+            }
+        }
     }
 
     @Test
@@ -181,16 +187,63 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(restaurant.getUtcOffset(), 120*60000);
-        assertTrue(restaurant.getOpeningHours().get(Calendar.SUNDAY).isEmpty());
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getOpeningHour(), 11);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getOpeningMinute(), 30);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getClosingHour(), 14);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(0).getClosingMinute(), 0);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(1).getOpeningHour(), 18);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(1).getOpeningMinute(), 0);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(1).getClosingHour(), 21);
-        assertEquals(restaurant.getOpeningHours().get(Calendar.THURSDAY).get(1).getClosingMinute(), 30);
+        assertEquals(120*60000, restaurant.getUtcOffset());
+
+        boolean sundayIsPresent = false;
+        for(OpenPeriod period : restaurant.getOpeningPeriods()) {
+            if(period.getOpeningDay() == Calendar.THURSDAY) {
+                assertTrue(period.getOpeningHour() == 11 || period.getOpeningHour() == 18);
+                assertTrue(period.getOpeningMinute() == 30 || period.getOpeningMinute() == 0);
+                assertTrue(period.getClosingHour() == 14 || period.getClosingHour() == 21);
+                assertTrue(period.getClosingMinute() == 0 || period.getClosingMinute() == 30);
+            }
+            if(period.getOpeningDay() == Calendar.SUNDAY) {
+                sundayIsPresent = true;
+            }
+        }
+        assertFalse(sundayIsPresent);
+    }
+
+    @Test
+    public void test_OpeningData_givenCloseAtMidnight() {
+        PlaceDetailsResults placeDetailsResults = generatePlaceDetailsWithOpeningPeriodCloseAtMidnight();
+        Restaurant restaurant = new Restaurant(placeDetailsResults.getPlaceDetails().getPlaceId());
+        PlaceDetailsResultToRestaurantMapper mapper = new PlaceDetailsResultToRestaurantMapper(restaurant);
+
+        restaurant = mapper.apply(placeDetailsResults);
+        assertTrue(restaurant.isOpeningHoursAvailable());
+        assertFalse(restaurant.isAlwaysOpen());
+        assertEquals(120*60000, restaurant.getUtcOffset());
+
+        for(OpenPeriod period : restaurant.getOpeningPeriods()) {
+            if(period.getOpeningDay() == Calendar.MONDAY) {
+                assertEquals(8, period.getOpeningHour());
+                assertEquals(0, period.getOpeningMinute());
+                assertEquals(0, period.getClosingHour());
+                assertEquals(0, period.getClosingMinute());
+            }
+        }
+    }
+
+    @Test
+    public void test_OpeningData_givenCloseAfterMidnight() {
+        PlaceDetailsResults placeDetailsResults = generatePlaceDetailsWithOpeningPeriodCloseAfterMidnight();
+        Restaurant restaurant = new Restaurant(placeDetailsResults.getPlaceDetails().getPlaceId());
+        PlaceDetailsResultToRestaurantMapper mapper = new PlaceDetailsResultToRestaurantMapper(restaurant);
+
+        restaurant = mapper.apply(placeDetailsResults);
+        assertTrue(restaurant.isOpeningHoursAvailable());
+        assertFalse(restaurant.isAlwaysOpen());
+        assertEquals(120*60000, restaurant.getUtcOffset());
+
+        for(OpenPeriod period : restaurant.getOpeningPeriods()) {
+            if(period.getOpeningDay() == Calendar.MONDAY && period.getClosingDay() == Calendar.TUESDAY) {
+                assertEquals(8, period.getOpeningHour());
+                assertEquals(0, period.getOpeningMinute());
+                assertEquals(2, period.getClosingHour());
+                assertEquals(0, period.getClosingMinute());
+            }
+        }
     }
 
     @Test
@@ -435,6 +488,66 @@ public class PlaceDetailsResultToRestaurantMapperTest {
             afternoonPeriod.getClose().setTime("2130");
 
             placeDetails.getOpeningHours().getPeriods().add(afternoonPeriod);
+        }
+
+        PlaceDetailsResults placeDetailsResults = new PlaceDetailsResults();
+        placeDetailsResults.setPlaceDetails(placeDetails);
+
+        return placeDetailsResults;
+    }
+
+    private PlaceDetailsResults generatePlaceDetailsWithOpeningPeriodCloseAtMidnight() {
+        PlaceDetails placeDetails = new PlaceDetails();
+        placeDetails.setName("Mizuki");
+        placeDetails.setPlaceId("ChIJmZKgsilwjEcRKVdZd_cE-4k");
+
+        placeDetails.setUtcOffset(120);
+        placeDetails.setOpeningHours(new OpeningHours());
+        placeDetails.getOpeningHours().setOpenNow(true);
+        placeDetails.getOpeningHours().setPeriods(new ArrayList<>());
+
+        for (int i = Calendar.MONDAY; i < Calendar.DAY_OF_WEEK; i++) {
+            Period period = new Period();
+
+            period.setOpen(new Open());
+            period.getOpen().setDay(i);
+            period.getOpen().setTime("0800");
+
+            period.setClose(new Close());
+            period.getClose().setDay(i+1);
+            period.getClose().setTime("0000");
+
+            placeDetails.getOpeningHours().getPeriods().add(period);
+        }
+
+        PlaceDetailsResults placeDetailsResults = new PlaceDetailsResults();
+        placeDetailsResults.setPlaceDetails(placeDetails);
+
+        return placeDetailsResults;
+    }
+
+    private PlaceDetailsResults generatePlaceDetailsWithOpeningPeriodCloseAfterMidnight() {
+        PlaceDetails placeDetails = new PlaceDetails();
+        placeDetails.setName("Mizuki");
+        placeDetails.setPlaceId("ChIJmZKgsilwjEcRKVdZd_cE-4k");
+
+        placeDetails.setUtcOffset(120);
+        placeDetails.setOpeningHours(new OpeningHours());
+        placeDetails.getOpeningHours().setOpenNow(true);
+        placeDetails.getOpeningHours().setPeriods(new ArrayList<>());
+
+        for (int i = Calendar.MONDAY; i < Calendar.DAY_OF_WEEK; i++) {
+            Period period = new Period();
+
+            period.setOpen(new Open());
+            period.getOpen().setDay(i);
+            period.getOpen().setTime("0800");
+
+            period.setClose(new Close());
+            period.getClose().setDay(i+1);
+            period.getClose().setTime("0200");
+
+            placeDetails.getOpeningHours().getPeriods().add(period);
         }
 
         PlaceDetailsResults placeDetailsResults = new PlaceDetailsResults();

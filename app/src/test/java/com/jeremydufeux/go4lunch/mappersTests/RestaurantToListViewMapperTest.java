@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
+import com.jeremydufeux.go4lunch.models.OpenPeriod;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 
 import org.junit.Test;
@@ -159,6 +160,82 @@ public class RestaurantToListViewMapperTest {
     }
 
     @Test
+    public void test_determineOpening_checkCloseAtMidnight() {
+        Calendar testDate = Calendar.getInstance();
+        testDate.set(Calendar.YEAR, 2021);
+        testDate.set(Calendar.MONTH, Calendar.APRIL); // April
+        testDate.set(Calendar.DAY_OF_MONTH, 19); // Monday
+        testDate.set(Calendar.HOUR_OF_DAY, 23);
+        testDate.set(Calendar.MINUTE, 30);
+
+        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithOpenPeriodsClosingAtMidnight();
+
+        RestaurantToListViewMapper mapper = new RestaurantToListViewMapper(null, R.string.unit_meter_short, testDate);
+        List<Restaurant> restaurantList = mapper.apply(restaurantHashMap);
+
+        assertEquals(R.string.open_until, restaurantList.get(0).getOpenTvString());
+        assertEquals("12:00 AM", restaurantList.get(0).getOpenTvCloseTimeString());
+        assertEquals(View.VISIBLE, restaurantList.get(0).getOpenTvVisibility());
+    }
+
+    @Test
+    public void test_determineOpening_checkCloseAfterMidnight() {
+        Calendar testDate = Calendar.getInstance();
+        testDate.set(Calendar.YEAR, 2021);
+        testDate.set(Calendar.MONTH, Calendar.APRIL); // April
+        testDate.set(Calendar.DAY_OF_MONTH, 19); // Monday
+        testDate.set(Calendar.HOUR_OF_DAY, 1);
+        testDate.set(Calendar.MINUTE, 30);
+
+        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithOpenPeriodsClosingAfterMidnight();
+
+        RestaurantToListViewMapper mapper = new RestaurantToListViewMapper(null, R.string.unit_meter_short, testDate);
+        List<Restaurant> restaurantList = mapper.apply(restaurantHashMap);
+
+        assertEquals(R.string.open_until, restaurantList.get(0).getOpenTvString());
+        assertEquals("2:00 AM", restaurantList.get(0).getOpenTvCloseTimeString());
+        assertEquals(View.VISIBLE, restaurantList.get(0).getOpenTvVisibility());
+    }
+
+    @Test
+    public void testDetermineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeMondayMorning() {
+        Calendar testDate = Calendar.getInstance();
+        testDate.set(Calendar.YEAR, 2021);
+        testDate.set(Calendar.MONTH, Calendar.APRIL); // April
+        testDate.set(Calendar.DAY_OF_MONTH, 19); // Monday
+        testDate.set(Calendar.HOUR_OF_DAY, 1);
+        testDate.set(Calendar.MINUTE, 30);
+
+        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithOpenPeriodsClosingAfterMidnightOnlyTheWeekend();
+
+        RestaurantToListViewMapper mapper = new RestaurantToListViewMapper(null, R.string.unit_meter_short, testDate);
+        List<Restaurant> restaurantList = mapper.apply(restaurantHashMap);
+
+        assertEquals("2:00 AM", restaurantList.get(0).getOpenTvCloseTimeString());
+        assertEquals(R.string.open_until, restaurantList.get(0).getOpenTvString());
+        assertEquals(View.VISIBLE, restaurantList.get(0).getOpenTvVisibility());
+    }
+
+    @Test
+    public void testDetermineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeFridayEvening() {
+        Calendar testDate = Calendar.getInstance();
+        testDate.set(Calendar.YEAR, 2021);
+        testDate.set(Calendar.MONTH, Calendar.APRIL); // April
+        testDate.set(Calendar.DAY_OF_MONTH, 16); // Monday
+        testDate.set(Calendar.HOUR_OF_DAY, 22);
+        testDate.set(Calendar.MINUTE, 30);
+
+        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithOpenPeriodsClosingAfterMidnightOnlyTheWeekend();
+
+        RestaurantToListViewMapper mapper = new RestaurantToListViewMapper(null, R.string.unit_meter_short, testDate);
+        List<Restaurant> restaurantList = mapper.apply(restaurantHashMap);
+
+        assertEquals(R.string.open_until, restaurantList.get(0).getOpenTvString());
+        assertEquals("11:00 PM", restaurantList.get(0).getOpenTvCloseTimeString());
+        assertEquals(View.VISIBLE, restaurantList.get(0).getOpenTvVisibility());
+    }
+
+    @Test
     public void test_determineOpening_checkClosedOnSunday() {
         Calendar testDate = Calendar.getInstance();
         testDate.set(Calendar.YEAR, 2021);
@@ -200,7 +277,7 @@ public class RestaurantToListViewMapperTest {
     public void test_determineOpening_checkAlwaysOpen() {
         Calendar testDate = Calendar.getInstance();
 
-        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithAlwaysOpe();
+        HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithAlwaysOpen();
 
         RestaurantToListViewMapper mapper = new RestaurantToListViewMapper(null, R.string.unit_meter_short, testDate);
         List<Restaurant> restaurantList = mapper.apply(restaurantHashMap);
@@ -243,16 +320,23 @@ public class RestaurantToListViewMapperTest {
 
     private HashMap<String, Restaurant> generateRestaurantHashMapWithOpenPeriods(){
         Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
-        HashMap<Integer, List<Restaurant.OpenPeriod>> openingHours = new HashMap<>();
-        List<Restaurant.OpenPeriod> dayHours = new ArrayList<>();
-        dayHours.add(new Restaurant.OpenPeriod(10, 0, 12, 0));
-        dayHours.add(new Restaurant.OpenPeriod(14, 0, 18, 0));
-        openingHours.put(1, dayHours);
-        openingHours.put(2, dayHours);
-        openingHours.put(4, dayHours);
-        openingHours.put(5, dayHours);
+        List<OpenPeriod> openPeriods = new ArrayList<>();
+        openPeriods.add(new OpenPeriod(1, 10, 0, 1,12, 0));
+        openPeriods.add(new OpenPeriod(1, 14, 0, 1, 18, 0));
+        openPeriods.add(new OpenPeriod(2, 10, 0, 2,12, 0));
+        openPeriods.add(new OpenPeriod(2, 14, 0, 2, 18, 0));
+        openPeriods.add(new OpenPeriod(3, 10, 0, 3,12, 0));
+        openPeriods.add(new OpenPeriod(3, 14, 0, 3, 18, 0));
+        openPeriods.add(new OpenPeriod(4, 10, 0, 4,12, 0));
+        openPeriods.add(new OpenPeriod(4, 14, 0, 4, 18, 0));
+        openPeriods.add(new OpenPeriod(5, 10, 0, 5,12, 0));
+        openPeriods.add(new OpenPeriod(5, 14, 0, 5, 18, 0));
+        openPeriods.add(new OpenPeriod(6, 10, 0, 6,12, 0));
+        openPeriods.add(new OpenPeriod(6, 14, 0, 6, 18, 0));
+        openPeriods.add(new OpenPeriod(7, 10, 0, 7,12, 0));
+        openPeriods.add(new OpenPeriod(7, 14, 0, 7, 18, 0));
 
-        restaurant.setOpeningHours(openingHours);
+        restaurant.setOpeningPeriods(openPeriods);
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
         restaurant.setUtcOffset(7200000);
@@ -262,7 +346,74 @@ public class RestaurantToListViewMapperTest {
         return restaurantHashMap;
     }
 
-    private HashMap<String, Restaurant> generateRestaurantHashMapWithAlwaysOpe (){
+    private HashMap<String, Restaurant> generateRestaurantHashMapWithOpenPeriodsClosingAtMidnight(){
+        Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
+        HashMap<Integer, List<OpenPeriod>> openingHours = new HashMap<>();
+        List<OpenPeriod> openPeriods = new ArrayList<>();
+
+        openPeriods.add(new OpenPeriod(1, 10, 0, 2,0, 0));
+        openPeriods.add(new OpenPeriod(2, 10, 0, 3,0, 0));
+        openPeriods.add(new OpenPeriod(3, 10, 0, 4,0, 0));
+        openPeriods.add(new OpenPeriod(4, 10, 0, 5,0, 0));
+        openPeriods.add(new OpenPeriod(5, 10, 0, 6,0, 0));
+        openPeriods.add(new OpenPeriod(6, 10, 0, 7,0, 0));
+        openPeriods.add(new OpenPeriod(7, 10, 0, 8,0, 0));
+
+        restaurant.setOpeningPeriods(openPeriods);
+        restaurant.setOpeningHoursAvailable(true);
+        restaurant.setAlwaysOpen(false);
+        restaurant.setUtcOffset(7200000);
+
+        HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
+        restaurantHashMap.put(restaurant.getUId(), restaurant);
+        return restaurantHashMap;
+    }
+
+    private HashMap<String, Restaurant> generateRestaurantHashMapWithOpenPeriodsClosingAfterMidnight(){
+        Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
+        List<OpenPeriod> openPeriods = new ArrayList<>();
+
+        openPeriods.add(new OpenPeriod(1, 10, 0, 2,2, 0));
+        openPeriods.add(new OpenPeriod(2, 10, 0, 3,2, 0));
+        openPeriods.add(new OpenPeriod(3, 10, 0, 4,2, 0));
+        openPeriods.add(new OpenPeriod(4, 10, 0, 5,2, 0));
+        openPeriods.add(new OpenPeriod(5, 10, 0, 6,2, 0));
+        openPeriods.add(new OpenPeriod(6, 10, 0, 7,2, 0));
+        openPeriods.add(new OpenPeriod(7, 10, 0, 8,2, 0));
+
+        restaurant.setOpeningPeriods(openPeriods);
+        restaurant.setOpeningHoursAvailable(true);
+        restaurant.setAlwaysOpen(false);
+        restaurant.setUtcOffset(7200000);
+
+        HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
+        restaurantHashMap.put(restaurant.getUId(), restaurant);
+        return restaurantHashMap;
+    }
+
+    private HashMap<String, Restaurant> generateRestaurantHashMapWithOpenPeriodsClosingAfterMidnightOnlyTheWeekend(){
+        Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
+        List<OpenPeriod> openPeriods = new ArrayList<>();
+
+        openPeriods.add(new OpenPeriod(1, 10, 0, 2,2, 0));
+        openPeriods.add(new OpenPeriod(2, 10, 0, 2,23, 0));
+        openPeriods.add(new OpenPeriod(3, 10, 0, 3,23, 0));
+        openPeriods.add(new OpenPeriod(4, 10, 0, 4,23, 0));
+        openPeriods.add(new OpenPeriod(5, 10, 0, 5,23, 0));
+        openPeriods.add(new OpenPeriod(6, 10, 0, 6,23, 0));
+        openPeriods.add(new OpenPeriod(7, 10, 0, 0,2, 0));
+
+        restaurant.setOpeningPeriods(openPeriods);
+        restaurant.setOpeningHoursAvailable(true);
+        restaurant.setAlwaysOpen(false);
+        restaurant.setUtcOffset(7200000);
+
+        HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
+        restaurantHashMap.put(restaurant.getUId(), restaurant);
+        return restaurantHashMap;
+    }
+
+    private HashMap<String, Restaurant> generateRestaurantHashMapWithAlwaysOpen(){
         Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(true);

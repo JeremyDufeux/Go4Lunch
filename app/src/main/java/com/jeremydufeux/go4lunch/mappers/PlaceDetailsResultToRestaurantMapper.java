@@ -4,6 +4,7 @@ import android.location.Location;
 import android.view.View;
 
 import com.jeremydufeux.go4lunch.BuildConfig;
+import com.jeremydufeux.go4lunch.models.OpenPeriod;
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
@@ -11,10 +12,7 @@ import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -81,29 +79,23 @@ public class PlaceDetailsResultToRestaurantMapper implements Function<PlaceDetai
 
             if(placeDetail.getOpeningHours().getPeriods() != null) {
 
-                HashMap<Integer, List<Restaurant.OpenPeriod>> openingHours = new HashMap<>();
-                for(int i = 0; i < Calendar.DAY_OF_WEEK; i++){
-                    List<Restaurant.OpenPeriod> dayHours = new ArrayList<>();
-                    openingHours.put(i, dayHours);
-                }
+                List<OpenPeriod> openingHours = new ArrayList<>();
 
                 for (Period period : placeDetail.getOpeningHours().getPeriods()) {
-                    if(period.getOpen().getDay() == 0
-                            && period.getOpen().getTime().equals("0000")
-                            && period.getClose() == null){
-                        mRestaurant.setAlwaysOpen(true);
-                        return;
-                    } else {
-                        Restaurant.OpenPeriod openPeriod = new Restaurant.OpenPeriod(
+                    if(period.getClose() != null) {
+                        OpenPeriod openPeriod = new OpenPeriod(
+                                period.getOpen().getDay() + 1,
                                 Integer.parseInt(period.getOpen().getTime().substring(0, 2)),
                                 Integer.parseInt(period.getOpen().getTime().substring(2, 4)),
+                                period.getClose().getDay() + 1,
                                 Integer.parseInt(period.getClose().getTime().substring(0, 2)),
                                 Integer.parseInt(period.getClose().getTime().substring(2, 4)));
-
-                        Objects.requireNonNull(openingHours.get(period.getOpen().getDay())).add(openPeriod);
+                        openingHours.add(openPeriod);
+                    } else {
+                        mRestaurant.setAlwaysOpen(true);
                     }
                 }
-                mRestaurant.setOpeningHours(openingHours);
+                mRestaurant.setOpeningPeriods(openingHours);
             }
         }
     }
