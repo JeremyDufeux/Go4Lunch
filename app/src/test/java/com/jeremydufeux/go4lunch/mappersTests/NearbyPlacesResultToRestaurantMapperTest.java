@@ -16,8 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class NearbyPlacesResultToRestaurantMapperTest {
 
     @Test
-    public void test_valuesMappedCorrectly(){
-        PlaceSearchResults placeSearchResults = generateNearbySearchFirstResults();
+    public void test_getExpectedRestaurantsAmount(){
+        PlaceSearchResults placeSearchResults = generateNearbySearchWith2GoodsPlacesAnd2Wrong();
         NearbyPlacesResultToRestaurantMapper mapper = new NearbyPlacesResultToRestaurantMapper();
 
         List<Restaurant> restaurantList = mapper.apply(placeSearchResults);
@@ -28,7 +28,7 @@ public class NearbyPlacesResultToRestaurantMapperTest {
     // Generate data
     // ---------------
 
-    private PlaceSearchResults generateNearbySearchFirstResults() {
+    private PlaceSearchResults generateNearbySearchWith2GoodsPlacesAnd2Wrong() {
         PlaceSearch placeSearch1 = new PlaceSearch();
         placeSearch1.setName("Le viand'art");
         placeSearch1.setPlaceId("ChIJH274sClwjEcRniBZAsyAtH0");
@@ -44,10 +44,15 @@ public class NearbyPlacesResultToRestaurantMapperTest {
         placeSearch3.setPlaceId("ilwdsgdghgkjEcRKVdZd_cklùklù");
         placeSearch3.setBusinessStatus("CLOSED_PERMANENTLY");
 
+        PlaceSearch placeSearch4 = new PlaceSearch();
+        placeSearch4.setName("Bab");
+        placeSearch4.setPlaceId("ihfjfdfghlwdsgdghgkjEcRKsdgsd");
+
         List<PlaceSearch> placeSearchList = new ArrayList<>();
         placeSearchList.add(placeSearch1);
         placeSearchList.add(placeSearch2);
         placeSearchList.add(placeSearch3);
+        placeSearchList.add(placeSearch4);
 
         PlaceSearchResults placeSearchResults = new PlaceSearchResults();
         placeSearchResults.setPlaceSearches(placeSearchList);

@@ -197,7 +197,7 @@ public class RestaurantToListViewMapperTest {
     }
 
     @Test
-    public void testDetermineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeMondayMorning() {
+    public void test_determineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeMondayMorning() {
         Calendar testDate = Calendar.getInstance();
         testDate.set(Calendar.YEAR, 2021);
         testDate.set(Calendar.MONTH, Calendar.APRIL); // April
@@ -216,7 +216,7 @@ public class RestaurantToListViewMapperTest {
     }
 
     @Test
-    public void testDetermineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeFridayEvening() {
+    public void test_determineOpening_givenCloseAfterMidnightOnlyTheWeekend_checkCloseTimeFridayEvening() {
         Calendar testDate = Calendar.getInstance();
         testDate.set(Calendar.YEAR, 2021);
         testDate.set(Calendar.MONTH, Calendar.APRIL); // April
@@ -296,6 +296,7 @@ public class RestaurantToListViewMapperTest {
         assertEquals(View.INVISIBLE, restaurantList.get(0).getWorkmateIvVisibility());
         assertEquals(View.INVISIBLE, restaurantList.get(0).getWorkmateTvVisibility());
     }
+
     @Test
     public void test_determineWorkmatesViewVisibility_checkWithTwoWorkmates() {
         HashMap<String, Restaurant> restaurantHashMap = generateRestaurantHashMapWithInterestedWorkmates();
