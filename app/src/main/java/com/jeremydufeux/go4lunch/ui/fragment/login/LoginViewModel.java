@@ -13,9 +13,7 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.NavigateToMapFragmentLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.SignInSuccessLiveEvent;
 
-import java.net.UnknownHostException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -59,10 +57,10 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void getErrors(Throwable throwable){
-        if(throwable instanceof TimeoutException){
+        if(throwable.getMessage().contains("TimeoutException")){
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
         }
-        else if(throwable instanceof UnknownHostException) {
+        else if(throwable.getMessage().contains("UnknownHostException")) {
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
         }
         else {

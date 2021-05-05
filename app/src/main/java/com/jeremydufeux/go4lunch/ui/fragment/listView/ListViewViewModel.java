@@ -9,18 +9,15 @@ import androidx.lifecycle.ViewModel;
 import com.jeremydufeux.go4lunch.R;
 import com.jeremydufeux.go4lunch.mappers.RestaurantToListViewMapper;
 import com.jeremydufeux.go4lunch.models.Restaurant;
-import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
 import com.jeremydufeux.go4lunch.repositories.RestaurantUseCase;
+import com.jeremydufeux.go4lunch.repositories.UserDataRepository;
+import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.LiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.StopRefreshLiveEvent;
-import com.jeremydufeux.go4lunch.utils.NoMorePageException;
-import com.jeremydufeux.go4lunch.utils.SingleLiveEvent;
 
-import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -80,13 +77,13 @@ public class ListViewViewModel extends ViewModel {
     }
 
     private void getErrorLiveEvents(Throwable throwable){
-        if(throwable instanceof TimeoutException){
+        if(throwable.getMessage().contains("TimeoutException")){
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
         }
-        else if(throwable instanceof UnknownHostException) {
+        else if(throwable.getMessage().contains("UnknownHostException")) {
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
         }
-        else if(throwable instanceof NoMorePageException) {
+        else if(throwable.getMessage().contains("NoMorePageException")) {
             mSingleLiveEvent.setValue(new StopRefreshLiveEvent());
         }
         else {

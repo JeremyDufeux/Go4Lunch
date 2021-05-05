@@ -23,10 +23,8 @@ import com.jeremydufeux.go4lunch.utils.liveEvent.RemoveMarkersLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSearchButtonLiveEvent;
 import com.jeremydufeux.go4lunch.utils.liveEvent.ShowSnackbarLiveEvent;
 
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -205,10 +203,10 @@ public class MapViewViewModel extends ViewModel {
     }
 
     public void getErrorLiveEvents(Throwable throwable){
-        if(throwable instanceof TimeoutException){
+        if(throwable.getMessage().contains("TimeoutException")){
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_timeout));
         }
-        else if(throwable instanceof UnknownHostException) {
+        else if(throwable.getMessage().contains("UnknownHostException")) {
             mSingleLiveEvent.setValue(new ShowSnackbarLiveEvent(R.string.error_no_internet));
         }
         else {
