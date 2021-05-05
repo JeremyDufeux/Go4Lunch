@@ -327,6 +327,7 @@ public class MapViewFragment extends Fragment implements
             }
             else if(event instanceof ShowSnackbarLiveEvent){
                 showSnackBar(((ShowSnackbarLiveEvent) event).getStingId());
+                hideProgressBar();
             }
             else if(event instanceof AddMarkersLiveEvent){
                 addMarkers();
