@@ -4,12 +4,12 @@ import com.jeremydufeux.go4lunch.api.PlacesService;
 import com.jeremydufeux.go4lunch.models.Workmate;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.AddressComponent;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Close;
-import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsGeometry;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Open;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.OpeningHours;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Period;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.Photo;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetails;
+import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsGeometry;
 import com.jeremydufeux.go4lunch.models.googlePlaceDetailsResult.PlaceDetailsResults;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.Location;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearch;
@@ -89,8 +89,7 @@ public class RestaurantUseCaseTest {
                 .assertValue(restaurantHashMap ->
                         restaurantHashMap.size() == mFirstPlaceSearchResults.getPlaceSearches().size()
                         && restaurantHashMap.containsKey(mFirstPlaceId)
-                        && Objects.requireNonNull(restaurantHashMap.get(mSecondPlaceId)).getName().equals(mSecondDetailsResults.getPlaceDetails().getName())
-                        && Objects.requireNonNull(restaurantHashMap.get(mSecondPlaceId)).getUtcOffset() == mSecondDetailsResults.getPlaceDetails().getUtcOffset()*60000);
+                        && Objects.requireNonNull(restaurantHashMap.get(mSecondPlaceId)).getName().equals(mSecondDetailsResults.getPlaceDetails().getName()));
     }
 
     @Test
@@ -138,8 +137,8 @@ public class RestaurantUseCaseTest {
 
         mRestaurantUseCase.observeRestaurantList()
                 .test()
-                .assertValue(restaurantHashMap -> restaurantHashMap.get(mFirstPlaceId).getInterestedWorkmates().size() == 2
-                        && restaurantHashMap.get(mFirstPlaceId).getInterestedWorkmates().contains(mInterestedWorkmates.get(0).getUId()));
+                .assertValue(restaurantHashMap -> Objects.requireNonNull(restaurantHashMap.get(mFirstPlaceId)).getInterestedWorkmates().size() == 2
+                        && Objects.requireNonNull(restaurantHashMap.get(mFirstPlaceId)).getInterestedWorkmates().contains(mInterestedWorkmates.get(0).getUId()));
     }
 
     @Test
@@ -148,7 +147,7 @@ public class RestaurantUseCaseTest {
 
         mRestaurantUseCase.observeRestaurantList()
                 .test()
-                .assertValue(restaurantHashMap -> restaurantHashMap.get(mSecondPlaceId).getInterestedWorkmates().size() == 0);
+                .assertValue(restaurantHashMap -> Objects.requireNonNull(restaurantHashMap.get(mSecondPlaceId)).getInterestedWorkmates().size() == 0);
     }
 
     // ---------------

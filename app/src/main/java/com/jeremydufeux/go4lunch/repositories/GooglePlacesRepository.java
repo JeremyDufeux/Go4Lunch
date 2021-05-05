@@ -62,7 +62,6 @@ public class GooglePlacesRepository {
                 + "address_component,"
                 + "geometry,"
                 + "vicinity,"
-                + "utc_offset,"
                 + "photo,"
                 + "international_phone_number,"
                 + "website,"

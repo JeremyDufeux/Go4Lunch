@@ -162,7 +162,6 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(120*60000, restaurant.getUtcOffset());
         for(OpenPeriod period : restaurant.getOpeningPeriods()) {
             if(period.getOpeningDay() == Calendar.SUNDAY) {
                 assertEquals(11, period.getOpeningHour());
@@ -187,7 +186,6 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(120*60000, restaurant.getUtcOffset());
 
         boolean sundayIsPresent = false;
         for(OpenPeriod period : restaurant.getOpeningPeriods()) {
@@ -213,7 +211,6 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(120*60000, restaurant.getUtcOffset());
 
         for(OpenPeriod period : restaurant.getOpeningPeriods()) {
             if(period.getOpeningDay() == Calendar.MONDAY) {
@@ -234,7 +231,6 @@ public class PlaceDetailsResultToRestaurantMapperTest {
         restaurant = mapper.apply(placeDetailsResults);
         assertTrue(restaurant.isOpeningHoursAvailable());
         assertFalse(restaurant.isAlwaysOpen());
-        assertEquals(120*60000, restaurant.getUtcOffset());
 
         for(OpenPeriod period : restaurant.getOpeningPeriods()) {
             if(period.getOpeningDay() == Calendar.MONDAY && period.getClosingDay() == Calendar.TUESDAY) {

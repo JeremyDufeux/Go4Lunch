@@ -39,8 +39,7 @@
         android:id="@+id/restaurant_details_fragment"
         android:name="com.jeremydufeux.go4lunch.ui.fragment.restaurantDetails.RestaurantDetailsFragment"
         android:label="@string/your_lunch"
-        tools:layout="@layout/fragment_restaurant_details" >
-    </fragment>
+        tools:layout="@layout/fragment_restaurant_details"/>
 
     <fragment
         android:id="@+id/settings_fragment"

@@ -73,7 +73,6 @@ public class RestaurantRepositoryTest {
         Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
         restaurant.setName("Le viand'art");
         restaurant.setAddress("56 Rue de Genève, Ambilly");
-        restaurant.setUtcOffset(7200000);
         restaurant.setPhoneNumber("+33 4 50 92 80 69");
         restaurant.setWebsite("https://le-viandart.business.site/");
         restaurant.setRating(4.2f);

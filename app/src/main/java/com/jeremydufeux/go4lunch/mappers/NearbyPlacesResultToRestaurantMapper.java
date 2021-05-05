@@ -1,8 +1,6 @@
 package com.jeremydufeux.go4lunch.mappers;
 
 
-import android.location.Location;
-
 import com.jeremydufeux.go4lunch.models.Restaurant;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearch;
 import com.jeremydufeux.go4lunch.models.googlePlaceResult.PlaceSearchResults;
@@ -22,15 +20,7 @@ public class NearbyPlacesResultToRestaurantMapper implements Function<PlaceSearc
 
         for(PlaceSearch placeSearch : results.getPlaceSearches()){
             if(placeSearch.getBusinessStatus()!= null && placeSearch.getBusinessStatus().equals(OPERATIONAL_BUSINESS_STATUS)) {
-
                 Restaurant restaurant = new Restaurant(placeSearch.getPlaceId());
-                restaurant.setName(placeSearch.getName());
-
-                Location location = new Location("");
-                location.setLatitude(placeSearch.getPlaceSearchGeometry().getLocation().getLat());
-                location.setLongitude(placeSearch.getPlaceSearchGeometry().getLocation().getLng());
-                restaurant.setLocation(location);
-
                 restaurantList.add(restaurant);
             }
         }

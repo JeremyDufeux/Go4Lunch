@@ -334,7 +334,6 @@ public class RestaurantToListViewMapperTest {
         restaurant.getOpeningPeriods().add(new OpenPeriod(7, 14, 0, 7, 18, 0));
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
-        restaurant.setUtcOffset(7200000);
         HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
         restaurantHashMap.put(restaurant.getUId(), restaurant);
         return restaurantHashMap;
@@ -351,7 +350,6 @@ public class RestaurantToListViewMapperTest {
         restaurant.getOpeningPeriods().add(new OpenPeriod(7, 10, 0, 8,0, 0));
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
-        restaurant.setUtcOffset(7200000);
         HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
         restaurantHashMap.put(restaurant.getUId(), restaurant);
         return restaurantHashMap;
@@ -369,7 +367,6 @@ public class RestaurantToListViewMapperTest {
         restaurant.getOpeningPeriods().add(new OpenPeriod(7, 10, 0, 8,2, 0));
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
-        restaurant.setUtcOffset(7200000);
         HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
         restaurantHashMap.put(restaurant.getUId(), restaurant);
         return restaurantHashMap;
@@ -386,7 +383,6 @@ public class RestaurantToListViewMapperTest {
         restaurant.getOpeningPeriods().add(new OpenPeriod(7, 10, 0, 0,2, 0));
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(false);
-        restaurant.setUtcOffset(7200000);
 
         HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
         restaurantHashMap.put(restaurant.getUId(), restaurant);
@@ -397,7 +393,6 @@ public class RestaurantToListViewMapperTest {
         Restaurant restaurant = new Restaurant("ChIJH274sClwjEcRniBZAsyAtH0");
         restaurant.setOpeningHoursAvailable(true);
         restaurant.setAlwaysOpen(true);
-        restaurant.setUtcOffset(7200000);
         HashMap<String, Restaurant> restaurantHashMap = new HashMap<>();
         restaurantHashMap.put(restaurant.getUId(), restaurant);
         return restaurantHashMap;
