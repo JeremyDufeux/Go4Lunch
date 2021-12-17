@@ -3,6 +3,22 @@ It allows you to search for a restaurant in the vicinity, then select it by tell
 Likewise, it is possible to consult the restaurants selected by colleagues in order to join them.
 At noon, a notification is sent to remind you of the choice of restaurant and who comes to eat with you.
 
+This projet uses
+- MVVM architecture
+- Navigation Component
+- Firebase Firestore
+- Firebase Storage
+- Firebase Auth
+- Google sign-in
+- Facebook sign-in
+- Twitter sign-in
+- Glide
+- RxJava
+- Retrofit
+- Hilt
+- Mockito
+- Work Manager
+
 ***
 
 ![Login](screenshots/login.png "Login")![Map view](screenshots/map_view.png "Map view")
